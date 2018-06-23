@@ -1,0 +1,604 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>React Component lifecycle | SIGABRT</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Nonnull">
+    
+
+    
+    <meta name="description" content="React Component lifecycle最近刚开始使用react-native做项目，有一些心得，所以在这里发表一下。对没有接触过的技术和开发环境，了解核心component的生命周期是非常重要的。能够保证在写代码的过程中不容易犯错。 什么是component？根据React官方文档，React.component是一个抽象基类。能够让使用者将UI拆成各个独立地，可重用的componen">
+<meta name="keywords" content="javascript,react">
+<meta property="og:type" content="article">
+<meta property="og:title" content="React Component lifecycle">
+<meta property="og:url" content="http://gobodigo.com/2017/07/18/react-life-cycle/index.html">
+<meta property="og:site_name" content="SIGABRT">
+<meta property="og:description" content="React Component lifecycle最近刚开始使用react-native做项目，有一些心得，所以在这里发表一下。对没有接触过的技术和开发环境，了解核心component的生命周期是非常重要的。能够保证在写代码的过程中不容易犯错。 什么是component？根据React官方文档，React.component是一个抽象基类。能够让使用者将UI拆成各个独立地，可重用的componen">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://ot51d7lis.bkt.clouddn.com/React%20component%20life%20cycle2.png">
+<meta property="og:updated_time" content="2018-06-23T14:22:10.519Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="React Component lifecycle">
+<meta name="twitter:description" content="React Component lifecycle最近刚开始使用react-native做项目，有一些心得，所以在这里发表一下。对没有接触过的技术和开发环境，了解核心component的生命周期是非常重要的。能够保证在写代码的过程中不容易犯错。 什么是component？根据React官方文档，React.component是一个抽象基类。能够让使用者将UI拆成各个独立地，可重用的componen">
+<meta name="twitter:image" content="http://ot51d7lis.bkt.clouddn.com/React%20component%20life%20cycle2.png">
+<meta name="twitter:creator" content="@CharlesLiu8">
+
+    
+    <link rel="alternative" href="/atom.xml" title="SIGABRT" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/logo32.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/logo114.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/logo114.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="SIGABRT" title="SIGABRT"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="SIGABRT">SIGABRT</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+						<form class="search">
+							<label>Search</label>
+						  <input id="bdcsMain" type="text" name="q" size="30" placeholder="Search"><br>
+						</form>
+						<script type="text/javascript">(function(){document.write(unescape('%3Cdiv id="bdcs"%3E%3C/div%3E'));var bdcs = document.createElement('script');bdcs.type = 'text/javascript';bdcs.async = true;bdcs.src = 'http://znsv.baidu.com/customer_search/api/js?sid=13808782294227901774' + '&plate_url=' + encodeURIComponent(window.location.href) + '&t=' + Math.ceil(new Date()/3600000);var s = document.getElementsByTagName('script')[0];s.parentNode.insertBefore(bdcs, s);})();</script>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/07/18/react-life-cycle/" title="React Component lifecycle" itemprop="url">React Component lifecycle</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Nonnull" target="_blank" itemprop="author">Nonnull</a>
+		
+  <p class="article-time">
+    <time datetime="2017-07-18T04:17:55.000Z" itemprop="datePublished"> Published 2017-07-18</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#React-Component-lifecycle"><span class="toc-number">1.</span> <span class="toc-text">React Component lifecycle</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#什么是component？"><span class="toc-number">1.1.</span> <span class="toc-text">什么是component？</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#React-lifecycle-methods"><span class="toc-number">2.</span> <span class="toc-text">React lifecycle methods</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#componentWillMount"><span class="toc-number">2.1.</span> <span class="toc-text">componentWillMount</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#componentDidMount"><span class="toc-number">2.2.</span> <span class="toc-text">componentDidMount</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#componentWillReceiveProps"><span class="toc-number">2.3.</span> <span class="toc-text">componentWillReceiveProps</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#shouldComponentUpdate"><span class="toc-number">2.4.</span> <span class="toc-text">shouldComponentUpdate</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#componentWillUpdate"><span class="toc-number">2.5.</span> <span class="toc-text">componentWillUpdate</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#componentDidUpdate"><span class="toc-number">2.6.</span> <span class="toc-text">componentDidUpdate</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#componentDidUpdate-1"><span class="toc-number">2.7.</span> <span class="toc-text">componentDidUpdate</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#make-cancelable-promise"><span class="toc-number">3.</span> <span class="toc-text">make cancelable promise</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="React-Component-lifecycle"><a href="#React-Component-lifecycle" class="headerlink" title="React Component lifecycle"></a>React Component lifecycle</h2><p>最近刚开始使用react-native做项目，有一些心得，所以在这里发表一下。对没有接触过的技术和开发环境，了解核心component的生命周期是非常重要的。能够保证在写代码的过程中不容易犯错。</p>
+<h3 id="什么是component？"><a href="#什么是component？" class="headerlink" title="什么是component？"></a>什么是component？</h3><p>根据React官方文档，<strong>React.component</strong>是一个抽象基类。能够让使用者将UI拆成各个独立地，可重用的component。常见的使用场景是继承它并提供一个<strong>render()</strong>方法。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Greeting</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">return</span> &lt;h1&gt;Hello, &#123;this.props.name&#125;&lt;/h1&gt;;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="React-lifecycle-methods"><a href="#React-lifecycle-methods" class="headerlink" title="React lifecycle methods"></a>React lifecycle methods</h2><p><img src="http://ot51d7lis.bkt.clouddn.com/React%20component%20life%20cycle2.png" alt=""></p>
+<p>上面这张图展示了一个React component的声明周期，从创建到销毁。接下来将逐步介绍以上各个方法并阐述什么时候使用使用它们。</p>
+<blockquote>
+<p>Mount单词，字典上的意思是：”to get up on something above the level of the ground; especially:to seat oneself (as on a horse) for riding” 后面这段意思很形象，骑上马，可以跑了 :[</p>
+</blockquote>
+<h3 id="componentWillMount"><a href="#componentWillMount" class="headerlink" title="componentWillMount"></a>componentWillMount</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">componentWillMount()</span><br></pre></td></tr></table></figure>
+<p>当这个方法被调用的时候，说明你的component将要出现在屏幕上。渲染方法<strong>render</strong>将要被调用。在这个方法内你能干什么呢？</p>
+<p>答案是，你可能不能干太多的事情。因为当<strong>componentWillMount</strong>被调用的时候，还没有任何component能够使用，所以你也无法对DOM做任何事情。</p>
+<p>另外，大部分初始化已经被component的<strong>constructor</strong>完成了(构造函数是你初始化默认值的最佳地方)</p>
+<p>说到这里，你可能觉得这个方法真没用。但是，这里有一个例外场景，就是当你要在<strong>运行时</strong>为整个app<strong>初始化全局配置</strong>的时候, 并且要保证第一时间初始化方法被调用，这个方法是有特别有用的。这就意味着你的component中几乎99%以上都不会用到这个方法。</p>
+<p>你可能会看到有人在这个方法里面启动AJAX calls或者执行一个Promise函数。不要这样做，下面会详细讲述原因。</p>
+<blockquote>
+<p><em>常用场景</em>：需要在运行时确定的App相关的配置<br><em>是否能够使用setState</em>: 否</p>
+</blockquote>
+<h3 id="componentDidMount"><a href="#componentDidMount" class="headerlink" title="componentDidMount"></a>componentDidMount</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">componentDidMount()</span><br></pre></td></tr></table></figure>
+<p>这个方法运行时，你的component已经加载上并已可使用。在这个方法里面你可以做很多事情，例如：</p>
+<ul>
+<li>在一个已经渲染好的画板上绘制新的元素</li>
+<li>添加event listeners</li>
+<li>加载数据。为什么这个方法里面适合加载数据呢？因为你无法保证一个异步的请求在component加载完成之前完成，它是不确定的。在某些情况下，还可能会在component unmount之后请求的response才返回回来，而这个时候如果根据response来设置state的话就会产生异常。使用componentDidMount至少可以保证在结果返回之前是有component可以使用的（但是，如果response返回时不进行处理的话，也有可能会发生错误。本文提供一种ES6 promise的解决方案，请看<a href="#cancelablePromise">make cancelable promise</a>）</li>
+</ul>
+<p>基本上，你可以做任何事情</p>
+<blockquote>
+<p><em>常用场景</em>：发起Ajax请求来加载数据<br><em>是否能够使用setState</em>: 是</p>
+</blockquote>
+<h3 id="componentWillReceiveProps"><a href="#componentWillReceiveProps" class="headerlink" title="componentWillReceiveProps"></a>componentWillReceiveProps</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">componentWillReceiveProps(nextProps)</span><br></pre></td></tr></table></figure>
+<p>这个方法被用来接收新的props。也许一些数据在parent component中加载并被传到当前compoent中。</p>
+<p>当component能够对新的props做出任何动作之前，componentWillReceiveProps会被调用。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">componentWillReceiveProps(nextProps) &#123;</span><br><span class="line">	<span class="keyword">if</span>(nextProps.text !=== <span class="keyword">this</span>.props.text) &#123;</span><br><span class="line">		<span class="keyword">this</span>.setState(&#123;<span class="attr">text</span>: nextProps.text&#125;);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过代码可以看到，在该方法中，我们可以同时访问当前props和nextProps。所以我们要做的就是：</p>
+<ul>
+<li>检查props是否有变化</li>
+<li>如果有变化，就做出相应的变化</li>
+</ul>
+<p><strong>注意</strong></p>
+<ul>
+<li>React也许会在props没有变化的时候调用该方法。所以总是判断props是否变化是有必要的。这种情况可能发生在parent component引起当前组件re-render。</li>
+<li>React不会在component初始化，设置初始props的调用该方法</li>
+<li>调用<strong>this.setState</strong>通常不会触发该方法</li>
+</ul>
+<blockquote>
+<p><em>常用场景</em>：针对props的变化做出相应的状态改变<br><em>是否能够使用setState</em>: 是</p>
+</blockquote>
+<h3 id="shouldComponentUpdate"><a href="#shouldComponentUpdate" class="headerlink" title="shouldComponentUpdate"></a>shouldComponentUpdate</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">shouldComponentUpdate(nextProps, nextState)</span><br></pre></td></tr></table></figure>
+<p>使用这个方法告诉React当前state或者props的变化是否会引起re-render。默认情况下，这个方法总是返回true，即需要re-render。如果你想要避免一些无意义或者纯属浪费的re-render，这个方法是你最好的选择。</p>
+<p>P.S 根据react最新官方文档，目前，如果<strong>shouldComponentUpdate</strong>方法返回false,则componentWillUpdate(), render() 和 componentDidUpdate()方法都不会被调用。但是，在未来的react版本中，<strong> shouldComponentUpdate</strong>的返回值只具有参考价值而不是强制性的，所以方法返回false后component也有可能会re-render。</p>
+<blockquote>
+<p><em>常用场景</em>：控制component是否需要re-render<br><em>是否能够使用setState</em>: NO</p>
+</blockquote>
+<h3 id="componentWillUpdate"><a href="#componentWillUpdate" class="headerlink" title="componentWillUpdate"></a>componentWillUpdate</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">componentWillUpdate(nextProps, nextState)</span><br></pre></td></tr></table></figure>
+<p>这个方法在re-render之前会被调用。这个方法跟<strong> componentWillReceiveProps</strong>类似，只是你不能在该方法里调用this.setState。</p>
+<p>如果你的component使用了<strong>shouldComponentUpdate</strong>并且当props变化的时候需要做一些事情，那么<strong>componentWillUpdate</strong>是一个不错的选择。</p>
+<blockquote>
+<p><em>常用场景</em>：在有shouldComponentUpdate方法的component中配合着用<br><em>是否能够使用setState</em>: NO</p>
+</blockquote>
+<h3 id="componentDidUpdate"><a href="#componentDidUpdate" class="headerlink" title="componentDidUpdate"></a>componentDidUpdate</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">componentDidUpdate(prevProps, prevState)</span><br></pre></td></tr></table></figure>
+<p>在component 更新之后，使用这个方法来操作DOM。这个方法也是一个发送网络请求的好的选择之一，前提是需要判断当前props和prevProps相比是否产生了变化（如果props没有变化，则不需要发送网络请求）</p>
+<blockquote>
+<p><em>常用场景</em>：根据props或者state的变化，对DOM进行相应的变化<br><em>是否能够使用setState</em>: YES</p>
+</blockquote>
+<h3 id="componentDidUpdate-1"><a href="#componentDidUpdate-1" class="headerlink" title="componentDidUpdate"></a>componentDidUpdate</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">componentWillUnmount()</span><br></pre></td></tr></table></figure>
+<p>这个方法会在component从屏幕上移除和销毁之前调用。在这个方法中，你需要进行任何必要的清理工作，比如取消network request，invalidate timers，remove event listeners或者清除任何在<strong>componentDidMount()</strong>中创建的DOM元素。</p>
+<blockquote>
+<p><em>常用场景</em>：清理一切需要必须清理的资源，事务或者事件<br><em>是否能够使用setState</em>: NO</p>
+</blockquote>
+<h2 id="make-cancelable-promise"><a href="#make-cancelable-promise" class="headerlink" title="make cancelable promise"></a><a id="cancelablePromise">make cancelable promise</a></h2><p>使用Promise发起异步请求，等到异步请求返回的时候，component有可能已经unmounted了。这个时候在response的callback尝试setState会引发异常。怎么避免这种情况呢？</p>
+<p>感谢@istarkov提供了一种可取消的Promise的方案：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> makeCancelable = <span class="function">(<span class="params">promise</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">let</span> hasCanceled_ = <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> wrappedPromise = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">    promise.then(</span><br><span class="line">      val =&gt; hasCanceled_ ? reject(&#123;<span class="attr">isCanceled</span>: <span class="literal">true</span>&#125;) : resolve(val),</span><br><span class="line">      error =&gt; hasCanceled_ ? reject(&#123;<span class="attr">isCanceled</span>: <span class="literal">true</span>&#125;) : reject(error)</span><br><span class="line">    );</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    promise: wrappedPromise,</span><br><span class="line">    cancel() &#123;</span><br><span class="line">      hasCanceled_ = <span class="literal">true</span>;</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>如何使用：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> cancelablePromise = makeCancelable(</span><br><span class="line">  <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="params">r</span> =&gt;</span> component.setState(&#123;...&#125;&#125;))</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">cancelablePromise</span><br><span class="line">  .promise</span><br><span class="line">  .then(<span class="function"><span class="params">()</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">'resolved'</span>))</span><br><span class="line">  .catch(<span class="function">(<span class="params">reason</span>) =&gt;</span> <span class="built_in">console</span>.log(<span class="string">'isCanceled'</span>, reason.isCanceled));</span><br><span class="line"></span><br><span class="line">cancelablePromise.cancel(); <span class="comment">// Cancel the promise</span></span><br></pre></td></tr></table></figure>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/javascript/">javascript</a>►<a class="article-category-link" href="/categories/javascript/react/">react</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/javascript/">javascript</a><a href="/tags/react/">react</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://gobodigo.com/2017/07/18/react-life-cycle/" data-title="React Component lifecycle | SIGABRT" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2017/07/23/find-non-include-regex/" title="找出不包含某个字符串的正则表达式">
+  <strong>上一篇：</strong><br/>
+  <span>
+  找出不包含某个字符串的正则表达式</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2017/07/16/ios-iap-product-types/"  title="iOS 内购商品类型">
+ <strong>下一篇：</strong><br/> 
+ <span>iOS 内购商品类型
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#React-Component-lifecycle"><span class="toc-number">1.</span> <span class="toc-text">React Component lifecycle</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#什么是component？"><span class="toc-number">1.1.</span> <span class="toc-text">什么是component？</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#React-lifecycle-methods"><span class="toc-number">2.</span> <span class="toc-text">React lifecycle methods</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#componentWillMount"><span class="toc-number">2.1.</span> <span class="toc-text">componentWillMount</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#componentDidMount"><span class="toc-number">2.2.</span> <span class="toc-text">componentDidMount</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#componentWillReceiveProps"><span class="toc-number">2.3.</span> <span class="toc-text">componentWillReceiveProps</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#shouldComponentUpdate"><span class="toc-number">2.4.</span> <span class="toc-text">shouldComponentUpdate</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#componentWillUpdate"><span class="toc-number">2.5.</span> <span class="toc-text">componentWillUpdate</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#componentDidUpdate"><span class="toc-number">2.6.</span> <span class="toc-text">componentDidUpdate</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#componentDidUpdate-1"><span class="toc-number">2.7.</span> <span class="toc-text">componentDidUpdate</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#make-cancelable-promise"><span class="toc-number">3.</span> <span class="toc-text">make cancelable promise</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/http/" title="http">http<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/iOS/" title="iOS">iOS<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/javascript/" title="javascript">javascript<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/javascript/react/" title="react">react<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/正则表达式/" title="正则表达式">正则表达式<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/算法/" title="算法">算法<sup>2</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/算法/" title="算法">算法<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/javascript/" title="javascript">javascript<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/http/" title="http">http<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/正则表达式/" title="正则表达式">正则表达式<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/objective-c/" title="objective-c">objective-c<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/react/" title="react">react<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OOD/" title="OOD">OOD<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+	<section class="info">
+		<p> Seeking Thinking <br/>
+			Realize Value</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		
+		<a href="https://github.com/windseason" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		<a href="https://twitter.com/CharlesLiu8" target="_blank" class="icon-twitter" title="twitter"></a>
+		
+		
+		<a href="https://www.facebook.com/charles.liu.853" target="_blank" class="icon-facebook" title="facebook"></a>
+		
+		
+		<a href="https://www.linkedin.com/in/charles-liu-b98382b" target="_blank" class="icon-linkedin" title="linkedin"></a>
+		
+		
+		
+		<a href="http://www.zhihu.com/people/windseason" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		
+		<a href="mailto:liuchao853@msn.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2018 
+		
+		<a href="/about" target="_blank" title="Nonnull">Nonnull</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+<script type="text/javascript">
+
+var disqus_shortname = 'windseason';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+
+
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?4f0f6a13270382ca7ac23fd9d6ca150c";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

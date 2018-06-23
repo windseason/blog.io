@@ -1,0 +1,549 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Objective-C Dynamic binding 研究 | SIGABRT</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Nonnull">
+    
+
+    
+    <meta name="description" content="Objective-C Dynamic binding 研究对于习惯编写静态编程语言(C#/java/C++)的同学，初识Objective-C，可能会跟我有一样的迷惑。什么迷惑呀？请看下面这段oc的代码： 1234567891011121314151617181920212223242526272829303132333435@interface MyObject : NSObject+ (id">
+<meta name="keywords" content="objective-c">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Objective-C Dynamic binding 研究">
+<meta property="og:url" content="http://gobodigo.com/2015/09/22/objc-dynamic-binding/index.html">
+<meta property="og:site_name" content="SIGABRT">
+<meta property="og:description" content="Objective-C Dynamic binding 研究对于习惯编写静态编程语言(C#/java/C++)的同学，初识Objective-C，可能会跟我有一样的迷惑。什么迷惑呀？请看下面这段oc的代码： 1234567891011121314151617181920212223242526272829303132333435@interface MyObject : NSObject+ (id">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-06-23T14:22:10.519Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Objective-C Dynamic binding 研究">
+<meta name="twitter:description" content="Objective-C Dynamic binding 研究对于习惯编写静态编程语言(C#/java/C++)的同学，初识Objective-C，可能会跟我有一样的迷惑。什么迷惑呀？请看下面这段oc的代码： 1234567891011121314151617181920212223242526272829303132333435@interface MyObject : NSObject+ (id">
+<meta name="twitter:creator" content="@CharlesLiu8">
+
+    
+    <link rel="alternative" href="/atom.xml" title="SIGABRT" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/logo32.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/logo114.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/logo114.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="SIGABRT" title="SIGABRT"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="SIGABRT">SIGABRT</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+						<form class="search">
+							<label>Search</label>
+						  <input id="bdcsMain" type="text" name="q" size="30" placeholder="Search"><br>
+						</form>
+						<script type="text/javascript">(function(){document.write(unescape('%3Cdiv id="bdcs"%3E%3C/div%3E'));var bdcs = document.createElement('script');bdcs.type = 'text/javascript';bdcs.async = true;bdcs.src = 'http://znsv.baidu.com/customer_search/api/js?sid=13808782294227901774' + '&plate_url=' + encodeURIComponent(window.location.href) + '&t=' + Math.ceil(new Date()/3600000);var s = document.getElementsByTagName('script')[0];s.parentNode.insertBefore(bdcs, s);})();</script>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/09/22/objc-dynamic-binding/" title="Objective-C Dynamic binding 研究" itemprop="url">Objective-C Dynamic binding 研究</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Nonnull" target="_blank" itemprop="author">Nonnull</a>
+		
+  <p class="article-time">
+    <time datetime="2015-09-22T15:30:00.000Z" itemprop="datePublished"> Published 2015-09-22</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Objective-C-Dynamic-binding-研究"><span class="toc-number">1.</span> <span class="toc-text">Objective-C Dynamic binding 研究</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="Objective-C-Dynamic-binding-研究"><a href="#Objective-C-Dynamic-binding-研究" class="headerlink" title="Objective-C Dynamic binding 研究"></a>Objective-C Dynamic binding 研究</h2><p>对于习惯编写静态编程语言(C#/java/C++)的同学，初识Objective-C，可能会跟我有一样的迷惑。什么迷惑呀？请看下面这段oc的代码：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">MyObject</span> : <span class="title">NSObject</span></span></span><br><span class="line">+ (<span class="keyword">id</span>)factoryMethod;</span><br><span class="line">-(<span class="built_in">NSString</span>*)tell;</span><br><span class="line"><span class="keyword">@end</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">MyObject</span></span></span><br><span class="line">+ (<span class="keyword">id</span>)factoryMethodB &#123; <span class="keyword">return</span> [[[<span class="keyword">self</span> <span class="keyword">class</span>] alloc] init]; &#125;</span><br><span class="line">- (<span class="built_in">NSString</span>*)tell</span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="string">@"I'm MyObject"</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">@end</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">MyOtherObject</span> : <span class="title">NSObject</span></span></span><br><span class="line">-(<span class="keyword">void</span>)say;</span><br><span class="line">-(<span class="built_in">NSString</span>*)tell;</span><br><span class="line"><span class="keyword">@end</span></span><br><span class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">MyOtherObject</span></span></span><br><span class="line">-(<span class="keyword">void</span>)say</span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">NSLog</span>(<span class="string">@"Hello world"</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">-(<span class="built_in">NSString</span>*)tell</span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="string">@"I'm MyOtherObject"</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">@end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> DoSometing()</span><br><span class="line">&#123;</span><br><span class="line">	MyOtherObject *obj = [MyObject factoryMethod]; (<span class="number">1</span>)</span><br><span class="line">	<span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,[obj tell]);                       (<span class="number">2</span>)</span><br><span class="line">	[obj say];                                     (<span class="number">3</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>代码顺利通过编译。调用DoSomething，运行到第(3)行时出错。先来看第（1）行，我打赌这行已经让只熟悉静态语言的程序员们不明白了，因为照理来说，MyObject的factoryMethod返回的是自己的实例，要是用别的语言编写，编译器第(1)行就报错了，因为类型不匹配呀。为什么OC的编译器不报错呢？不急，我们先来看看这个返回值<strong>id</strong>的定义：</p>
+<blockquote>
+<p>Objective-C provides a special type that can hold a pointer to any<br>object you can construct with Objective-C—regardless of class. This<br>type is called id, and can be used to make your Objective-C<br>programming generic. （大致意思就是id是一个与类型无关的指向任意对象的东东。能够让你OC编程泛型化。）</p>
+</blockquote>
+<p>几个意思呢？其实id就是一个指针，但是它又不同于c/c++里面的void<em>。void</em>是指向内存中任意块的未知对象或者未知内容的。id很明确，它就是用来指向OC对象的。（关于void*是否能转换为OC对象这里暂时不讨论）。好了，这就解释了第(1)行的可行性。</p>
+<p>运行到第二行的时候，NSLog输出:</p>
+<blockquote>
+<p>I’m MyObject</p>
+</blockquote>
+<p>它居然正确的调用了MyObject的tell方法！这就要Dynamic binding（动态绑定）知识来解释了：</p>
+<blockquote>
+<p>Dynamic binding means that when we call a certain object’s method, and there are several implementations of that method, the right one is figured out at runtime. In Objective-C, this idea is used, but is also extended - you are permitted to send any message to any object. At first glance this may sound rather dangerous, but in fact this allows you a lot of flexibility. （大意是：OC的动态绑定的意思是OC扩展了Dynamic binding，使编程人员能够被允许发送任何消息给任何对象。咋一听这种扩展非常危险，但是实际上它带来了很大的灵活性！）</p>
+</blockquote>
+<p>由于MyOtherObject*仅仅是声明一个指针，被赋予id。所以第(2)行怎么执行是在运行时决定的，所以[obj tell]也就顺理成章能够毫无错误的运行了。</p>
+<p>第(3)行运行的时候，报错:</p>
+<blockquote>
+<p>unrecognized selector sent to instance 0x100400100</p>
+</blockquote>
+<p>结合上面的知识，很容易判断，因为MyOtherObject有say方法，所以编译器通过。但是运行时，其实指针的内容是MyObject，MyObject并没有声明say方法，所以就报错了。</p>
+<p>关于Dynamic binding还有个更有趣的例子，请看：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">LinkedListNode</span> : <span class="title">NSObject</span></span></span><br><span class="line"><span class="keyword">@property</span> <span class="keyword">id</span> data;</span><br><span class="line"><span class="keyword">@property</span> LinkedListNode * child;</span><br><span class="line"><span class="keyword">@end</span></span><br><span class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">LinkedListNode</span></span></span><br><span class="line"><span class="keyword">@end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> DoSometing2()</span><br><span class="line">&#123;</span><br><span class="line">    LinkedListNode *p = [[LinkedListNode alloc] init];</span><br><span class="line">    p.data = [MyOtherObject new];</span><br><span class="line">    </span><br><span class="line">    LinkedListNode *child = [LinkedListNode new];</span><br><span class="line">    child.data = [MyObject new];</span><br><span class="line">    p.child = child;</span><br><span class="line">    </span><br><span class="line">    LinkedListNode *node;</span><br><span class="line">    <span class="keyword">for</span> (node = p; node != <span class="literal">nil</span>; node = node.child) &#123;</span><br><span class="line">	    [[node data] say];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>编译，没任何错误。运行，报的是跟上面(3)一样的错误。同样的原因，怎么办呢？你可能会想，太灵活了，太容易出错了。幸好，有解决的办法：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">LinkedListNode *p = [LinkedListNode new];</span><br><span class="line">p.data = [MyOtherObject new];</span><br><span class="line"> </span><br><span class="line"> LinkedListNode *child = [LinkedListNode new];</span><br><span class="line"> child.data = [MyObject new];</span><br><span class="line"> p.child = child;</span><br><span class="line"> </span><br><span class="line"> LinkedListNode *node;</span><br><span class="line"> <span class="keyword">for</span> (node = p; node != <span class="literal">nil</span>; node = node.child) &#123;</span><br><span class="line">        <span class="keyword">if</span> ([[node data] respondsToSelector:<span class="keyword">@selector</span>(say)]) &#123;</span><br><span class="line">            [[node data] say];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>另外，还可以判断是否是某一特定类：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> ([node isKindOfClass:[MyOtherObject <span class="keyword">class</span>]]) &#123;</span><br><span class="line">	[[node data] say];</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>上述例子的factoryMethod的返回值id，苹果已经不推荐这么用了。苹果推荐返回instancetype。它跟id用法一样，但是主要是用在alloc, init或者类的工厂方法上的。<br>它的好处是 编译器能够检测被调用的对象上是否能够反应传入的消息，如果不能，则发出警告。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/iOS/">iOS</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/objective-c/">objective-c</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://gobodigo.com/2015/09/22/objc-dynamic-binding/" data-title="Objective-C Dynamic binding 研究 | SIGABRT" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2015/10/15/URL-URL-encoding/" title="URL&amp;URL encoding">
+  <strong>上一篇：</strong><br/>
+  <span>
+  URL&amp;URL encoding</span>
+</a>
+</div>
+
+
+</nav>
+
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Objective-C-Dynamic-binding-研究"><span class="toc-number">1.</span> <span class="toc-text">Objective-C Dynamic binding 研究</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/http/" title="http">http<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/iOS/" title="iOS">iOS<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/javascript/" title="javascript">javascript<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/javascript/react/" title="react">react<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/正则表达式/" title="正则表达式">正则表达式<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/算法/" title="算法">算法<sup>2</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/算法/" title="算法">算法<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/javascript/" title="javascript">javascript<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/http/" title="http">http<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/正则表达式/" title="正则表达式">正则表达式<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/objective-c/" title="objective-c">objective-c<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/react/" title="react">react<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OOD/" title="OOD">OOD<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+	<section class="info">
+		<p> Seeking Thinking <br/>
+			Realize Value</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		
+		<a href="https://github.com/windseason" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		<a href="https://twitter.com/CharlesLiu8" target="_blank" class="icon-twitter" title="twitter"></a>
+		
+		
+		<a href="https://www.facebook.com/charles.liu.853" target="_blank" class="icon-facebook" title="facebook"></a>
+		
+		
+		<a href="https://www.linkedin.com/in/charles-liu-b98382b" target="_blank" class="icon-linkedin" title="linkedin"></a>
+		
+		
+		
+		<a href="http://www.zhihu.com/people/windseason" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		
+		<a href="mailto:liuchao853@msn.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2018 
+		
+		<a href="/about" target="_blank" title="Nonnull">Nonnull</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+<script type="text/javascript">
+
+var disqus_shortname = 'windseason';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+
+
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?4f0f6a13270382ca7ac23fd9d6ca150c";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

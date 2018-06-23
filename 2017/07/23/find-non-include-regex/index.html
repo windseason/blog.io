@@ -1,0 +1,546 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>找出不包含某个字符串的正则表达式 | SIGABRT</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Nonnull">
+    
+
+    
+    <meta name="description" content="找出不包含某个字符串的正则表达式经常我们会遇到想找出不包含某个字符串，例如”hello”的文本，最容易想到的是在正则表达式里使用[^hello]，但这样的正则表达式完全是另外一个意思，它的意思是字符串里不能包含’h’，’e’，’l’, ‘o’四个单字符。那什么样的正则表达式能过滤出不包含完整“hello”字串的信息呢？事实上，说正则表达式里不支持逆向匹配并不是百分之百的正确。 我们就可以使用否定式">
+<meta name="keywords" content="正则表达式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="找出不包含某个字符串的正则表达式">
+<meta property="og:url" content="http://gobodigo.com/2017/07/23/find-non-include-regex/index.html">
+<meta property="og:site_name" content="SIGABRT">
+<meta property="og:description" content="找出不包含某个字符串的正则表达式经常我们会遇到想找出不包含某个字符串，例如”hello”的文本，最容易想到的是在正则表达式里使用[^hello]，但这样的正则表达式完全是另外一个意思，它的意思是字符串里不能包含’h’，’e’，’l’, ‘o’四个单字符。那什么样的正则表达式能过滤出不包含完整“hello”字串的信息呢？事实上，说正则表达式里不支持逆向匹配并不是百分之百的正确。 我们就可以使用否定式">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-06-23T14:22:10.517Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="找出不包含某个字符串的正则表达式">
+<meta name="twitter:description" content="找出不包含某个字符串的正则表达式经常我们会遇到想找出不包含某个字符串，例如”hello”的文本，最容易想到的是在正则表达式里使用[^hello]，但这样的正则表达式完全是另外一个意思，它的意思是字符串里不能包含’h’，’e’，’l’, ‘o’四个单字符。那什么样的正则表达式能过滤出不包含完整“hello”字串的信息呢？事实上，说正则表达式里不支持逆向匹配并不是百分之百的正确。 我们就可以使用否定式">
+<meta name="twitter:creator" content="@CharlesLiu8">
+
+    
+    <link rel="alternative" href="/atom.xml" title="SIGABRT" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/logo32.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/logo114.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/logo114.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="SIGABRT" title="SIGABRT"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="SIGABRT">SIGABRT</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+						<form class="search">
+							<label>Search</label>
+						  <input id="bdcsMain" type="text" name="q" size="30" placeholder="Search"><br>
+						</form>
+						<script type="text/javascript">(function(){document.write(unescape('%3Cdiv id="bdcs"%3E%3C/div%3E'));var bdcs = document.createElement('script');bdcs.type = 'text/javascript';bdcs.async = true;bdcs.src = 'http://znsv.baidu.com/customer_search/api/js?sid=13808782294227901774' + '&plate_url=' + encodeURIComponent(window.location.href) + '&t=' + Math.ceil(new Date()/3600000);var s = document.getElementsByTagName('script')[0];s.parentNode.insertBefore(bdcs, s);})();</script>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/07/23/find-non-include-regex/" title="找出不包含某个字符串的正则表达式" itemprop="url">找出不包含某个字符串的正则表达式</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Nonnull" target="_blank" itemprop="author">Nonnull</a>
+		
+  <p class="article-time">
+    <time datetime="2017-07-23T14:42:43.000Z" itemprop="datePublished"> Published 2017-07-23</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#找出不包含某个字符串的正则表达式"><span class="toc-number">1.</span> <span class="toc-text">找出不包含某个字符串的正则表达式</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="找出不包含某个字符串的正则表达式"><a href="#找出不包含某个字符串的正则表达式" class="headerlink" title="找出不包含某个字符串的正则表达式"></a>找出不包含某个字符串的正则表达式</h2><p>经常我们会遇到想找出不包含某个字符串，例如”hello”的文本，最容易想到的是在正则表达式里使用[^hello]，但这样的正则表达式完全是另外一个意思，它的意思是字符串里不能包含’h’，’e’，’l’, ‘o’四个单字符。那什么样的正则表达式能过滤出不包含完整“hello”字串的信息呢？事实上，说正则表达式里不支持逆向匹配并不是百分之百的正确。</p>
+<p>我们就可以使用<strong>否定式查找</strong>来模拟出逆向匹配，从而解决我们的问题, 表达式如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">^((?!hello).)*$</span><br></pre></td></tr></table></figure>
+<p>上面这个表达式就能过滤出不包含<strong>‘hello’</strong>字串的信息。</p>
+<p>先解释一下<strong>?!</strong>的用法：</p>
+<blockquote>
+<p>零宽负向先行断言(?!exp)，只会匹配后缀exp不存在的位置。例如，\d{3}(?!\d)匹配三位数字，而且这三位数字的后面不能是数字</p>
+</blockquote>
+<p>现在解释表达式<strong>((?!hello).)*</strong>：</p>
+<p>表达式<strong>(?!hello)</strong>.会往前查找，看看前面是不是没有“hello”字串，如果没有(是其它字符)，那么.(点号)就会匹配这些其它字符。<strong>这种正则表达式的“查找”也叫做“zero-width-assertions”(零宽度断言)</strong>，因为它不会捕获任何的字符，只是判断。</p>
+<p>我们来看一下<strong>“Nonnullhelloworld”</strong>这个字符串。</p>
+<blockquote>
+<p><strong>(?!hello)</strong>会检查每个字符串后面跟的是不是<strong>‘hello’</strong>，如果不是，.就匹配这个字符。表达式<strong>(?!hello)</strong>只执行一次，所以将这个表达式用括弧包裹组成组，然后用星号*修饰来匹配零次或多次。</p>
+</blockquote>
+<p>匹配<strong>Nonnullhelloworld</strong>返回false, 说明该字符串含有<strong>‘hello’</strong>子串。<br>匹配<strong>Nonnullworld</strong>返回true<br>匹配<strong>Nonnullworldhello</strong>返回false<br>匹配<strong>hello</strong>返回false</p>
+<p>所以，你可以认为当表达式返回false的时候，说明该字符串包含指定子串。</p>
+<p>最后推荐一个好的，快速的测试正则表达式的在线网站，我用起来很不错(居然还有正则表达式的解释，真是有点强大哈，还不快自己尝试一下)：<br><a href="https://regex101.com/" target="_blank" rel="noopener">https://regex101.com/</a></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/正则表达式/">正则表达式</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/正则表达式/">正则表达式</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://gobodigo.com/2017/07/23/find-non-include-regex/" data-title="找出不包含某个字符串的正则表达式 | SIGABRT" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2017/07/28/algorithm-dijstra/" title="最短路径之迪杰斯特拉算法">
+  <strong>上一篇：</strong><br/>
+  <span>
+  最短路径之迪杰斯特拉算法</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2017/07/18/react-life-cycle/"  title="React Component lifecycle">
+ <strong>下一篇：</strong><br/> 
+ <span>React Component lifecycle
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#找出不包含某个字符串的正则表达式"><span class="toc-number">1.</span> <span class="toc-text">找出不包含某个字符串的正则表达式</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/http/" title="http">http<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/iOS/" title="iOS">iOS<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/javascript/" title="javascript">javascript<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/javascript/react/" title="react">react<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/正则表达式/" title="正则表达式">正则表达式<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/算法/" title="算法">算法<sup>2</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/算法/" title="算法">算法<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/javascript/" title="javascript">javascript<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/http/" title="http">http<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/正则表达式/" title="正则表达式">正则表达式<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/objective-c/" title="objective-c">objective-c<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/react/" title="react">react<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OOD/" title="OOD">OOD<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+	<section class="info">
+		<p> Seeking Thinking <br/>
+			Realize Value</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		
+		<a href="https://github.com/windseason" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		<a href="https://twitter.com/CharlesLiu8" target="_blank" class="icon-twitter" title="twitter"></a>
+		
+		
+		<a href="https://www.facebook.com/charles.liu.853" target="_blank" class="icon-facebook" title="facebook"></a>
+		
+		
+		<a href="https://www.linkedin.com/in/charles-liu-b98382b" target="_blank" class="icon-linkedin" title="linkedin"></a>
+		
+		
+		
+		<a href="http://www.zhihu.com/people/windseason" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		
+		<a href="mailto:liuchao853@msn.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2018 
+		
+		<a href="/about" target="_blank" title="Nonnull">Nonnull</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+<script type="text/javascript">
+
+var disqus_shortname = 'windseason';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+
+
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?4f0f6a13270382ca7ac23fd9d6ca150c";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
