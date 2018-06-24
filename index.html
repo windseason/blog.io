@@ -44,7 +44,7 @@
 			
 			<div id="textlogo">
 				<h1 class="site-name"><a href="/" title="SIGABRT">SIGABRT</a></h1>
-				<h2 class="blog-motto"></h2>
+				<h2 class="blog-motto">Seeking Thinking Realizing Value</h2>
 			</div>
 			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
 			</a></div>
@@ -73,6 +73,135 @@
     </header>
     <div id="container">
       <div id="main">
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2018/06/23/fastlane-jenkins/" title="使用Fastlane和Jenkins构建自动打包系统 (Part 1)" itemprop="url">使用Fastlane和Jenkins构建自动打包系统 (Part 1)</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Nonnull" target="_blank" itemprop="author">Nonnull</a>
+		
+  <p class="article-time">
+    <time datetime="2018-06-23T14:30:11.000Z" itemprop="datePublished"> Published 2018-06-23</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <blockquote>
+<p>发这篇博文的目的主要是总结一些在使用fastlane过程遇到的坑，顺便吐槽一下Fastlane官方网站：写的好飘逸，对于新手来说不看几遍不试几次，完全不知到整个体系是如何的。。。最后我希望能够帮助看到这篇文章的你:]</p>
+</blockquote>
+<h2 id="Fastlane"><a href="#Fastlane" class="headerlink" title="Fastlane"></a>Fastlane</h2><p><img src="https://docs.fastlane.tools/img/fastlane_text.png" alt=""></p>
+<p><strong>Fastlane</strong>是一种能够将iOS和android平台beta测试或者正式发布完全自动化的工具！It’s amazing dude! 它能够做的事情有：</p>
+<ul>
+<li>生成应用商店需要的所有截图 (本地化的截图！可以根据需要为各种语言生成）</li>
+<li>处理打包时候的签名</li>
+<li>发布应用到商店</li>
+</ul>
+<p>我们接下来以iOS为例讲解如何使用fastlane打包iOS app</p>
+<h3 id="fastlane初始化配置"><a href="#fastlane初始化配置" class="headerlink" title="fastlane初始化配置"></a>fastlane初始化配置</h3><p>详细的setup步骤这里不赘述，大家可以到<a href="https://docs.fastlane.tools/getting-started/ios/setup/" target="_blank" rel="noopener">Getting started with fastlane for iOS</a>查看。</p>
+<p>根据文档，安装完fastlane后，配置工程的第一个命令是(这里不建议使用swift版本的init，一个是目前是beta版本，另外一个是当前能查到的资料都是以<a href="https://www.martinfowler.com/articles/rake.html" target="_blank" rel="noopener">ruby DSL</a>来说明的):</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fastlane init</span><br></pre></td></tr></table></figure>
+<p>运行这个命令之后，会看到命令行出现交互式提问，第一个问题经常是问你想用fastlane 来干嘛？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1. 📸  Automate screenshots (自动化appstore 本地化截图)</span><br><span class="line">2. 👩‍✈️  Automate beta distribution to TestFlight (自动化发布beta测试app到test flight)</span><br><span class="line">3. 🚀  Automate App Store distribution (appstore 发布自动化)</span><br><span class="line">4. 🛠  Manual setup - manually setup your project to automate your tasks (手动配置自己的工程)</span><br></pre></td></tr></table></figure>
+<p>如果您的app有多个target或者没有找到跟workspace名字一样的scheme，fastlane会提示输入bundle id，然后会提示输入apple id及其密码，如果apple id在多个team还会提示选择team等等，总之问题问完，你的初始配置也就完成了。</p>
+<p>配置完后，会在您的工程下面生成一个名为<strong>fastlane</strong>的文件夹，这个文件夹就是所有fastlane的配置所在了。文件夹会包含两个文件:</p>
+<ul>
+<li>Appfile: 用来存储在使用fastlane过程中所需要的有用信息，例如apple id，bundle id等</li>
+<li>Fastfile: fastlane编译以及发布的核心文件，所有需要自动编译配置的代码都放到这个文件里面</li>
+</ul>
+<h3 id="Fastfile"><a href="#Fastfile" class="headerlink" title="Fastfile"></a>Fastfile</h3><p>现在重点讲一下如何配置<strong>Fastfile</strong>。初始化完后，fastlane会自动为工程生成如下代码在<strong>fastfile</strong>里面(我在初始化的时候选择的是第3项–appstore发布自动化，如果选择别的选项可能会与下面的例子有稍微不同)。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">platform <span class="symbol">:ios</span> <span class="keyword">do</span></span><br><span class="line">  desc <span class="string">"Push a new release build to the App Store"</span></span><br><span class="line">  lane <span class="symbol">:release</span> <span class="keyword">do</span></span><br><span class="line">    build_app(<span class="symbol">workspace:</span> <span class="string">"Spacename.xcworkspace"</span>, <span class="symbol">scheme:</span> <span class="string">"SchemeName"</span>)</span><br><span class="line">    upload_to_app_store(<span class="symbol">skip_metadata:</span> <span class="literal">true</span>, <span class="symbol">skip_screenshots:</span> <span class="literal">true</span>)</span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>platform: 告诉fastlane是哪个平台。</li>
+<li>desc: 注解。一般放到每个lane之前一行用于解释这个lane的作用</li>
+<li>lane: 简单来讲就是一个任务的配置，比如发布到test flight算一个任务，打内部测试Adhoc包等。lane 后面跟着的是冒号加任务名称，如上代码： :release, 这样你就可以在命令行下面输入如下命令就可以执行这个任务了：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fastlane release</span><br></pre></td></tr></table></figure>
+<ul>
+<li>lane的body里面能够使用的命令都叫做action，能调用的<a href="https://docs.fastlane.tools/actions" target="_blank" rel="noopener">actions</a>官方已经帮我们列出来了，而且每个action都有详细的文档。例子中的任务一眼就能看出来是做什么：编译名为<strong>Spacename.xcworkspace</strong>，scheme为<strong>SchemeName</strong>的工程，编译完后上传到app store（跳过上传meta data和screenshots）</li>
+</ul>
+<blockquote>
+<p>读者可以亲手试一试，讲workspace和scheme改为自己工程的名字，然后在命令行运行fastlane release，之后如果编译没有失败并且itunes connect连接和验证成功的话，您会看到ipa包已经成功的传到了itunes connect的后台了。怎么样？很厉害吧，就2行代码就搞定了编译，打包，上传到appstore这种平时繁杂的任务！</p>
+</blockquote>
+<p>等等，我们好像漏了什么。对，最重要的程序签名！</p>
+<h3 id="Fastlane-match"><a href="#Fastlane-match" class="headerlink" title="Fastlane match"></a>Fastlane match</h3><p>什么是Fastlane match? Fastlane match不仅仅是在配置fastlane自动打包时候需要用到，而且极大地简化了在一个开发团队中共享证书和provisioning profiles的流程！</p>
+<ul>
+<li>项目组中每来一个新成员，是不是都要花时间为新成员配置证书，并且把他加入到相应项目的provisioning profiles里面？如果项目众多，是不是管理的一场噩梦？想要简化吗？快使用<strong>Fastlane match</strong>!</li>
+<li>连接到苹果服务器很慢，下载provisioning profile很慢！想每次都下载快吗？快使用<strong>Fastlane match</strong>!</li>
+<li>想在团队中方便的使用个人开发者证书，而不用拷来拷去吗？快使用<strong>Fastlane match</strong>!</li>
+<li>项目组有新设备后，快使用<strong>Fastlane match</strong>! 一键搞定！</li>
+</ul>
+<p>说了那么多好处，咱们来看看怎么用！首先在工程所在文件夹运行如下命令（确保在运行之前先运行过fastlane init命令）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fastlane match init</span><br></pre></td></tr></table></figure>
+<p>运行完后，fastlane会问用来存储工程的证书和provisioning profiles的Git repo的URL是什么？所以，马上去Github或者Gitlab上创建一个去吧！</p>
+<p><strong>注意！！！</strong></p>
+<ul>
+<li>所有传到指定git repo的证书和provisioning profiles将会被fastlane使用OpenSSL来加密存储的。</li>
+<li>你必须对曾git repo有完全的控制权力。最好保证你所使用的git repo是私有的并且使用安全的私钥。</li>
+<li>即使你的证书泄露了，在不知道你的itunes connect账号的情况下并不能对你造成伤害</li>
+<li>如果你使用Git hub或者Bitbuckt，建议你使用开启两步验证的itunes connect账号来作为match连接时用的账号</li>
+</ul>
+<p>跟随着所有提示做完后会在fastlane文件夹下生成一个叫做<strong>Matchfile</strong>的文件，初始的文件内容与下面类似：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">git_url(<span class="string">"git@xxx/certificates.git"</span>)</span><br><span class="line"></span><br><span class="line">type(<span class="string">"development"</span>) <span class="comment"># The default type, can be: appstore, adhoc, enterprise or development</span></span><br><span class="line"></span><br><span class="line">app_identifier([<span class="string">"bundle identifier 1"</span>, <span class="string">"bundle identifier 2"</span>])</span><br><span class="line"><span class="comment">#username("xxx<span class="doctag">@xxx</span>.com") # Your Apple Developer Portal username</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># For all available options run `fastlane match --help`</span></span><br><span class="line"><span class="comment"># Remove the # in the beginning of the line to enable the other options</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#match(app_identifier: ["bundle identifier 1", "bundle identifier 2"], type: "adhoc")</span></span><br></pre></td></tr></table></figure>
+<p>初始化完后，就到为工程生成证书和provisioning profiles了 ，（如果不是新项目，想利用已经存在的证书怎么办？这部分也有解决方案，我打算放到part 2的时候再讲）运行如下命令，就会为工程生成development证书和相应的provisiong profile：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fastlane match development</span><br></pre></td></tr></table></figure>
+<p>第一次运行这个命令会提示请输入passphase，这个passphase就是用来加密证书和provisioning profiles用的。</p>
+<p><strong>注意</strong>: 运行以上命令,如果发现没有相应的证书和provisiong profiles就会生成新的证书和provisioning profiles，所以请慎用！</p>
+<p>接下来，如果想在一台新的机器上安装该工程的证书就可以运行下面的命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fastlane match development --readonly</span><br></pre></td></tr></table></figure>
+<p>加上<strong>–readonly</strong>就能保证不会生成新的，而仅仅只是执行安装而已。除了development,我们还能指定adhoc, appstore, enterprise等参数来生成不同场景的证书。</p>
+<p>生成的证书和provisioning profiles都会被加密放到初始化match时指定的git repo中，这样当使用<strong>fastlane match development</strong>或者<strong>fastlane match development –readonly</strong>的时候，fastlane会第一时间从指定的git repo中去寻找并安装，所以不需要经过苹果服务器。如果git repo是自己公司服务器的，那就更快了:]。</p>
+<p>如果想一口气装上所需要的证书和provisioning profiles, 那么可以写一个脚本来完成：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/sh</span><br><span class="line"><span class="meta">#</span>install appstore development profiles and cert</span><br><span class="line">fastlane match development --readonly</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span>uncomment below lines if you need install other types of certs</span><br><span class="line"><span class="meta">#</span>fastlane match adhoc --readonly</span><br><span class="line"><span class="meta">#</span>fastlane match appstore --readonly</span><br></pre></td></tr></table></figure>
+<p>将脚本传到工程git上，这样只要有新机器，就运行一下这个脚本就全部装上了。</p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/iOS/">iOS</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/iOS/">iOS</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2018/06/23/fastlane-jenkins/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
 
    
     
@@ -976,96 +1105,10 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/09/22/objc-dynamic-binding/" title="Objective-C Dynamic binding 研究" itemprop="url">Objective-C Dynamic binding 研究</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Nonnull" target="_blank" itemprop="author">Nonnull</a>
-		
-  <p class="article-time">
-    <time datetime="2015-09-22T15:30:00.000Z" itemprop="datePublished"> Published 2015-09-22</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="Objective-C-Dynamic-binding-研究"><a href="#Objective-C-Dynamic-binding-研究" class="headerlink" title="Objective-C Dynamic binding 研究"></a>Objective-C Dynamic binding 研究</h2><p>对于习惯编写静态编程语言(C#/java/C++)的同学，初识Objective-C，可能会跟我有一样的迷惑。什么迷惑呀？请看下面这段oc的代码：</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">MyObject</span> : <span class="title">NSObject</span></span></span><br><span class="line">+ (<span class="keyword">id</span>)factoryMethod;</span><br><span class="line">-(<span class="built_in">NSString</span>*)tell;</span><br><span class="line"><span class="keyword">@end</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">MyObject</span></span></span><br><span class="line">+ (<span class="keyword">id</span>)factoryMethodB &#123; <span class="keyword">return</span> [[[<span class="keyword">self</span> <span class="keyword">class</span>] alloc] init]; &#125;</span><br><span class="line">- (<span class="built_in">NSString</span>*)tell</span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="string">@"I'm MyObject"</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">@end</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">MyOtherObject</span> : <span class="title">NSObject</span></span></span><br><span class="line">-(<span class="keyword">void</span>)say;</span><br><span class="line">-(<span class="built_in">NSString</span>*)tell;</span><br><span class="line"><span class="keyword">@end</span></span><br><span class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">MyOtherObject</span></span></span><br><span class="line">-(<span class="keyword">void</span>)say</span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">NSLog</span>(<span class="string">@"Hello world"</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">-(<span class="built_in">NSString</span>*)tell</span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="string">@"I'm MyOtherObject"</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">@end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> DoSometing()</span><br><span class="line">&#123;</span><br><span class="line">	MyOtherObject *obj = [MyObject factoryMethod]; (<span class="number">1</span>)</span><br><span class="line">	<span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,[obj tell]);                       (<span class="number">2</span>)</span><br><span class="line">	[obj say];                                     (<span class="number">3</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>代码顺利通过编译。调用DoSomething，运行到第(3)行时出错。先来看第（1）行，我打赌这行已经让只熟悉静态语言的程序员们不明白了，因为照理来说，MyObject的factoryMethod返回的是自己的实例，要是用别的语言编写，编译器第(1)行就报错了，因为类型不匹配呀。为什么OC的编译器不报错呢？不急，我们先来看看这个返回值<strong>id</strong>的定义：</p>
-<blockquote>
-<p>Objective-C provides a special type that can hold a pointer to any<br>object you can construct with Objective-C—regardless of class. This<br>type is called id, and can be used to make your Objective-C<br>programming generic. （大致意思就是id是一个与类型无关的指向任意对象的东东。能够让你OC编程泛型化。）</p>
-</blockquote>
-<p>几个意思呢？其实id就是一个指针，但是它又不同于c/c++里面的void<em>。void</em>是指向内存中任意块的未知对象或者未知内容的。id很明确，它就是用来指向OC对象的。（关于void*是否能转换为OC对象这里暂时不讨论）。好了，这就解释了第(1)行的可行性。</p>
-<p>运行到第二行的时候，NSLog输出:</p>
-<blockquote>
-<p>I’m MyObject</p>
-</blockquote>
-<p>它居然正确的调用了MyObject的tell方法！这就要Dynamic binding（动态绑定）知识来解释了：</p>
-<blockquote>
-<p>Dynamic binding means that when we call a certain object’s method, and there are several implementations of that method, the right one is figured out at runtime. In Objective-C, this idea is used, but is also extended - you are permitted to send any message to any object. At first glance this may sound rather dangerous, but in fact this allows you a lot of flexibility. （大意是：OC的动态绑定的意思是OC扩展了Dynamic binding，使编程人员能够被允许发送任何消息给任何对象。咋一听这种扩展非常危险，但是实际上它带来了很大的灵活性！）</p>
-</blockquote>
-<p>由于MyOtherObject*仅仅是声明一个指针，被赋予id。所以第(2)行怎么执行是在运行时决定的，所以[obj tell]也就顺理成章能够毫无错误的运行了。</p>
-<p>第(3)行运行的时候，报错:</p>
-<blockquote>
-<p>unrecognized selector sent to instance 0x100400100</p>
-</blockquote>
-<p>结合上面的知识，很容易判断，因为MyOtherObject有say方法，所以编译器通过。但是运行时，其实指针的内容是MyObject，MyObject并没有声明say方法，所以就报错了。</p>
-<p>关于Dynamic binding还有个更有趣的例子，请看：</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">LinkedListNode</span> : <span class="title">NSObject</span></span></span><br><span class="line"><span class="keyword">@property</span> <span class="keyword">id</span> data;</span><br><span class="line"><span class="keyword">@property</span> LinkedListNode * child;</span><br><span class="line"><span class="keyword">@end</span></span><br><span class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">LinkedListNode</span></span></span><br><span class="line"><span class="keyword">@end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> DoSometing2()</span><br><span class="line">&#123;</span><br><span class="line">    LinkedListNode *p = [[LinkedListNode alloc] init];</span><br><span class="line">    p.data = [MyOtherObject new];</span><br><span class="line">    </span><br><span class="line">    LinkedListNode *child = [LinkedListNode new];</span><br><span class="line">    child.data = [MyObject new];</span><br><span class="line">    p.child = child;</span><br><span class="line">    </span><br><span class="line">    LinkedListNode *node;</span><br><span class="line">    <span class="keyword">for</span> (node = p; node != <span class="literal">nil</span>; node = node.child) &#123;</span><br><span class="line">	    [[node data] say];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>编译，没任何错误。运行，报的是跟上面(3)一样的错误。同样的原因，怎么办呢？你可能会想，太灵活了，太容易出错了。幸好，有解决的办法：</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">LinkedListNode *p = [LinkedListNode new];</span><br><span class="line">p.data = [MyOtherObject new];</span><br><span class="line"> </span><br><span class="line"> LinkedListNode *child = [LinkedListNode new];</span><br><span class="line"> child.data = [MyObject new];</span><br><span class="line"> p.child = child;</span><br><span class="line"> </span><br><span class="line"> LinkedListNode *node;</span><br><span class="line"> <span class="keyword">for</span> (node = p; node != <span class="literal">nil</span>; node = node.child) &#123;</span><br><span class="line">        <span class="keyword">if</span> ([[node data] respondsToSelector:<span class="keyword">@selector</span>(say)]) &#123;</span><br><span class="line">            [[node data] say];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
-<p>另外，还可以判断是否是某一特定类：</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> ([node isKindOfClass:[MyOtherObject <span class="keyword">class</span>]]) &#123;</span><br><span class="line">	[[node data] say];</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
-<p>上述例子的factoryMethod的返回值id，苹果已经不推荐这么用了。苹果推荐返回instancetype。它跟id用法一样，但是主要是用在alloc, init或者类的工厂方法上的。<br>它的好处是 编译器能够检测被调用的对象上是否能够反应传入的消息，如果不能，则发出警告。</p>
 
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/iOS/">iOS</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/objective-c/">objective-c</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/09/22/objc-dynamic-binding/#disqus_thread" class="comments-count-link">Comments</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
+  <nav id="page-nav" class="clearfix">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
+  </nav>
 
 </div>
       <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
@@ -1084,7 +1127,7 @@
 		  
 		
 		  
-			<li><a href="/categories/iOS/" title="iOS">iOS<sup>3</sup></a></li>
+			<li><a href="/categories/iOS/" title="iOS">iOS<sup>4</sup></a></li>
 		  
 		
 		  
@@ -1113,11 +1156,11 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/算法/" title="算法">算法<sup>2</sup></a></li>
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>3</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/iOS/" title="iOS">iOS<sup>2</sup></a></li>
+				<li><a href="/tags/算法/" title="算法">算法<sup>2</sup></a></li>
 			
 		
 			
@@ -1133,11 +1176,11 @@
 			
 		
 			
-				<li><a href="/tags/objective-c/" title="objective-c">objective-c<sup>1</sup></a></li>
+				<li><a href="/tags/react/" title="react">react<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/react/" title="react">react<sup>1</sup></a></li>
+				<li><a href="/tags/objective-c/" title="objective-c">objective-c<sup>1</sup></a></li>
 			
 		
 			

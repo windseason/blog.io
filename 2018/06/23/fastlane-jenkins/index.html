@@ -1,0 +1,590 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>使用Fastlane和Jenkins构建自动打包系统 (Part 1) | SIGABRT</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Nonnull">
+    
+
+    
+    <meta name="description" content="发这篇博文的目的主要是总结一些在使用fastlane过程遇到的坑，顺便吐槽一下Fastlane官方网站：写的好飘逸，对于新手来说不看几遍不试几次，完全不知到整个体系是如何的。。。最后我希望能够帮助看到这篇文章的你:]  Fastlane Fastlane是一种能够将iOS和android平台beta测试或者正式发布完全自动化的工具！It’s amazing dude! 它能够做的事情有：  生成">
+<meta name="keywords" content="iOS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用Fastlane和Jenkins构建自动打包系统 (Part 1)">
+<meta property="og:url" content="http://gobodigo.com/2018/06/23/fastlane-jenkins/index.html">
+<meta property="og:site_name" content="SIGABRT">
+<meta property="og:description" content="发这篇博文的目的主要是总结一些在使用fastlane过程遇到的坑，顺便吐槽一下Fastlane官方网站：写的好飘逸，对于新手来说不看几遍不试几次，完全不知到整个体系是如何的。。。最后我希望能够帮助看到这篇文章的你:]  Fastlane Fastlane是一种能够将iOS和android平台beta测试或者正式发布完全自动化的工具！It’s amazing dude! 它能够做的事情有：  生成">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://docs.fastlane.tools/img/fastlane_text.png">
+<meta property="og:updated_time" content="2018-06-24T15:50:54.999Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用Fastlane和Jenkins构建自动打包系统 (Part 1)">
+<meta name="twitter:description" content="发这篇博文的目的主要是总结一些在使用fastlane过程遇到的坑，顺便吐槽一下Fastlane官方网站：写的好飘逸，对于新手来说不看几遍不试几次，完全不知到整个体系是如何的。。。最后我希望能够帮助看到这篇文章的你:]  Fastlane Fastlane是一种能够将iOS和android平台beta测试或者正式发布完全自动化的工具！It’s amazing dude! 它能够做的事情有：  生成">
+<meta name="twitter:image" content="https://docs.fastlane.tools/img/fastlane_text.png">
+<meta name="twitter:creator" content="@CharlesLiu8">
+
+    
+    <link rel="alternative" href="/atom.xml" title="SIGABRT" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/logo32.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/logo114.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/logo114.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="SIGABRT" title="SIGABRT"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="SIGABRT">SIGABRT</a></h1>
+				<h2 class="blog-motto">Seeking Thinking Realizing Value</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+						<form class="search">
+							<label>Search</label>
+						  <input id="bdcsMain" type="text" name="q" size="30" placeholder="Search"><br>
+						</form>
+						<script type="text/javascript">(function(){document.write(unescape('%3Cdiv id="bdcs"%3E%3C/div%3E'));var bdcs = document.createElement('script');bdcs.type = 'text/javascript';bdcs.async = true;bdcs.src = 'http://znsv.baidu.com/customer_search/api/js?sid=13808782294227901774' + '&plate_url=' + encodeURIComponent(window.location.href) + '&t=' + Math.ceil(new Date()/3600000);var s = document.getElementsByTagName('script')[0];s.parentNode.insertBefore(bdcs, s);})();</script>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2018/06/23/fastlane-jenkins/" title="使用Fastlane和Jenkins构建自动打包系统 (Part 1)" itemprop="url">使用Fastlane和Jenkins构建自动打包系统 (Part 1)</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Nonnull" target="_blank" itemprop="author">Nonnull</a>
+		
+  <p class="article-time">
+    <time datetime="2018-06-23T14:30:11.000Z" itemprop="datePublished"> Published 2018-06-23</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Fastlane"><span class="toc-number">1.</span> <span class="toc-text">Fastlane</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#fastlane初始化配置"><span class="toc-number">1.1.</span> <span class="toc-text">fastlane初始化配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Fastfile"><span class="toc-number">1.2.</span> <span class="toc-text">Fastfile</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Fastlane-match"><span class="toc-number">1.3.</span> <span class="toc-text">Fastlane match</span></a></li></ol></li></ol>
+		
+		</div>
+		
+		<blockquote>
+<p>发这篇博文的目的主要是总结一些在使用fastlane过程遇到的坑，顺便吐槽一下Fastlane官方网站：写的好飘逸，对于新手来说不看几遍不试几次，完全不知到整个体系是如何的。。。最后我希望能够帮助看到这篇文章的你:]</p>
+</blockquote>
+<h2 id="Fastlane"><a href="#Fastlane" class="headerlink" title="Fastlane"></a>Fastlane</h2><p><img src="https://docs.fastlane.tools/img/fastlane_text.png" alt=""></p>
+<p><strong>Fastlane</strong>是一种能够将iOS和android平台beta测试或者正式发布完全自动化的工具！It’s amazing dude! 它能够做的事情有：</p>
+<ul>
+<li>生成应用商店需要的所有截图 (本地化的截图！可以根据需要为各种语言生成）</li>
+<li>处理打包时候的签名</li>
+<li>发布应用到商店</li>
+</ul>
+<p>我们接下来以iOS为例讲解如何使用fastlane打包iOS app</p>
+<h3 id="fastlane初始化配置"><a href="#fastlane初始化配置" class="headerlink" title="fastlane初始化配置"></a>fastlane初始化配置</h3><p>详细的setup步骤这里不赘述，大家可以到<a href="https://docs.fastlane.tools/getting-started/ios/setup/" target="_blank" rel="noopener">Getting started with fastlane for iOS</a>查看。</p>
+<p>根据文档，安装完fastlane后，配置工程的第一个命令是(这里不建议使用swift版本的init，一个是目前是beta版本，另外一个是当前能查到的资料都是以<a href="https://www.martinfowler.com/articles/rake.html" target="_blank" rel="noopener">ruby DSL</a>来说明的):</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fastlane init</span><br></pre></td></tr></table></figure>
+<p>运行这个命令之后，会看到命令行出现交互式提问，第一个问题经常是问你想用fastlane 来干嘛？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1. 📸  Automate screenshots (自动化appstore 本地化截图)</span><br><span class="line">2. 👩‍✈️  Automate beta distribution to TestFlight (自动化发布beta测试app到test flight)</span><br><span class="line">3. 🚀  Automate App Store distribution (appstore 发布自动化)</span><br><span class="line">4. 🛠  Manual setup - manually setup your project to automate your tasks (手动配置自己的工程)</span><br></pre></td></tr></table></figure>
+<p>如果您的app有多个target或者没有找到跟workspace名字一样的scheme，fastlane会提示输入bundle id，然后会提示输入apple id及其密码，如果apple id在多个team还会提示选择team等等，总之问题问完，你的初始配置也就完成了。</p>
+<p>配置完后，会在您的工程下面生成一个名为<strong>fastlane</strong>的文件夹，这个文件夹就是所有fastlane的配置所在了。文件夹会包含两个文件:</p>
+<ul>
+<li>Appfile: 用来存储在使用fastlane过程中所需要的有用信息，例如apple id，bundle id等</li>
+<li>Fastfile: fastlane编译以及发布的核心文件，所有需要自动编译配置的代码都放到这个文件里面</li>
+</ul>
+<h3 id="Fastfile"><a href="#Fastfile" class="headerlink" title="Fastfile"></a>Fastfile</h3><p>现在重点讲一下如何配置<strong>Fastfile</strong>。初始化完后，fastlane会自动为工程生成如下代码在<strong>fastfile</strong>里面(我在初始化的时候选择的是第3项–appstore发布自动化，如果选择别的选项可能会与下面的例子有稍微不同)。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">platform <span class="symbol">:ios</span> <span class="keyword">do</span></span><br><span class="line">  desc <span class="string">"Push a new release build to the App Store"</span></span><br><span class="line">  lane <span class="symbol">:release</span> <span class="keyword">do</span></span><br><span class="line">    build_app(<span class="symbol">workspace:</span> <span class="string">"Spacename.xcworkspace"</span>, <span class="symbol">scheme:</span> <span class="string">"SchemeName"</span>)</span><br><span class="line">    upload_to_app_store(<span class="symbol">skip_metadata:</span> <span class="literal">true</span>, <span class="symbol">skip_screenshots:</span> <span class="literal">true</span>)</span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>platform: 告诉fastlane是哪个平台。</li>
+<li>desc: 注解。一般放到每个lane之前一行用于解释这个lane的作用</li>
+<li>lane: 简单来讲就是一个任务的配置，比如发布到test flight算一个任务，打内部测试Adhoc包等。lane 后面跟着的是冒号加任务名称，如上代码： :release, 这样你就可以在命令行下面输入如下命令就可以执行这个任务了：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fastlane release</span><br></pre></td></tr></table></figure>
+<ul>
+<li>lane的body里面能够使用的命令都叫做action，能调用的<a href="https://docs.fastlane.tools/actions" target="_blank" rel="noopener">actions</a>官方已经帮我们列出来了，而且每个action都有详细的文档。例子中的任务一眼就能看出来是做什么：编译名为<strong>Spacename.xcworkspace</strong>，scheme为<strong>SchemeName</strong>的工程，编译完后上传到app store（跳过上传meta data和screenshots）</li>
+</ul>
+<blockquote>
+<p>读者可以亲手试一试，讲workspace和scheme改为自己工程的名字，然后在命令行运行fastlane release，之后如果编译没有失败并且itunes connect连接和验证成功的话，您会看到ipa包已经成功的传到了itunes connect的后台了。怎么样？很厉害吧，就2行代码就搞定了编译，打包，上传到appstore这种平时繁杂的任务！</p>
+</blockquote>
+<p>等等，我们好像漏了什么。对，最重要的程序签名！</p>
+<h3 id="Fastlane-match"><a href="#Fastlane-match" class="headerlink" title="Fastlane match"></a>Fastlane match</h3><p>什么是Fastlane match? Fastlane match不仅仅是在配置fastlane自动打包时候需要用到，而且极大地简化了在一个开发团队中共享证书和provisioning profiles的流程！</p>
+<ul>
+<li>项目组中每来一个新成员，是不是都要花时间为新成员配置证书，并且把他加入到相应项目的provisioning profiles里面？如果项目众多，是不是管理的一场噩梦？想要简化吗？快使用<strong>Fastlane match</strong>!</li>
+<li>连接到苹果服务器很慢，下载provisioning profile很慢！想每次都下载快吗？快使用<strong>Fastlane match</strong>!</li>
+<li>想在团队中方便的使用个人开发者证书，而不用拷来拷去吗？快使用<strong>Fastlane match</strong>!</li>
+<li>项目组有新设备后，快使用<strong>Fastlane match</strong>! 一键搞定！</li>
+</ul>
+<p>说了那么多好处，咱们来看看怎么用！首先在工程所在文件夹运行如下命令（确保在运行之前先运行过fastlane init命令）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fastlane match init</span><br></pre></td></tr></table></figure>
+<p>运行完后，fastlane会问用来存储工程的证书和provisioning profiles的Git repo的URL是什么？所以，马上去Github或者Gitlab上创建一个去吧！</p>
+<p><strong>注意！！！</strong></p>
+<ul>
+<li>所有传到指定git repo的证书和provisioning profiles将会被fastlane使用OpenSSL来加密存储的。</li>
+<li>你必须对曾git repo有完全的控制权力。最好保证你所使用的git repo是私有的并且使用安全的私钥。</li>
+<li>即使你的证书泄露了，在不知道你的itunes connect账号的情况下并不能对你造成伤害</li>
+<li>如果你使用Git hub或者Bitbuckt，建议你使用开启两步验证的itunes connect账号来作为match连接时用的账号</li>
+</ul>
+<p>跟随着所有提示做完后会在fastlane文件夹下生成一个叫做<strong>Matchfile</strong>的文件，初始的文件内容与下面类似：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">git_url(<span class="string">"git@xxx/certificates.git"</span>)</span><br><span class="line"></span><br><span class="line">type(<span class="string">"development"</span>) <span class="comment"># The default type, can be: appstore, adhoc, enterprise or development</span></span><br><span class="line"></span><br><span class="line">app_identifier([<span class="string">"bundle identifier 1"</span>, <span class="string">"bundle identifier 2"</span>])</span><br><span class="line"><span class="comment">#username("xxx<span class="doctag">@xxx</span>.com") # Your Apple Developer Portal username</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># For all available options run `fastlane match --help`</span></span><br><span class="line"><span class="comment"># Remove the # in the beginning of the line to enable the other options</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#match(app_identifier: ["bundle identifier 1", "bundle identifier 2"], type: "adhoc")</span></span><br></pre></td></tr></table></figure>
+<p>初始化完后，就到为工程生成证书和provisioning profiles了 ，（如果不是新项目，想利用已经存在的证书怎么办？这部分也有解决方案，我打算放到part 2的时候再讲）运行如下命令，就会为工程生成development证书和相应的provisiong profile：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fastlane match development</span><br></pre></td></tr></table></figure>
+<p>第一次运行这个命令会提示请输入passphase，这个passphase就是用来加密证书和provisioning profiles用的。</p>
+<p><strong>注意</strong>: 运行以上命令,如果发现没有相应的证书和provisiong profiles就会生成新的证书和provisioning profiles，所以请慎用！</p>
+<p>接下来，如果想在一台新的机器上安装该工程的证书就可以运行下面的命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fastlane match development --readonly</span><br></pre></td></tr></table></figure>
+<p>加上<strong>–readonly</strong>就能保证不会生成新的，而仅仅只是执行安装而已。除了development,我们还能指定adhoc, appstore, enterprise等参数来生成不同场景的证书。</p>
+<p>生成的证书和provisioning profiles都会被加密放到初始化match时指定的git repo中，这样当使用<strong>fastlane match development</strong>或者<strong>fastlane match development –readonly</strong>的时候，fastlane会第一时间从指定的git repo中去寻找并安装，所以不需要经过苹果服务器。如果git repo是自己公司服务器的，那就更快了:]。</p>
+<p>如果想一口气装上所需要的证书和provisioning profiles, 那么可以写一个脚本来完成：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/sh</span><br><span class="line"><span class="meta">#</span>install appstore development profiles and cert</span><br><span class="line">fastlane match development --readonly</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span>uncomment below lines if you need install other types of certs</span><br><span class="line"><span class="meta">#</span>fastlane match adhoc --readonly</span><br><span class="line"><span class="meta">#</span>fastlane match appstore --readonly</span><br></pre></td></tr></table></figure>
+<p>将脚本传到工程git上，这样只要有新机器，就运行一下这个脚本就全部装上了。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/iOS/">iOS</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/iOS/">iOS</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://gobodigo.com/2018/06/23/fastlane-jenkins/" data-title="使用Fastlane和Jenkins构建自动打包系统 (Part 1) | SIGABRT" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2017/08/24/agile-desgin/"  title="敏捷设计之SOLID原则">
+ <strong>下一篇：</strong><br/> 
+ <span>敏捷设计之SOLID原则
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Fastlane"><span class="toc-number">1.</span> <span class="toc-text">Fastlane</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#fastlane初始化配置"><span class="toc-number">1.1.</span> <span class="toc-text">fastlane初始化配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Fastfile"><span class="toc-number">1.2.</span> <span class="toc-text">Fastfile</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Fastlane-match"><span class="toc-number">1.3.</span> <span class="toc-text">Fastlane match</span></a></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/http/" title="http">http<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/iOS/" title="iOS">iOS<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/javascript/" title="javascript">javascript<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/javascript/react/" title="react">react<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/正则表达式/" title="正则表达式">正则表达式<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/算法/" title="算法">算法<sup>2</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/算法/" title="算法">算法<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/javascript/" title="javascript">javascript<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/http/" title="http">http<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/正则表达式/" title="正则表达式">正则表达式<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/react/" title="react">react<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/objective-c/" title="objective-c">objective-c<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OOD/" title="OOD">OOD<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+	<section class="info">
+		<p> Seeking Thinking <br/>
+			Realize Value</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		
+		<a href="https://github.com/windseason" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		<a href="https://twitter.com/CharlesLiu8" target="_blank" class="icon-twitter" title="twitter"></a>
+		
+		
+		<a href="https://www.facebook.com/charles.liu.853" target="_blank" class="icon-facebook" title="facebook"></a>
+		
+		
+		<a href="https://www.linkedin.com/in/charles-liu-b98382b" target="_blank" class="icon-linkedin" title="linkedin"></a>
+		
+		
+		
+		<a href="http://www.zhihu.com/people/windseason" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		
+		<a href="mailto:liuchao853@msn.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2018 
+		
+		<a href="/about" target="_blank" title="Nonnull">Nonnull</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+<script type="text/javascript">
+
+var disqus_shortname = 'windseason';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+
+
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?4f0f6a13270382ca7ac23fd9d6ca150c";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
