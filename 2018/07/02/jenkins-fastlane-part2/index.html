@@ -1,0 +1,571 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>使用Fastlane和Jenkins构建自动打包系统 (Part 2) | SIGABRT</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Nonnull">
+    
+
+    
+    <meta name="description" content="Fastlane match 使用已经存在的证书经过第一部分的学习，Fastlane这个工具确实很好用，自动生成证书，自动打包，自动传到appstore，一切看上很完美。但是，在默认情况下，match是不能够使用已经存在的证书和provisiong profiles的，换句话说就是每次调用fastlane match的时候，如果发现git repo没有就会为你生成新的。显然，这个限制会让很多现有项">
+<meta name="keywords" content="iOS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用Fastlane和Jenkins构建自动打包系统 (Part 2)">
+<meta property="og:url" content="http://gobodigo.com/2018/07/02/jenkins-fastlane-part2/index.html">
+<meta property="og:site_name" content="SIGABRT">
+<meta property="og:description" content="Fastlane match 使用已经存在的证书经过第一部分的学习，Fastlane这个工具确实很好用，自动生成证书，自动打包，自动传到appstore，一切看上很完美。但是，在默认情况下，match是不能够使用已经存在的证书和provisiong profiles的，换句话说就是每次调用fastlane match的时候，如果发现git repo没有就会为你生成新的。显然，这个限制会让很多现有项">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://ot51d7lis.bkt.clouddn.com/export_cert.png">
+<meta property="og:image" content="http://ot51d7lis.bkt.clouddn.com/export_dialog.JPG">
+<meta property="og:updated_time" content="2018-07-03T08:54:23.717Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用Fastlane和Jenkins构建自动打包系统 (Part 2)">
+<meta name="twitter:description" content="Fastlane match 使用已经存在的证书经过第一部分的学习，Fastlane这个工具确实很好用，自动生成证书，自动打包，自动传到appstore，一切看上很完美。但是，在默认情况下，match是不能够使用已经存在的证书和provisiong profiles的，换句话说就是每次调用fastlane match的时候，如果发现git repo没有就会为你生成新的。显然，这个限制会让很多现有项">
+<meta name="twitter:image" content="http://ot51d7lis.bkt.clouddn.com/export_cert.png">
+<meta name="twitter:creator" content="@CharlesLiu8">
+
+    
+    <link rel="alternative" href="/atom.xml" title="SIGABRT" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/logo32.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/logo114.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/logo114.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="SIGABRT" title="SIGABRT"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="SIGABRT">SIGABRT</a></h1>
+				<h2 class="blog-motto">Seeking Thinking Realizing Value</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+						<form class="search">
+							<label>Search</label>
+						  <input id="bdcsMain" type="text" name="q" size="30" placeholder="Search"><br>
+						</form>
+						<script type="text/javascript">(function(){document.write(unescape('%3Cdiv id="bdcs"%3E%3C/div%3E'));var bdcs = document.createElement('script');bdcs.type = 'text/javascript';bdcs.async = true;bdcs.src = 'http://znsv.baidu.com/customer_search/api/js?sid=13808782294227901774' + '&plate_url=' + encodeURIComponent(window.location.href) + '&t=' + Math.ceil(new Date()/3600000);var s = document.getElementsByTagName('script')[0];s.parentNode.insertBefore(bdcs, s);})();</script>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2018/07/02/jenkins-fastlane-part2/" title="使用Fastlane和Jenkins构建自动打包系统 (Part 2)" itemprop="url">使用Fastlane和Jenkins构建自动打包系统 (Part 2)</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Nonnull" target="_blank" itemprop="author">Nonnull</a>
+		
+  <p class="article-time">
+    <time datetime="2018-07-02T02:05:14.000Z" itemprop="datePublished"> Published 2018-07-02</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Fastlane-match-使用已经存在的证书"><span class="toc-number">1.</span> <span class="toc-text">Fastlane match 使用已经存在的证书</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#导出证书"><span class="toc-number">1.1.</span> <span class="toc-text">导出证书</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用Spaceship"><span class="toc-number">1.2.</span> <span class="toc-text">使用Spaceship</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Push-证书和Provision"><span class="toc-number">1.3.</span> <span class="toc-text">Push 证书和Provision</span></a></li></ol></li></ol>
+		
+		</div>
+		
+		<h2 id="Fastlane-match-使用已经存在的证书"><a href="#Fastlane-match-使用已经存在的证书" class="headerlink" title="Fastlane match 使用已经存在的证书"></a>Fastlane match 使用已经存在的证书</h2><p>经过第一部分的学习，<strong>Fastlane</strong>这个工具确实很好用，自动生成证书，自动打包，自动传到appstore，一切看上很完美。但是，在默认情况下，<strong>match</strong>是不能够使用已经存在的证书和provisiong profiles的，换句话说就是每次调用<strong>fastlane match</strong>的时候，如果发现git repo没有就会为你生成新的。显然，这个限制会让很多现有项目的开发者望而生畏。好在，我们有办法可以让它支持现有证，但是这个办法稍微有点麻烦，因为它不是自动的。</p>
+<blockquote>
+<p>如果你还未了解什么是fastlane，请先阅读<a href="http://gobodigo.com/2018/06/23/fastlane-jenkins/">使用Fastlane和Jenkins构建自动打包系统 (Part 1)</a></p>
+</blockquote>
+<h3 id="导出证书"><a href="#导出证书" class="headerlink" title="导出证书"></a>导出证书</h3><p>在我们开始使用现有的证书前，先得保证所有需要的证书和私钥都已经被导出并且保存在本地。</p>
+<p><strong>首先</strong></p>
+<p>打开<strong>keychain</strong>, 选择要将要在项目中使用的证书，然后选择导出</p>
+<p><img src="http://ot51d7lis.bkt.clouddn.com/export_cert.png" alt=""></p>
+<p>在<strong>File Format</strong>选择导出为.cer文件。</p>
+<p><img src="http://ot51d7lis.bkt.clouddn.com/export_dialog.JPG" alt=""></p>
+<p>然后，再次选择导出，在<strong>File Format</strong>选择导出为p12导出私钥（不要设置密码，因为如果设置了密码后，fastlane就无法导入私钥了）。</p>
+<p>下一步就是去查找证书在apple developer portal的id了（后续需要以这个id来为证书和私钥命名），但是这个信息在管理后台是看不到的。这个时候，就需要借助<strong>fastlane</strong>内部直接使用的一个库<strong>Spaceship</strong>。</p>
+<h3 id="使用Spaceship"><a href="#使用Spaceship" class="headerlink" title="使用Spaceship"></a>使用Spaceship</h3><p>在命令行输入<code>irb</code>打开一个交互式的ruby shell环境。</p>
+<p>之后，输入<code>require &#39;spaceship&#39;</code>和回车，这个命令会将这个库导入到当前的shell环境中。接下来，输入下面这个命令来登录到apple developer portal：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Spaceship.login</span><br></pre></td></tr></table></figure>
+<p>然后就是获取证书信息的命令，这里有两种方式，一种是获得全部的，另外一种是按照证书的类型来获取。</p>
+<p>第一种，获取所有证书信息：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Spaceship.certificate.all</span><br></pre></td></tr></table></figure>
+<p>第二种，获取指定类型的证书信息：</p>
+<p><strong>获取开发证书</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Spaceship.certificate.development.all</span><br></pre></td></tr></table></figure>
+<p><strong>获取发布证书</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Spaceship.certificate.production.all</span><br></pre></td></tr></table></figure>
+<p><strong>证书信息例子</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;Spaceship::Portal::Certificate::Development </span><br><span class="line">	id=<span class="string">"TB48U5GPM8"</span>, </span><br><span class="line">	name=<span class="string">"iOS Development"</span>, </span><br><span class="line">	status=<span class="string">"Issued"</span>, </span><br><span class="line">	created=2018-06-29 10:35:08 UTC, </span><br><span class="line">	expires=2019-06-29 10:25:08 UTC, </span><br><span class="line">	owner_type=<span class="string">"teamMember"</span>, </span><br><span class="line">	owner_name=<span class="string">"owner name"</span>, </span><br><span class="line">	owner_id=<span class="string">"X9EZKD2K8B"</span>, </span><br><span class="line">	type_display_id=<span class="string">"6QPB9NHCEX"</span>, </span><br><span class="line">	can_download=<span class="literal">true</span>&gt;</span><br></pre></td></tr></table></figure>
+<p>这个命令会列出证书所有的信息，而且很有可能会返回多个证书。这个时候，你需要仔细将其与本地证书的时间和过期对比，一致的就是你要找的证书信息。当你找到匹配的，就以证书信息的id来命名本地保存的相应的证书和私钥。</p>
+<p>接下来我们需要将证书push到match使用的git repo上。</p>
+<h3 id="Push-证书和Provision"><a href="#Push-证书和Provision" class="headerlink" title="Push 证书和Provision"></a>Push 证书和Provision</h3><p>在命令行输入下面的命令来准备一些需要用到的变量：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">irb(main):004:0&gt; require <span class="string">'match'</span></span><br><span class="line">=&gt; <span class="literal">true</span></span><br><span class="line">irb(main):005:0&gt; git_url=<span class="string">'git@github.com:path-to/the-encrypted-certs-repo.git'</span></span><br><span class="line">=&gt; <span class="string">"git@github.com:path-to/the-encrypted-certs-repo.git"</span></span><br><span class="line">irb(main):006:0&gt; shallow_clone = <span class="literal">false</span></span><br><span class="line">=&gt; <span class="literal">false</span></span><br><span class="line">irb(main):007:0&gt; manual_password = <span class="string">'password-to-decrypt-the-repo'</span></span><br><span class="line">=&gt; <span class="string">"password-to-decrypt-the-repo"</span></span><br><span class="line">irb(main):008:0&gt;</span><br></pre></td></tr></table></figure>
+<p>接下来，我们需要使用下面的命令把存放证书的git repo给clone下来并且解密</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">irb(main):005:0&gt; workspace = Match::GitHelper.clone(git_url, shallow_clone, manual_password: manual_password)</span><br><span class="line">[21:17:30]: Cloning remote git repo...</span><br><span class="line">[21:17:31]: 🔓  Successfully decrypted certificates repo</span><br><span class="line">=&gt; <span class="string">"/var/folders/5s/5cgmqxkx4fx6bllwgp1y5dlh000gp/T/d2018-0411-3701-148akjh"</span></span><br></pre></td></tr></table></figure>
+<p>这个命令将repo clone到了<code>/var/folders/...</code>打开它。然后在这个文件夹里面，根据证书的类型来创建不同的文件夹：</p>
+<ul>
+<li>如果创建开发证书，则放到<code>certs/development</code>里面</li>
+<li>如果是发布证书，则放到<code>certs/distribution</code>里面</li>
+</ul>
+<p>将证书和私钥都要对应放到上述的文件夹里面。</p>
+<p>最后来处理<strong>provision profiles</strong>，首先你得从<strong>Apple developer portal</strong>下载所需要的<strong>provision profiles</strong>。下载完成后，根据不同的类型放入不同的文件夹，规则如下：</p>
+<ul>
+<li><strong>adhoc</strong>: <code>profiles/adhoc/AdHoc_&lt;appbundleid&gt;.mobileprovision</code></li>
+<li><strong>appstore</strong>: <code>profiles/appstore/AppStore_&lt;appbundleid&gt;.mobileprovision</code></li>
+<li><strong>development</strong>: <code>profiles/development/Development_&lt;appbundleid&gt;.mobileprovision</code></li>
+</ul>
+<p>做完这些后，现在我们来把证书和provision profiles推到git repo上去吧。执行下面的命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">irb(main):006:0&gt; Match::GitHelper.commit_changes(workspace, <span class="string">"add certificate, private key and provisioning profiles"</span>, git_url)</span><br></pre></td></tr></table></figure>
+<p>大功告成。现在你应该可以通过<strong>fastlane</strong>命令来安装证书和provision profiles了。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fastlane match distribution --<span class="built_in">readonly</span></span><br></pre></td></tr></table></figure>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/iOS/">iOS</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/iOS/">iOS</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://gobodigo.com/2018/07/02/jenkins-fastlane-part2/" data-title="使用Fastlane和Jenkins构建自动打包系统 (Part 2) | SIGABRT" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2018/06/23/fastlane-jenkins/"  title="使用Fastlane和Jenkins构建自动打包系统 (Part 1)">
+ <strong>下一篇：</strong><br/> 
+ <span>使用Fastlane和Jenkins构建自动打包系统 (Part 1)
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Fastlane-match-使用已经存在的证书"><span class="toc-number">1.</span> <span class="toc-text">Fastlane match 使用已经存在的证书</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#导出证书"><span class="toc-number">1.1.</span> <span class="toc-text">导出证书</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用Spaceship"><span class="toc-number">1.2.</span> <span class="toc-text">使用Spaceship</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Push-证书和Provision"><span class="toc-number">1.3.</span> <span class="toc-text">Push 证书和Provision</span></a></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/http/" title="http">http<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/iOS/" title="iOS">iOS<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/javascript/" title="javascript">javascript<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/javascript/react/" title="react">react<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/正则表达式/" title="正则表达式">正则表达式<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/算法/" title="算法">算法<sup>2</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/算法/" title="算法">算法<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/javascript/" title="javascript">javascript<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/正则表达式/" title="正则表达式">正则表达式<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/http/" title="http">http<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/react/" title="react">react<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/objective-c/" title="objective-c">objective-c<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OOD/" title="OOD">OOD<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+	<section class="info">
+		<p> Seeking Thinking <br/>
+			Realize Value</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		
+		<a href="https://github.com/windseason" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		<a href="https://twitter.com/CharlesLiu8" target="_blank" class="icon-twitter" title="twitter"></a>
+		
+		
+		<a href="https://www.facebook.com/charles.liu.853" target="_blank" class="icon-facebook" title="facebook"></a>
+		
+		
+		<a href="https://www.linkedin.com/in/charles-liu-b98382b" target="_blank" class="icon-linkedin" title="linkedin"></a>
+		
+		
+		
+		<a href="http://www.zhihu.com/people/windseason" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		
+		<a href="mailto:liuchao853@msn.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2018 
+		
+		<a href="/about" target="_blank" title="Nonnull">Nonnull</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+<script type="text/javascript">
+
+var disqus_shortname = 'windseason';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+
+
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?4f0f6a13270382ca7ac23fd9d6ca150c";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

@@ -80,6 +80,115 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2018/07/02/jenkins-fastlane-part2/" title="使用Fastlane和Jenkins构建自动打包系统 (Part 2)" itemprop="url">使用Fastlane和Jenkins构建自动打包系统 (Part 2)</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Nonnull" target="_blank" itemprop="author">Nonnull</a>
+		
+  <p class="article-time">
+    <time datetime="2018-07-02T02:05:14.000Z" itemprop="datePublished"> Published 2018-07-02</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="Fastlane-match-使用已经存在的证书"><a href="#Fastlane-match-使用已经存在的证书" class="headerlink" title="Fastlane match 使用已经存在的证书"></a>Fastlane match 使用已经存在的证书</h2><p>经过第一部分的学习，<strong>Fastlane</strong>这个工具确实很好用，自动生成证书，自动打包，自动传到appstore，一切看上很完美。但是，在默认情况下，<strong>match</strong>是不能够使用已经存在的证书和provisiong profiles的，换句话说就是每次调用<strong>fastlane match</strong>的时候，如果发现git repo没有就会为你生成新的。显然，这个限制会让很多现有项目的开发者望而生畏。好在，我们有办法可以让它支持现有证，但是这个办法稍微有点麻烦，因为它不是自动的。</p>
+<blockquote>
+<p>如果你还未了解什么是fastlane，请先阅读<a href="http://gobodigo.com/2018/06/23/fastlane-jenkins/">使用Fastlane和Jenkins构建自动打包系统 (Part 1)</a></p>
+</blockquote>
+<h3 id="导出证书"><a href="#导出证书" class="headerlink" title="导出证书"></a>导出证书</h3><p>在我们开始使用现有的证书前，先得保证所有需要的证书和私钥都已经被导出并且保存在本地。</p>
+<p><strong>首先</strong></p>
+<p>打开<strong>keychain</strong>, 选择要将要在项目中使用的证书，然后选择导出</p>
+<p><img src="http://ot51d7lis.bkt.clouddn.com/export_cert.png" alt=""></p>
+<p>在<strong>File Format</strong>选择导出为.cer文件。</p>
+<p><img src="http://ot51d7lis.bkt.clouddn.com/export_dialog.JPG" alt=""></p>
+<p>然后，再次选择导出，在<strong>File Format</strong>选择导出为p12导出私钥（不要设置密码，因为如果设置了密码后，fastlane就无法导入私钥了）。</p>
+<p>下一步就是去查找证书在apple developer portal的id了（后续需要以这个id来为证书和私钥命名），但是这个信息在管理后台是看不到的。这个时候，就需要借助<strong>fastlane</strong>内部直接使用的一个库<strong>Spaceship</strong>。</p>
+<h3 id="使用Spaceship"><a href="#使用Spaceship" class="headerlink" title="使用Spaceship"></a>使用Spaceship</h3><p>在命令行输入<code>irb</code>打开一个交互式的ruby shell环境。</p>
+<p>之后，输入<code>require &#39;spaceship&#39;</code>和回车，这个命令会将这个库导入到当前的shell环境中。接下来，输入下面这个命令来登录到apple developer portal：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Spaceship.login</span><br></pre></td></tr></table></figure>
+<p>然后就是获取证书信息的命令，这里有两种方式，一种是获得全部的，另外一种是按照证书的类型来获取。</p>
+<p>第一种，获取所有证书信息：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Spaceship.certificate.all</span><br></pre></td></tr></table></figure>
+<p>第二种，获取指定类型的证书信息：</p>
+<p><strong>获取开发证书</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Spaceship.certificate.development.all</span><br></pre></td></tr></table></figure>
+<p><strong>获取发布证书</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Spaceship.certificate.production.all</span><br></pre></td></tr></table></figure>
+<p><strong>证书信息例子</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;Spaceship::Portal::Certificate::Development </span><br><span class="line">	id=<span class="string">"TB48U5GPM8"</span>, </span><br><span class="line">	name=<span class="string">"iOS Development"</span>, </span><br><span class="line">	status=<span class="string">"Issued"</span>, </span><br><span class="line">	created=2018-06-29 10:35:08 UTC, </span><br><span class="line">	expires=2019-06-29 10:25:08 UTC, </span><br><span class="line">	owner_type=<span class="string">"teamMember"</span>, </span><br><span class="line">	owner_name=<span class="string">"owner name"</span>, </span><br><span class="line">	owner_id=<span class="string">"X9EZKD2K8B"</span>, </span><br><span class="line">	type_display_id=<span class="string">"6QPB9NHCEX"</span>, </span><br><span class="line">	can_download=<span class="literal">true</span>&gt;</span><br></pre></td></tr></table></figure>
+<p>这个命令会列出证书所有的信息，而且很有可能会返回多个证书。这个时候，你需要仔细将其与本地证书的时间和过期对比，一致的就是你要找的证书信息。当你找到匹配的，就以证书信息的id来命名本地保存的相应的证书和私钥。</p>
+<p>接下来我们需要将证书push到match使用的git repo上。</p>
+<h3 id="Push-证书和Provision"><a href="#Push-证书和Provision" class="headerlink" title="Push 证书和Provision"></a>Push 证书和Provision</h3><p>在命令行输入下面的命令来准备一些需要用到的变量：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">irb(main):004:0&gt; require <span class="string">'match'</span></span><br><span class="line">=&gt; <span class="literal">true</span></span><br><span class="line">irb(main):005:0&gt; git_url=<span class="string">'git@github.com:path-to/the-encrypted-certs-repo.git'</span></span><br><span class="line">=&gt; <span class="string">"git@github.com:path-to/the-encrypted-certs-repo.git"</span></span><br><span class="line">irb(main):006:0&gt; shallow_clone = <span class="literal">false</span></span><br><span class="line">=&gt; <span class="literal">false</span></span><br><span class="line">irb(main):007:0&gt; manual_password = <span class="string">'password-to-decrypt-the-repo'</span></span><br><span class="line">=&gt; <span class="string">"password-to-decrypt-the-repo"</span></span><br><span class="line">irb(main):008:0&gt;</span><br></pre></td></tr></table></figure>
+<p>接下来，我们需要使用下面的命令把存放证书的git repo给clone下来并且解密</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">irb(main):005:0&gt; workspace = Match::GitHelper.clone(git_url, shallow_clone, manual_password: manual_password)</span><br><span class="line">[21:17:30]: Cloning remote git repo...</span><br><span class="line">[21:17:31]: 🔓  Successfully decrypted certificates repo</span><br><span class="line">=&gt; <span class="string">"/var/folders/5s/5cgmqxkx4fx6bllwgp1y5dlh000gp/T/d2018-0411-3701-148akjh"</span></span><br></pre></td></tr></table></figure>
+<p>这个命令将repo clone到了<code>/var/folders/...</code>打开它。然后在这个文件夹里面，根据证书的类型来创建不同的文件夹：</p>
+<ul>
+<li>如果创建开发证书，则放到<code>certs/development</code>里面</li>
+<li>如果是发布证书，则放到<code>certs/distribution</code>里面</li>
+</ul>
+<p>将证书和私钥都要对应放到上述的文件夹里面。</p>
+<p>最后来处理<strong>provision profiles</strong>，首先你得从<strong>Apple developer portal</strong>下载所需要的<strong>provision profiles</strong>。下载完成后，根据不同的类型放入不同的文件夹，规则如下：</p>
+<ul>
+<li><strong>adhoc</strong>: <code>profiles/adhoc/AdHoc_&lt;appbundleid&gt;.mobileprovision</code></li>
+<li><strong>appstore</strong>: <code>profiles/appstore/AppStore_&lt;appbundleid&gt;.mobileprovision</code></li>
+<li><strong>development</strong>: <code>profiles/development/Development_&lt;appbundleid&gt;.mobileprovision</code></li>
+</ul>
+<p>做完这些后，现在我们来把证书和provision profiles推到git repo上去吧。执行下面的命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">irb(main):006:0&gt; Match::GitHelper.commit_changes(workspace, <span class="string">"add certificate, private key and provisioning profiles"</span>, git_url)</span><br></pre></td></tr></table></figure>
+<p>大功告成。现在你应该可以通过<strong>fastlane</strong>命令来安装证书和provision profiles了。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fastlane match distribution --<span class="built_in">readonly</span></span><br></pre></td></tr></table></figure>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/iOS/">iOS</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/iOS/">iOS</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2018/07/02/jenkins-fastlane-part2/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2018/06/23/fastlane-jenkins/" title="使用Fastlane和Jenkins构建自动打包系统 (Part 1)" itemprop="url">使用Fastlane和Jenkins构建自动打包系统 (Part 1)</a>
   </h1>
   <p class="article-author">By
@@ -912,202 +1021,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/10/15/URL-URL-encoding/" title="URL&amp;URL encoding" itemprop="url">URL&amp;URL encoding</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Nonnull" target="_blank" itemprop="author">Nonnull</a>
-		
-  <p class="article-time">
-    <time datetime="2015-10-15T15:42:00.000Z" itemprop="datePublished"> Published 2015-10-15</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>当我们浏览网页的时候，其中涉及到不少技术。其中，有一项最基本的机制使得我们可以顺利的在浩瀚的互联网海洋中快速的定位到我们想要的资源并接收数据。这项技术是网页的根本，是形成互联网的基石。它就是URL。</p>
-<p>URL 英文全名 Uniform resource locator，翻译过来就是统一资源标识符。例如，<a href="http://www.baidu.com" target="_blank" rel="noopener">”http://www.baidu.com”</a> 是一个URL。关于URL怎么定义，该遵守什么规则，是有着一套世界公认的规则的，<a href="http://tools.ietf.org/html/rfc1738" target="_blank" rel="noopener">第一版规则是在1994年诞生的</a>。</p>
-<h2 id="一般URL语法"><a href="#一般URL语法" class="headerlink" title="一般URL语法"></a>一般URL语法</h2><p>我们先来看一个例子：<br><code>https://jay:123456@www.example.com:8080/file;p=1?q=2#section2</code></p>
-<p>分解该URL，我们能够获得以下信息：</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">组件名</th>
-<th style="text-align:right">数据</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">scheme</td>
-<td style="text-align:right">https</td>
-</tr>
-<tr>
-<td style="text-align:left">user</td>
-<td style="text-align:right">jay</td>
-</tr>
-<tr>
-<td style="text-align:left">password</td>
-<td style="text-align:right">123456</td>
-</tr>
-<tr>
-<td style="text-align:left">host address</td>
-<td style="text-align:right">www.example.com</td>
-</tr>
-<tr>
-<td style="text-align:left">port</td>
-<td style="text-align:right">8080</td>
-</tr>
-<tr>
-<td style="text-align:left">path</td>
-<td style="text-align:right">file</td>
-</tr>
-<tr>
-<td style="text-align:left">path parameter</td>
-<td style="text-align:right">p=1</td>
-</tr>
-<tr>
-<td style="text-align:left">query parameter</td>
-<td style="text-align:right">q=2</td>
-</tr>
-<tr>
-<td style="text-align:left">fragment</td>
-<td style="text-align:right">section2</td>
-</tr>
-</tbody>
-</table>
-<h2 id="HTTP-URL-语法"><a href="#HTTP-URL-语法" class="headerlink" title="HTTP URL 语法"></a>HTTP URL 语法</h2><p>HTTP URL的scheme通常组成为</p>
-<ol>
-<li>Scheme: http或者https</li>
-<li>Path: 指定获取数据的路径</li>
-<li>Query参数（可选）</li>
-<li>fragment参数（可选）</li>
-</ol>
-<h2 id="Path-与-Path-parameters"><a href="#Path-与-Path-parameters" class="headerlink" title="Path 与 Path parameters"></a>Path 与 Path parameters</h2><p>其中，Path跟我们熟知的文件路径非常类似。Path通常是以一个“/”开头，每一个文件夹又都被一个”/”互相分隔，例如”/Study/URLSyntax/starter/first.docx”分为四个部分：”study”，”URLSyntax”，”starter”，”first.docx”。</p>
-<p>每一个Path部分后都能够跟一个可选的参数(path parameters)部分，判断的根据是以”;”字符开始。参数可以有多个，并以”;”分隔。每个参数都有值，以”=”分隔，例如”/file;a=1”，定义了”file”这个path的参数为”a”，值为”1”。这些参数是很少用到的，但是他们是确实存在的。</p>
-<h2 id="Query"><a href="#Query" class="headerlink" title="Query"></a>Query</h2><p>在Path后面以”?”开始的部分就是Query了，Query包含一组以”&amp;”分隔的参数与数值对。参数及其数值以”=”分隔。例如，”?url=<a href="http://domain.tld/&amp;title=The" target="_blank" rel="noopener">http://domain.tld/&amp;title=The</a> title of a post”，定义了两个参数”url”和”title”，他们的值分别为”<a href="http://domain.tld“和”The" target="_blank" rel="noopener">http://domain.tld“和”The</a> title of a post”。Query 用的最多的情况是提交一个form的时候或者是搜索的时候。</p>
-<h2 id="Fragment"><a href="#Fragment" class="headerlink" title="Fragment"></a>Fragment</h2><p>Fragment是用来定位到当前页面某一个具体位置的url部分。在url部分以”#”开始的部分为fragment。</p>
-<h2 id="URL-encoding"><a href="#URL-encoding" class="headerlink" title="URL encoding"></a>URL encoding</h2><p>好了，聊完URL基本组成部分，接下来就要介绍URL encoding了。经常上网的同学一定对下面这种URL不陌生吧？<br><a href="https://www.baidu.com/s?ie=utf-8&amp;f=8&amp;rsv_bp=1&amp;rsv_idx=2&amp;tn=baiduhome_pg&amp;wd=%E7%BA%A2%E7%B1%B3note2&amp;rsv_spt=1&amp;oq=green&amp;rsv_pq=947783b70000" target="_blank" rel="noopener">https://www.baidu.com/s?ie=utf-8&amp;f=8&amp;rsv_bp=1&amp;rsv_idx=2&amp;tn=baiduhome_pg&amp;wd=%E7%BA%A2%E7%B1%B3note2&amp;rsv_spt=1&amp;oq=green&amp;rsv_pq=947783b70000</a></p>
-<p>可以看到，该URL包括了一些神秘的字符，例如”wd=%E7%BA%A2%E7%B1%B3note2”，一般的人是无法读的。这就是被编码后的样子了。</p>
-<p>为什么给URL 编码呢？原因很简单，因为如果允许任意字符的话，解析URL的任务将会非常艰巨而且效率低下，比如URL允许中文或者阿拉伯文。所以W3C组织就规定了一套协议，现在最新的应该是<a href="https://tools.ietf.org/html/rfc3986" target="_blank" rel="noopener">RFC 3986</a>，有兴趣深入研究的同学推荐阅读。编码就是对URL每个部分，不允许出现的字符进行编码。那么允许的字符有哪些呢？如下所示：<br><img src="http://img.blog.csdn.net/20151016130703641" alt=""><br>摘取自:<a href="https://en.wikipedia.org/wiki/Percent-encoding#Types_of_URI_characters." target="_blank" rel="noopener">https://en.wikipedia.org/wiki/Percent-encoding#Types_of_URI_characters.</a></p>
-<p>URL encoding介绍的差不多了，现在来讲讲URL encoding需要注意的问题。</p>
-<h2 id="URL-encoding-陷阱"><a href="#URL-encoding-陷阱" class="headerlink" title="URL encoding 陷阱"></a>URL encoding 陷阱</h2><p>RFC标准中没有指明使用哪种特定的编码格式来对url 进行编码。一般来说ASCII字符都是可以被使用的，但是对于保留字符(reserved characters)和非ASCII字符，我们必须考虑需要使用哪种编码方式来进行编码。最新的RFC标准是使用UTF-8来进行编码。但是，开发者也许也会遇到不是用UTF-8编码的时候。。。</p>
-<p>对于HTTP URTs来说，空格符号在Path部分会被编码为”%20”，而”+”是不用被编码的。<br>对于Query部分来说，空格符号会被编码为”+”或者”%20”，而”+”会被编码为”%2B”。</p>
-<p>这样就意味着一个字符串在不同的部分就会被编码为不同的形式。例如”blue+light blue”字符串。我们来看一个具体的例子：<a href="http://example.com/blue+light%20blue?blue%2Blight+blue“。从这个例子可以看出如果对URL语法不熟悉的话，是无法对一个URL进行编码的。要对URL进行编码，就需要知道每一部分对应的保留字符是哪些而不是简单的对URL进行遍历并编码。" target="_blank" rel="noopener">http://example.com/blue+light%20blue?blue%2Blight+blue“。从这个例子可以看出如果对URL语法不熟悉的话，是无法对一个URL进行编码的。要对URL进行编码，就需要知道每一部分对应的保留字符是哪些而不是简单的对URL进行遍历并编码。</a></p>
-<p>每个部分的保留字符</p>
-<ul>
-<li>“?”在Query部分是不用被编码的</li>
-<li>“/”在Query部分也是不用被编码的</li>
-<li>“:@-._~!$&amp;’()*+,;=”在Path部分是不用被编码的</li>
-<li>“/?:@-._~!$&amp;’()*+,;=”在fragment部分是不用被编码的</li>
-</ul>
-<h2 id="解码后的URL无法被正确分析"><a href="#解码后的URL无法被正确分析" class="headerlink" title="解码后的URL无法被正确分析"></a>解码后的URL无法被正确分析</h2><p>通过一个例子来分析更清楚：<br><code>”http://example.com/blue%2Fred%3Fand+green”</code></p>
-<p>该URL有如下几个部分：</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">部分</th>
-<th style="text-align:right">值</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">scheme</td>
-<td style="text-align:right">http</td>
-</tr>
-<tr>
-<td style="text-align:left">host</td>
-<td style="text-align:right">example.com</td>
-</tr>
-<tr>
-<td style="text-align:left">path</td>
-<td style="text-align:right">blue%2Fred%3Fand+green</td>
-</tr>
-<tr>
-<td style="text-align:left">解码后的path</td>
-<td style="text-align:right">blue/red?and+green</td>
-</tr>
-</tbody>
-</table>
-<p>分析后，很明显，我们是在找一个”blue/red?and+green”的资源，而不是找一个在blue文件夹下的”red?and+green”的资源。</p>
-<p>如果我们首先对URL解码，然后再分析呢？解码后的URL:<br><code>”http://example.com/blue/red?and+green”</code></p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">部分</th>
-<th style="text-align:right">值</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">scheme</td>
-<td style="text-align:right">http</td>
-</tr>
-<tr>
-<td style="text-align:left">host</td>
-<td style="text-align:right">example.com</td>
-</tr>
-<tr>
-<td style="text-align:left">path</td>
-<td style="text-align:right">blue/red</td>
-</tr>
-<tr>
-<td style="text-align:left">query parameter name</td>
-<td style="text-align:right">and+green</td>
-</tr>
-</tbody>
-</table>
-<p>很明显，这个是错误的。这个例子告诉我们，分析并拆解一个URL必须要在解码之前进行。</p>
-<h2 id="解码后的URL有可能无法被编码回原来的格式"><a href="#解码后的URL有可能无法被编码回原来的格式" class="headerlink" title="解码后的URL有可能无法被编码回原来的格式"></a>解码后的URL有可能无法被编码回原来的格式</h2><p>如果对”<a href="http://example.com/blue%2Fred%3Fand+green“解码，你将得到”http://example.com/blue/red?and+green“，然后又进行编码，你将得到”http://example.com/blue/red?and+green“，因为这个是合法的URL不需要进行character" target="_blank" rel="noopener">http://example.com/blue%2Fred%3Fand+green“解码，你将得到”http://example.com/blue/red?and+green“，然后又进行编码，你将得到”http://example.com/blue/red?and+green“，因为这个是合法的URL不需要进行character</a> escape。</p>
-<p>参考原文：<br><a href="http://blog.lunatech.com/2009/02/03/what-every-web-developer-must-know-about-url-encoding" target="_blank" rel="noopener">http://blog.lunatech.com/2009/02/03/what-every-web-developer-must-know-about-url-encoding</a></p>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/http/">http</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/http/">http</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/10/15/URL-URL-encoding/#disqus_thread" class="comments-count-link">Comments</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
@@ -1130,7 +1043,7 @@
 		  
 		
 		  
-			<li><a href="/categories/iOS/" title="iOS">iOS<sup>4</sup></a></li>
+			<li><a href="/categories/iOS/" title="iOS">iOS<sup>5</sup></a></li>
 		  
 		
 		  
@@ -1159,7 +1072,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/iOS/" title="iOS">iOS<sup>3</sup></a></li>
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>4</sup></a></li>
 			
 		
 			
@@ -1171,11 +1084,11 @@
 			
 		
 			
-				<li><a href="/tags/http/" title="http">http<sup>1</sup></a></li>
+				<li><a href="/tags/正则表达式/" title="正则表达式">正则表达式<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/正则表达式/" title="正则表达式">正则表达式<sup>1</sup></a></li>
+				<li><a href="/tags/http/" title="http">http<sup>1</sup></a></li>
 			
 		
 			
