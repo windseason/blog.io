@@ -21,7 +21,7 @@
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://ot51d7lis.bkt.clouddn.com/export_cert.png">
 <meta property="og:image" content="http://ot51d7lis.bkt.clouddn.com/export_dialog.JPG">
-<meta property="og:updated_time" content="2018-07-03T08:54:23.717Z">
+<meta property="og:updated_time" content="2018-07-04T10:00:13.876Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用Fastlane和Jenkins构建自动打包系统 (Part 2)">
 <meta name="twitter:description" content="Fastlane match 使用已经存在的证书经过第一部分的学习，Fastlane这个工具确实很好用，自动生成证书，自动打包，自动传到appstore，一切看上很完美。但是，在默认情况下，match是不能够使用已经存在的证书和provisiong profiles的，换句话说就是每次调用fastlane match的时候，如果发现git repo没有就会为你生成新的。显然，这个限制会让很多现有项">
@@ -152,7 +152,7 @@
 <p>做完这些后，现在我们来把证书和provision profiles推到git repo上去吧。执行下面的命令：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">irb(main):006:0&gt; Match::GitHelper.commit_changes(workspace, <span class="string">"add certificate, private key and provisioning profiles"</span>, git_url)</span><br></pre></td></tr></table></figure>
 <p>大功告成。现在你应该可以通过<strong>fastlane</strong>命令来安装证书和provision profiles了。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fastlane match distribution --<span class="built_in">readonly</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fastlane match development --<span class="built_in">readonly</span></span><br></pre></td></tr></table></figure>
   
 	</div>
 		<footer class="article-footer clearfix">
