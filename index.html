@@ -1,99 +1,345 @@
+<!DOCTYPE html>
 
- <!DOCTYPE HTML>
-<html >
-<head>
-  <meta charset="UTF-8">
+
+
   
-    <title>SIGABRT</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
-    
-    <meta name="author" content="Charles">
-    
 
-    
-    <meta property="og:type" content="website">
+
+<html class="theme-next muse use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/logo114.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/logo32.svg?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/logo32.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, Charles" />
+
+
+
+
+
+
+
+
+
+
+<meta property="og:type" content="website">
 <meta property="og:title" content="SIGABRT">
 <meta property="og:url" content="http://gobodigo.com/index.html">
 <meta property="og:site_name" content="SIGABRT">
 <meta property="og:locale" content="default">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SIGABRT">
-<meta name="twitter:creator" content="@CharlesLiu8">
 
-    
-    <link rel="alternative" href="/atom.xml" title="SIGABRT" type="application/atom+xml">
-    
-    
-    <link rel="icon" href="/img/logo32.ico">
-    
-    
-    <link rel="apple-touch-icon" href="/img/logo114.png">
-    <link rel="apple-touch-icon-precomposed" href="/img/logo114.png">
-    
-    <link rel="stylesheet" href="/css/style.css">
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://gobodigo.com/"/>
+
+
+
+
+
+  <title>SIGABRT</title>
+  
+
+
+
+
+
+
+
+
 </head>
 
-  <body>
-    <header>
-      
-<div>
-		
-			<div id="imglogo">
-				<a href="/"><img src="/img/logo.svg" alt="SIGABRT" title="SIGABRT"/></a>
-			</div>
-			
-			<div id="textlogo">
-				<h1 class="site-name"><a href="/" title="SIGABRT">SIGABRT</a></h1>
-				<h2 class="blog-motto">Seeking Thinking Realizing Value</h2>
-			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
-			</a></div>
-			<nav class="animated">
-				<ul>
-					<ul>
-					 
-						<li><a href="/">Home</a></li>
-					
-						<li><a href="/archives">Archives</a></li>
-					
-						<li><a href="/about">About</a></li>
-					
-					<li>
- 					
-						<form class="search">
-							<label>Search</label>
-						  <input id="bdcsMain" type="text" name="q" size="30" placeholder="Search"><br>
-						</form>
-						<script type="text/javascript">(function(){document.write(unescape('%3Cdiv id="bdcs"%3E%3C/div%3E'));var bdcs = document.createElement('script');bdcs.type = 'text/javascript';bdcs.async = true;bdcs.src = 'http://znsv.baidu.com/customer_search/api/js?sid=13808782294227901774' + '&plate_url=' + encodeURIComponent(window.location.href) + '&t=' + Math.ceil(new Date()/3600000);var s = document.getElementsByTagName('script')[0];s.parentNode.insertBefore(bdcs, s);})();</script>
-					
-					</li>
-				</ul>
-			</nav>			
-</div>
-    </header>
-    <div id="container">
-      <div id="main">
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
 
-   
+  
+  
     
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
+  
+
+  <div class="container sidebar-position-left 
+  page-home">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta custom-logo">
     
-      <a href="/2018/07/02/jenkins-fastlane-part2/" title="使用Fastlane和Jenkins构建自动打包系统 (Part 2)" itemprop="url">使用Fastlane和Jenkins构建自动打包系统 (Part 2)</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Charles" target="_blank" itemprop="author">Charles</a>
-		
-  <p class="article-time">
-    <time datetime="2018-07-02T02:05:14.000Z" itemprop="datePublished"> Published 2018-07-02</time>
+      <div class="site-meta-headline">
+        <a>
+          <img class="custom-logo-image" src="/images/logo.svg"
+               alt="SIGABRT"/>
+        </a>
+      </div>
     
-  </p>
-</header>
-    <div class="article-content">
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">SIGABRT</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Seeking Thinking Realizing Value</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
         
-        <h2 id="Fastlane-match-使用已经存在的证书"><a href="#Fastlane-match-使用已经存在的证书" class="headerlink" title="Fastlane match 使用已经存在的证书"></a>Fastlane match 使用已经存在的证书</h2><p>经过第一部分的学习，<strong>Fastlane</strong>这个工具确实很好用，自动生成证书，自动打包，自动传到appstore，一切看上很完美。但是，在默认情况下，<strong>match</strong>是不能够使用已经存在的证书和provisiong profiles的，换句话说就是每次调用<strong>fastlane match</strong>的时候，如果发现git repo没有就会为你生成新的。显然，这个限制会让很多现有项目的开发者望而生畏。好在，我们有办法可以让它支持现有证，但是这个办法稍微有点麻烦，因为它不是自动的。</p>
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+  <section id="posts" class="posts-expand">
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://gobodigo.com/2018/07/02/jenkins-fastlane-part2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Charles">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SIGABRT">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/07/02/jenkins-fastlane-part2/" itemprop="url">使用Fastlane和Jenkins构建自动打包系统 (Part 2)</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-02T10:05:14+08:00">
+                2018-07-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/iOS/" itemprop="url" rel="index">
+                    <span itemprop="name">iOS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/07/02/jenkins-fastlane-part2/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2018/07/02/jenkins-fastlane-part2/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Fastlane-match-使用已经存在的证书"><a href="#Fastlane-match-使用已经存在的证书" class="headerlink" title="Fastlane match 使用已经存在的证书"></a>Fastlane match 使用已经存在的证书</h2><p>经过第一部分的学习，<strong>Fastlane</strong>这个工具确实很好用，自动生成证书，自动打包，自动传到appstore，一切看上很完美。但是，在默认情况下，<strong>match</strong>是不能够使用已经存在的证书和provisiong profiles的，换句话说就是每次调用<strong>fastlane match</strong>的时候，如果发现git repo没有就会为你生成新的。显然，这个限制会让很多现有项目的开发者望而生畏。好在，我们有办法可以让它支持现有证，但是这个办法稍微有点麻烦，因为它不是自动的。</p>
 <blockquote>
 <p>如果你还未了解什么是fastlane，请先阅读<a href="http://gobodigo.com/2018/06/23/fastlane-jenkins/">使用Fastlane和Jenkins构建自动打包系统 (Part 1)</a></p>
 </blockquote>
@@ -141,68 +387,157 @@
 <p>大功告成。现在你应该可以通过<strong>fastlane</strong>命令来安装证书和provision profiles了。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fastlane match development --<span class="built_in">readonly</span></span><br></pre></td></tr></table></figure>
 
-        
-        
-        <p class="article-more-link">
           
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/iOS/">iOS</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/iOS/">iOS</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2018/07/02/jenkins-fastlane-part2/#disqus_thread" class="comments-count-link">Comments</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2018/06/23/fastlane-jenkins/" title="使用Fastlane和Jenkins构建自动打包系统 (Part 1)" itemprop="url">使用Fastlane和Jenkins构建自动打包系统 (Part 1)</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Charles" target="_blank" itemprop="author">Charles</a>
-		
-  <p class="article-time">
-    <time datetime="2018-06-23T14:30:11.000Z" itemprop="datePublished"> Published 2018-06-23</time>
-    
-  </p>
-</header>
-    <div class="article-content">
         
-        <blockquote>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://gobodigo.com/2018/06/23/fastlane-jenkins/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Charles">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SIGABRT">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/06/23/fastlane-jenkins/" itemprop="url">使用Fastlane和Jenkins构建自动打包系统 (Part 1)</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-06-23T22:30:11+08:00">
+                2018-06-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/iOS/" itemprop="url" rel="index">
+                    <span itemprop="name">iOS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/06/23/fastlane-jenkins/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2018/06/23/fastlane-jenkins/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
 <p>发这篇博文的目的主要是总结一些在使用fastlane过程遇到的坑，顺便吐槽一下Fastlane官方网站：写的好飘逸，对于新手来说不看几遍不试几次，完全不知到整个体系是如何的。。。最后我希望能够帮助看到这篇文章的你:]</p>
 </blockquote>
 <h2 id="Fastlane"><a href="#Fastlane" class="headerlink" title="Fastlane"></a>Fastlane</h2><p><img src="https://docs.fastlane.tools/img/fastlane_text.png" alt=""></p>
@@ -273,68 +608,135 @@
 <figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">platform <span class="symbol">:ios</span> <span class="keyword">do</span></span><br><span class="line">  desc <span class="string">"Push a new release build to the App Store"</span></span><br><span class="line">  lane <span class="symbol">:release</span> <span class="keyword">do</span></span><br><span class="line">  	sync_code_signing</span><br><span class="line">    build_app(<span class="symbol">workspace:</span> <span class="string">"Spacename.xcworkspace"</span>, <span class="symbol">scheme:</span> <span class="string">"SchemeName"</span>)</span><br><span class="line">    upload_to_app_store(<span class="symbol">skip_metadata:</span> <span class="literal">true</span>, <span class="symbol">skip_screenshots:</span> <span class="literal">true</span>)</span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
 <p>只需要在编译之前调用sync_code_signing即可！</p>
 
-        
-        
-        <p class="article-more-link">
           
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/iOS/">iOS</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/iOS/">iOS</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2018/06/23/fastlane-jenkins/#disqus_thread" class="comments-count-link">Comments</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2017/08/24/agile-desgin/" title="敏捷设计之SOLID原则" itemprop="url">敏捷设计之SOLID原则</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Charles" target="_blank" itemprop="author">Charles</a>
-		
-  <p class="article-time">
-    <time datetime="2017-08-24T07:38:11.000Z" itemprop="datePublished"> Published 2017-08-24</time>
-    
-  </p>
-</header>
-    <div class="article-content">
         
-        <h2 id="敏捷设计之SOLID原则"><a href="#敏捷设计之SOLID原则" class="headerlink" title="敏捷设计之SOLID原则"></a>敏捷设计之SOLID原则</h2><h3 id="把握所学东西的本质"><a href="#把握所学东西的本质" class="headerlink" title="把握所学东西的本质"></a>把握所学东西的本质</h3><p>在讨论SOLID原则之前，我们需要明确一点，就是这个规则是为了解决什么问题而被发明出来的。只有弄清楚这一点，才能够在实际工作中正确应用。举个栗子吧，比如为什么要采用MVC？教科书般的回答就是MVC就是Model-View-Controller，然后将Model,View和Controller各自按照教科书说一遍。你觉得你真的理解为什么要用MVC了吗？举个简单的例子说明非MVC是什么样的吧？</p>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://gobodigo.com/2017/08/24/agile-desgin/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Charles">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SIGABRT">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/08/24/agile-desgin/" itemprop="url">敏捷设计之SOLID原则</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-08-24T15:38:11+08:00">
+                2017-08-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/08/24/agile-desgin/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2017/08/24/agile-desgin/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="敏捷设计之SOLID原则"><a href="#敏捷设计之SOLID原则" class="headerlink" title="敏捷设计之SOLID原则"></a>敏捷设计之SOLID原则</h2><h3 id="把握所学东西的本质"><a href="#把握所学东西的本质" class="headerlink" title="把握所学东西的本质"></a>把握所学东西的本质</h3><p>在讨论SOLID原则之前，我们需要明确一点，就是这个规则是为了解决什么问题而被发明出来的。只有弄清楚这一点，才能够在实际工作中正确应用。举个栗子吧，比如为什么要采用MVC？教科书般的回答就是MVC就是Model-View-Controller，然后将Model,View和Controller各自按照教科书说一遍。你觉得你真的理解为什么要用MVC了吗？举个简单的例子说明非MVC是什么样的吧？</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line"></span><br><span class="line">&lt;%</span><br><span class="line">set conn=Server.CreateObject(<span class="string">"ADODB.Connection"</span>)</span><br><span class="line">conn.Provider=<span class="string">"Microsoft.Jet.OLEDB.4.0"</span></span><br><span class="line">conn.Open(Server.Mappath(<span class="string">"/db/northwind.mdb"</span>))</span><br><span class="line">set rs = Server.CreateObject(<span class="string">"ADODB.recordset"</span>)</span><br><span class="line">rs.Open <span class="string">"Select * from Customers"</span>, conn</span><br><span class="line"></span><br><span class="line"><span class="keyword">do</span> until rs.EOF</span><br><span class="line">    <span class="keyword">for</span> each x <span class="keyword">in</span> rs.Fields</span><br><span class="line">       Response.Write(x.name)</span><br><span class="line">       Response.Write(<span class="string">" = "</span>)</span><br><span class="line">       Response.Write(x.value &amp; <span class="string">"&lt;br&gt;"</span>) </span><br><span class="line">    next</span><br><span class="line">    Response.Write(<span class="string">"&lt;br&gt;"</span>)</span><br><span class="line">    rs.MoveNext</span><br><span class="line">loop</span><br><span class="line"></span><br><span class="line">rs.close</span><br><span class="line">conn.close</span><br><span class="line">%&gt;</span><br><span class="line"></span><br><span class="line">&lt;<span class="regexp">/body&gt;</span></span><br><span class="line"><span class="regexp">&lt;/</span>html&gt;</span><br></pre></td></tr></table></figure>
 <p>这是一段ASP classic的代码。这段代码的问题：</p>
 <ul>
@@ -405,125 +807,308 @@
 <p>咋一看，细节上可能跟Liskov要求的很像，但是请注意，DIP主要强调的是模块之间的依赖。下面用一个例子来感受一下</p>
 <p><img src="http://ot51d7lis.bkt.clouddn.com/DIP%20%281%29.png" alt=""></p>
 
-        
-        
-        <p class="article-more-link">
           
-       </p>
+        
+      
     </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
+    
+    
+    
 
+    
 
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/OOD/">OOD</a>
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
   </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2017/08/24/agile-desgin/#disqus_thread" class="comments-count-link">Comments</a>
-	
-</div>
-
-</footer>
+  
+  
+  
+  </article>
 
 
-    </article>
-
-
-
-
-
-
-   
     
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://gobodigo.com/2017/07/28/algorithm-dijstra/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Charles">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SIGABRT">
+    </span>
+
     
-      <a href="/2017/07/28/algorithm-dijstra/" title="最短路径之迪杰斯特拉算法" itemprop="url">最短路径之迪杰斯特拉算法</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Charles" target="_blank" itemprop="author">Charles</a>
-		
-  <p class="article-time">
-    <time datetime="2017-07-28T15:36:29.000Z" itemprop="datePublished"> Published 2017-07-28</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fstream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="built_in">std</span>::<span class="built_in">cin</span>;</span><br><span class="line"><span class="keyword">using</span> <span class="built_in">std</span>::<span class="built_in">cout</span>;</span><br><span class="line"><span class="keyword">using</span> <span class="built_in">std</span>::<span class="built_in">vector</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//maximum number of nodes</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxnum = <span class="number">100</span>;</span><br><span class="line"><span class="comment">//maxWeight represents infinite large</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxWeight = <span class="number">99999</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">///</span></span><br><span class="line"><span class="comment">///Calculate the shortest path based on dijstra algorithm.</span></span><br><span class="line"><span class="comment">///</span></span><br><span class="line"><span class="comment">///@param v source node index</span></span><br><span class="line"><span class="comment">///@param n number of nodes</span></span><br><span class="line"><span class="comment">///@param dist to save the distance between the ith node and the source node </span></span><br><span class="line"><span class="comment">///@param record the ith node's previous node.</span></span><br><span class="line"><span class="comment">///@param arcs line matrix</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">dijstra</span><span class="params">(<span class="keyword">int</span> v, <span class="keyword">int</span> n, <span class="keyword">int</span> *dist, <span class="keyword">int</span> *prev, <span class="keyword">int</span> arcs[maxnum][maxnum])</span> </span>&#123;</span><br><span class="line">    <span class="comment">//bool array marks which node has been put to S.</span></span><br><span class="line">    <span class="comment">//S is an array that contains nodes which makes up of the shortest path.</span></span><br><span class="line">    <span class="keyword">bool</span> included[n];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">        included[i] = <span class="literal">false</span>;</span><br><span class="line">        dist[i] = arcs[v][i];</span><br><span class="line"></span><br><span class="line">        <span class="comment">//if the distance is not maxWeight, then it means there </span></span><br><span class="line">        <span class="comment">//is a line between the v and the ith node. so set the ith</span></span><br><span class="line">        <span class="comment">//node's previous to v.</span></span><br><span class="line">        <span class="keyword">if</span>(dist[i] &lt; maxWeight) &#123;</span><br><span class="line">            prev[i] = v;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            prev[i] = <span class="number">-1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//start from the source node v, so put it to S by default.</span></span><br><span class="line">    included[v] = <span class="literal">true</span>;</span><br><span class="line">    <span class="comment">//self to self is 0.</span></span><br><span class="line">    dist[v] = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; n; i++) &#123;</span><br><span class="line">        <span class="keyword">int</span> min = maxWeight;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> w;</span><br><span class="line">        <span class="comment">//find min distance between the source node and the ith</span></span><br><span class="line">        <span class="comment">//node. the ith node must not be in S.</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; n; j++) &#123;</span><br><span class="line">            <span class="keyword">if</span>(!included[j] &amp;&amp; dist[j] &lt; min) &#123;</span><br><span class="line">                min = dist[j];</span><br><span class="line">                w = j;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//put the w node into the S.</span></span><br><span class="line">        included[w] = <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; n; j++) &#123;</span><br><span class="line">            <span class="keyword">if</span>(!included[j] &amp;&amp; min + arcs[w][j] &lt; dist[j]) &#123;</span><br><span class="line">                dist[j] = min + arcs[w][j];</span><br><span class="line">                prev[j] = w;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">std</span>::ifstream ifin;</span><br><span class="line">    <span class="comment">//number of nodes</span></span><br><span class="line">    <span class="keyword">int</span> n;</span><br><span class="line">    <span class="comment">//number of lines</span></span><br><span class="line">    <span class="keyword">int</span> lines;</span><br><span class="line">    <span class="keyword">int</span> arcs[maxnum][maxnum];</span><br><span class="line"></span><br><span class="line">    ifin.open(<span class="string">"sample.txt"</span>);</span><br><span class="line">    <span class="keyword">if</span>(ifin.is_open()) &#123;</span><br><span class="line">        ifin &gt;&gt; n;</span><br><span class="line">        ifin &gt;&gt; lines;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; lines; i++) &#123;</span><br><span class="line">            <span class="keyword">int</span> row, column, weight;</span><br><span class="line">            ifin &gt;&gt; row &gt;&gt; column &gt;&gt; weight;</span><br><span class="line"></span><br><span class="line">            arcs[row][column] = weight;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"could not open sample.txt "</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ifin.close();</span><br><span class="line"></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; n &lt;&lt; <span class="string">" nodes "</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; lines &lt;&lt; <span class="string">" lines "</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//to save the distance between the ith node and the source node </span></span><br><span class="line">    <span class="keyword">int</span> dist[n];</span><br><span class="line">    <span class="comment">//to record the ith node's previous node.</span></span><br><span class="line">    <span class="keyword">int</span> prev[n];</span><br><span class="line"></span><br><span class="line">    <span class="comment">//init arcs</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; n; j++) &#123;</span><br><span class="line">            <span class="keyword">if</span>(arcs[i][j] == <span class="number">0</span>) &#123;</span><br><span class="line">                arcs[i][j] = maxWeight;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="built_in">cout</span> &lt;&lt; arcs[i][j] &lt;&lt; <span class="string">"\t"</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">int</span> v = <span class="number">0</span>;</span><br><span class="line">    dijstra(v, n, dist, prev, arcs);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"distance between "</span>&lt;&lt; v &lt;&lt;<span class="string">" and last point is :"</span> &lt;&lt; dist[n<span class="number">-1</span>] &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"shortest path is ["</span>;</span><br><span class="line">    <span class="keyword">int</span> k = n - <span class="number">1</span>;</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; path(<span class="number">1</span>,k);</span><br><span class="line">    <span class="keyword">while</span>(prev[k] &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">        k = prev[k];</span><br><span class="line">        path.push_back(k);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span>(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;::reverse_iterator iter = path.rbegin(); iter != path.rend(); ++iter) &#123;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; *iter &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"]"</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      <header class="post-header">
+
         
         
-        <p class="article-more-link">
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/07/28/algorithm-dijstra/" itemprop="url">最短路径之迪杰斯特拉算法</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-07-28T23:36:29+08:00">
+                2017-07-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
           
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/算法/" itemprop="url" rel="index">
+                    <span itemprop="name">算法</span>
+                  </a>
+                </span>
 
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/算法/">算法</a>
-</div>
+                
+                
+              
+            </span>
+          
 
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/07/28/algorithm-dijstra/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2017/07/28/algorithm-dijstra/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
 
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/算法/">算法</a>
-  </div>
+          
+          
 
-</div>
+          
 
+          
 
+          
 
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2017/07/28/algorithm-dijstra/#disqus_thread" class="comments-count-link">Comments</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
+        </div>
+      </header>
     
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
+
     
-      <a href="/2017/07/23/find-non-include-regex/" title="找出不包含某个字符串的正则表达式" itemprop="url">找出不包含某个字符串的正则表达式</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Charles" target="_blank" itemprop="author">Charles</a>
-		
-  <p class="article-time">
-    <time datetime="2017-07-23T14:42:43.000Z" itemprop="datePublished"> Published 2017-07-23</time>
     
-  </p>
-</header>
-    <div class="article-content">
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
         
-        <h2 id="找出不包含某个字符串的正则表达式"><a href="#找出不包含某个字符串的正则表达式" class="headerlink" title="找出不包含某个字符串的正则表达式"></a>找出不包含某个字符串的正则表达式</h2><p>经常我们会遇到想找出不包含某个字符串，例如”hello”的文本，最容易想到的是在正则表达式里使用[^hello]，但这样的正则表达式完全是另外一个意思，它的意思是字符串里不能包含’h’，’e’，’l’, ‘o’四个单字符。那什么样的正则表达式能过滤出不包含完整“hello”字串的信息呢？事实上，说正则表达式里不支持逆向匹配并不是百分之百的正确。</p>
+          
+            <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fstream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="built_in">std</span>::<span class="built_in">cin</span>;</span><br><span class="line"><span class="keyword">using</span> <span class="built_in">std</span>::<span class="built_in">cout</span>;</span><br><span class="line"><span class="keyword">using</span> <span class="built_in">std</span>::<span class="built_in">vector</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//maximum number of nodes</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxnum = <span class="number">100</span>;</span><br><span class="line"><span class="comment">//maxWeight represents infinite large</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxWeight = <span class="number">99999</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">///</span></span><br><span class="line"><span class="comment">///Calculate the shortest path based on dijstra algorithm.</span></span><br><span class="line"><span class="comment">///</span></span><br><span class="line"><span class="comment">///@param v source node index</span></span><br><span class="line"><span class="comment">///@param n number of nodes</span></span><br><span class="line"><span class="comment">///@param dist to save the distance between the ith node and the source node </span></span><br><span class="line"><span class="comment">///@param record the ith node's previous node.</span></span><br><span class="line"><span class="comment">///@param arcs line matrix</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">dijstra</span><span class="params">(<span class="keyword">int</span> v, <span class="keyword">int</span> n, <span class="keyword">int</span> *dist, <span class="keyword">int</span> *prev, <span class="keyword">int</span> arcs[maxnum][maxnum])</span> </span>&#123;</span><br><span class="line">    <span class="comment">//bool array marks which node has been put to S.</span></span><br><span class="line">    <span class="comment">//S is an array that contains nodes which makes up of the shortest path.</span></span><br><span class="line">    <span class="keyword">bool</span> included[n];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">        included[i] = <span class="literal">false</span>;</span><br><span class="line">        dist[i] = arcs[v][i];</span><br><span class="line"></span><br><span class="line">        <span class="comment">//if the distance is not maxWeight, then it means there </span></span><br><span class="line">        <span class="comment">//is a line between the v and the ith node. so set the ith</span></span><br><span class="line">        <span class="comment">//node's previous to v.</span></span><br><span class="line">        <span class="keyword">if</span>(dist[i] &lt; maxWeight) &#123;</span><br><span class="line">            prev[i] = v;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            prev[i] = <span class="number">-1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//start from the source node v, so put it to S by default.</span></span><br><span class="line">    included[v] = <span class="literal">true</span>;</span><br><span class="line">    <span class="comment">//self to self is 0.</span></span><br><span class="line">    dist[v] = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; n; i++) &#123;</span><br><span class="line">        <span class="keyword">int</span> min = maxWeight;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> w;</span><br><span class="line">        <span class="comment">//find min distance between the source node and the ith</span></span><br><span class="line">        <span class="comment">//node. the ith node must not be in S.</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; n; j++) &#123;</span><br><span class="line">            <span class="keyword">if</span>(!included[j] &amp;&amp; dist[j] &lt; min) &#123;</span><br><span class="line">                min = dist[j];</span><br><span class="line">                w = j;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//put the w node into the S.</span></span><br><span class="line">        included[w] = <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; n; j++) &#123;</span><br><span class="line">            <span class="keyword">if</span>(!included[j] &amp;&amp; min + arcs[w][j] &lt; dist[j]) &#123;</span><br><span class="line">                dist[j] = min + arcs[w][j];</span><br><span class="line">                prev[j] = w;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">std</span>::ifstream ifin;</span><br><span class="line">    <span class="comment">//number of nodes</span></span><br><span class="line">    <span class="keyword">int</span> n;</span><br><span class="line">    <span class="comment">//number of lines</span></span><br><span class="line">    <span class="keyword">int</span> lines;</span><br><span class="line">    <span class="keyword">int</span> arcs[maxnum][maxnum];</span><br><span class="line"></span><br><span class="line">    ifin.open(<span class="string">"sample.txt"</span>);</span><br><span class="line">    <span class="keyword">if</span>(ifin.is_open()) &#123;</span><br><span class="line">        ifin &gt;&gt; n;</span><br><span class="line">        ifin &gt;&gt; lines;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; lines; i++) &#123;</span><br><span class="line">            <span class="keyword">int</span> row, column, weight;</span><br><span class="line">            ifin &gt;&gt; row &gt;&gt; column &gt;&gt; weight;</span><br><span class="line"></span><br><span class="line">            arcs[row][column] = weight;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"could not open sample.txt "</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ifin.close();</span><br><span class="line"></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; n &lt;&lt; <span class="string">" nodes "</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; lines &lt;&lt; <span class="string">" lines "</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//to save the distance between the ith node and the source node </span></span><br><span class="line">    <span class="keyword">int</span> dist[n];</span><br><span class="line">    <span class="comment">//to record the ith node's previous node.</span></span><br><span class="line">    <span class="keyword">int</span> prev[n];</span><br><span class="line"></span><br><span class="line">    <span class="comment">//init arcs</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; n; j++) &#123;</span><br><span class="line">            <span class="keyword">if</span>(arcs[i][j] == <span class="number">0</span>) &#123;</span><br><span class="line">                arcs[i][j] = maxWeight;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="built_in">cout</span> &lt;&lt; arcs[i][j] &lt;&lt; <span class="string">"\t"</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">int</span> v = <span class="number">0</span>;</span><br><span class="line">    dijstra(v, n, dist, prev, arcs);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"distance between "</span>&lt;&lt; v &lt;&lt;<span class="string">" and last point is :"</span> &lt;&lt; dist[n<span class="number">-1</span>] &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"shortest path is ["</span>;</span><br><span class="line">    <span class="keyword">int</span> k = n - <span class="number">1</span>;</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; path(<span class="number">1</span>,k);</span><br><span class="line">    <span class="keyword">while</span>(prev[k] &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">        k = prev[k];</span><br><span class="line">        path.push_back(k);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span>(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;::reverse_iterator iter = path.rbegin(); iter != path.rend(); ++iter) &#123;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; *iter &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"]"</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://gobodigo.com/2017/07/23/find-non-include-regex/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Charles">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SIGABRT">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/07/23/find-non-include-regex/" itemprop="url">找出不包含某个字符串的正则表达式</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-07-23T22:42:43+08:00">
+                2017-07-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/正则表达式/" itemprop="url" rel="index">
+                    <span itemprop="name">正则表达式</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/07/23/find-non-include-regex/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2017/07/23/find-non-include-regex/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="找出不包含某个字符串的正则表达式"><a href="#找出不包含某个字符串的正则表达式" class="headerlink" title="找出不包含某个字符串的正则表达式"></a>找出不包含某个字符串的正则表达式</h2><p>经常我们会遇到想找出不包含某个字符串，例如”hello”的文本，最容易想到的是在正则表达式里使用[^hello]，但这样的正则表达式完全是另外一个意思，它的意思是字符串里不能包含’h’，’e’，’l’, ‘o’四个单字符。那什么样的正则表达式能过滤出不包含完整“hello”字串的信息呢？事实上，说正则表达式里不支持逆向匹配并不是百分之百的正确。</p>
 <p>我们就可以使用<strong>否定式查找</strong>来模拟出逆向匹配，从而解决我们的问题, 表达式如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">^((?!hello).)*$</span><br></pre></td></tr></table></figure>
 <p>上面这个表达式就能过滤出不包含<strong>‘hello’</strong>字串的信息。</p>
@@ -541,68 +1126,168 @@
 <p>所以，你可以认为当表达式返回false的时候，说明该字符串包含指定子串。</p>
 <p>最后推荐一个好的，快速的测试正则表达式的在线网站，我用起来很不错(居然还有正则表达式的解释，真是有点强大哈，还不快自己尝试一下)：<br><a href="https://regex101.com/" target="_blank" rel="noopener">https://regex101.com/</a></p>
 
-        
-        
-        <p class="article-more-link">
           
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/正则表达式/">正则表达式</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/正则表达式/">正则表达式</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2017/07/23/find-non-include-regex/#disqus_thread" class="comments-count-link">Comments</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2017/07/18/react-life-cycle/" title="React Component lifecycle" itemprop="url">React Component lifecycle</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Charles" target="_blank" itemprop="author">Charles</a>
-		
-  <p class="article-time">
-    <time datetime="2017-07-18T04:17:55.000Z" itemprop="datePublished"> Published 2017-07-18</time>
-    
-  </p>
-</header>
-    <div class="article-content">
         
-        <h2 id="React-Component-lifecycle"><a href="#React-Component-lifecycle" class="headerlink" title="React Component lifecycle"></a>React Component lifecycle</h2><p>最近刚开始使用react-native做项目，有一些心得，所以在这里发表一下。对没有接触过的技术和开发环境，了解核心component的生命周期是非常重要的。能够保证在写代码的过程中不容易犯错。</p>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://gobodigo.com/2017/07/18/react-life-cycle/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Charles">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SIGABRT">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/07/18/react-life-cycle/" itemprop="url">React Component lifecycle</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-07-18T12:17:55+08:00">
+                2017-07-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/javascript/" itemprop="url" rel="index">
+                    <span itemprop="name">javascript</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/javascript/react/" itemprop="url" rel="index">
+                    <span itemprop="name">react</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/07/18/react-life-cycle/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2017/07/18/react-life-cycle/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="React-Component-lifecycle"><a href="#React-Component-lifecycle" class="headerlink" title="React Component lifecycle"></a>React Component lifecycle</h2><p>最近刚开始使用react-native做项目，有一些心得，所以在这里发表一下。对没有接触过的技术和开发环境，了解核心component的生命周期是非常重要的。能够保证在写代码的过程中不容易犯错。</p>
 <h3 id="什么是component？"><a href="#什么是component？" class="headerlink" title="什么是component？"></a>什么是component？</h3><p>根据React官方文档，<strong>React.component</strong>是一个抽象基类。能够让使用者将UI拆成各个独立地，可重用的component。常见的使用场景是继承它并提供一个<strong>render()</strong>方法。</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Greeting</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">return</span> &lt;h1&gt;Hello, &#123;this.props.name&#125;&lt;/h1&gt;;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h2 id="React-lifecycle-methods"><a href="#React-lifecycle-methods" class="headerlink" title="React lifecycle methods"></a>React lifecycle methods</h2><p><img src="http://ot51d7lis.bkt.clouddn.com/React%20component%20life%20cycle2.png" alt=""></p>
@@ -676,68 +1361,157 @@
 <p>如何使用：</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> cancelablePromise = makeCancelable(</span><br><span class="line">  <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="params">r</span> =&gt;</span> component.setState(&#123;...&#125;&#125;))</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">cancelablePromise</span><br><span class="line">  .promise</span><br><span class="line">  .then(<span class="function"><span class="params">()</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">'resolved'</span>))</span><br><span class="line">  .catch(<span class="function">(<span class="params">reason</span>) =&gt;</span> <span class="built_in">console</span>.log(<span class="string">'isCanceled'</span>, reason.isCanceled));</span><br><span class="line"></span><br><span class="line">cancelablePromise.cancel(); <span class="comment">// Cancel the promise</span></span><br></pre></td></tr></table></figure>
 
-        
-        
-        <p class="article-more-link">
           
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/javascript/">javascript</a>►<a class="article-category-link" href="/categories/javascript/react/">react</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/javascript/">javascript</a><a href="/tags/react/">react</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2017/07/18/react-life-cycle/#disqus_thread" class="comments-count-link">Comments</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2017/07/16/ios-iap-product-types/" title="iOS 内购商品类型" itemprop="url">iOS 内购商品类型</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Charles" target="_blank" itemprop="author">Charles</a>
-		
-  <p class="article-time">
-    <time datetime="2017-07-16T14:49:27.000Z" itemprop="datePublished"> Published 2017-07-16</time>
-    
-  </p>
-</header>
-    <div class="article-content">
         
-        <h2 id="iOS-内购商品类型"><a href="#iOS-内购商品类型" class="headerlink" title="iOS 内购商品类型"></a>iOS 内购商品类型</h2><p>由于最近的项目有IAP，所以又重温了一遍iOS IAP的知识。在开发的过程中，发现网络上的各种文档都有，当然最详细的还是苹果官方IAP文档，但是苹果对每种类型介绍太官方(官话)，让刚开始看的人不太容易弄懂每种商品的区别。另外，深刻理解每种商品对后面的开发非常有帮助。所以，我觉得有必要说一下。</p>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://gobodigo.com/2017/07/16/ios-iap-product-types/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Charles">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SIGABRT">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/07/16/ios-iap-product-types/" itemprop="url">iOS 内购商品类型</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-07-16T22:49:27+08:00">
+                2017-07-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/iOS/" itemprop="url" rel="index">
+                    <span itemprop="name">iOS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/07/16/ios-iap-product-types/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2017/07/16/ios-iap-product-types/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="iOS-内购商品类型"><a href="#iOS-内购商品类型" class="headerlink" title="iOS 内购商品类型"></a>iOS 内购商品类型</h2><p>由于最近的项目有IAP，所以又重温了一遍iOS IAP的知识。在开发的过程中，发现网络上的各种文档都有，当然最详细的还是苹果官方IAP文档，但是苹果对每种类型介绍太官方(官话)，让刚开始看的人不太容易弄懂每种商品的区别。另外，深刻理解每种商品对后面的开发非常有帮助。所以，我觉得有必要说一下。</p>
 <p>IAP的类型一共4种，接下来，我将对每一种进行通俗易懂的解释。</p>
 <h3 id="Consumable-products-消费类型内购"><a href="#Consumable-products-消费类型内购" class="headerlink" title="Consumable products (消费类型内购)"></a>Consumable products (消费类型内购)</h3><p>苹果官方解释</p>
 <blockquote>
@@ -762,68 +1536,157 @@
 </ul>
 <h3 id="Non-renewable-subscriptions"><a href="#Non-renewable-subscriptions" class="headerlink" title="Non-renewable subscriptions"></a>Non-renewable subscriptions</h3><p>这种类型的商品跟Auto-renewable subscriptions的商品非常像，目的也是为了给用户提供持续服务的类型。最大的区别是，与该商品相关的续订的信息都由你的服务器保存和处理。简而言之，就是如果你选了Auto-renewable subscriptions，则苹果帮你搞定一切，包括用户的自动续订。但如果你选了Non-renewable subscriptions做为你提供的商品的类型，则你需要负责续订以及过期时间的管理，以及让用户购买的商品在用户所有的设备上可用（只要用户正确登录你的服务器）。哦，对了，还有恢复购买也需要你负责。</p>
 
-        
-        
-        <p class="article-more-link">
           
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/iOS/">iOS</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/iOS/">iOS</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2017/07/16/ios-iap-product-types/#disqus_thread" class="comments-count-link">Comments</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2017/07/08/javascript-Hoisting/" title="什么是Javascript Hoisting？" itemprop="url">什么是Javascript Hoisting？</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Charles" target="_blank" itemprop="author">Charles</a>
-		
-  <p class="article-time">
-    <time datetime="2017-07-07T16:06:58.000Z" itemprop="datePublished"> Published 2017-07-08</time>
-    
-  </p>
-</header>
-    <div class="article-content">
         
-        <h2 id="什么是Javascript-hoisting"><a href="#什么是Javascript-hoisting" class="headerlink" title="什么是Javascript hoisting?"></a>什么是Javascript hoisting?</h2><p>Javascript hoisting 国内一般翻译为<strong>变量提升</strong>。</p>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://gobodigo.com/2017/07/08/javascript-Hoisting/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Charles">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SIGABRT">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/07/08/javascript-Hoisting/" itemprop="url">什么是Javascript Hoisting？</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-07-08T00:06:58+08:00">
+                2017-07-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/javascript/" itemprop="url" rel="index">
+                    <span itemprop="name">javascript</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/07/08/javascript-Hoisting/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2017/07/08/javascript-Hoisting/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="什么是Javascript-hoisting"><a href="#什么是Javascript-hoisting" class="headerlink" title="什么是Javascript hoisting?"></a>什么是Javascript hoisting?</h2><p>Javascript hoisting 国内一般翻译为<strong>变量提升</strong>。</p>
 <p>Hoisting这个词是用来描述Javascript在执行上下文，尤其是创建和执行变量时时如何工作的。但是，hoisting使得Javascript的执行容易被误解。例如，hoisting通常被认为是把变量或者方法在运行时环境被物理地移动到代码的顶部，但是实际上却不是这样。实际上发生的是，变量或者方法的声明在编译时就被提前放入内存，而代码仍然放到原来的位置上。</p>
 <p>接下来，通过几个例子来帮助理解</p>
 <h2 id="方法提升例子"><a href="#方法提升例子" class="headerlink" title="方法提升例子"></a>方法提升例子</h2><p>将方法的声明在任何代码执行之前放入内存的好处是能够在方法声明之前就能够使用它，因为它已经被提前放入内存里了。</p>
@@ -835,68 +1698,157 @@
 <p><strong>注意</strong>: Javascript 只提升变量的声明，而不提升变量的定义。如果你在声明和定义之前试图获得变量的值，你会得到undefined。</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> x = <span class="number">1</span>; <span class="comment">// 初始化 x</span></span><br><span class="line"><span class="built_in">console</span>.log(x + <span class="string">" "</span> + y); <span class="comment">// '1 undefined'，因为定义不会被提升</span></span><br><span class="line"><span class="keyword">var</span> y = <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 下面这段代码的结果也是一样的</span></span><br><span class="line"><span class="keyword">var</span> x = <span class="number">1</span>; <span class="comment">// Initialize x</span></span><br><span class="line"><span class="keyword">var</span> y; <span class="comment">// Declare y</span></span><br><span class="line"><span class="built_in">console</span>.log(x + <span class="string">" "</span> + y); <span class="comment">// '1 undefined'</span></span><br><span class="line">y = <span class="number">2</span>; <span class="comment">// Initialize y</span></span><br></pre></td></tr></table></figure>
 
-        
-        
-        <p class="article-more-link">
           
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/javascript/">javascript</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/javascript/">javascript</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2017/07/08/javascript-Hoisting/#disqus_thread" class="comments-count-link">Comments</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2017/07/07/ios-memory-types/" title="iOS memory types" itemprop="url">iOS memory types</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Charles" target="_blank" itemprop="author">Charles</a>
-		
-  <p class="article-time">
-    <time datetime="2017-07-07T05:12:52.000Z" itemprop="datePublished"> Published 2017-07-07</time>
-    
-  </p>
-</header>
-    <div class="article-content">
         
-        <h2 id="iOS-memory"><a href="#iOS-memory" class="headerlink" title="iOS memory"></a>iOS memory</h2><h3 id="Clean-memory"><a href="#Clean-memory" class="headerlink" title="Clean memory"></a>Clean memory</h3><p>clean memory are memories that can be recreated, on iOS it is memory of:</p>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://gobodigo.com/2017/07/07/ios-memory-types/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Charles">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SIGABRT">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/07/07/ios-memory-types/" itemprop="url">iOS memory types</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-07-07T13:12:52+08:00">
+                2017-07-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/iOS/" itemprop="url" rel="index">
+                    <span itemprop="name">iOS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/07/07/ios-memory-types/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2017/07/07/ios-memory-types/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="iOS-memory"><a href="#iOS-memory" class="headerlink" title="iOS memory"></a>iOS memory</h2><h3 id="Clean-memory"><a href="#Clean-memory" class="headerlink" title="Clean memory"></a>Clean memory</h3><p>clean memory are memories that can be recreated, on iOS it is memory of:</p>
 <ul>
 <li>system framework</li>
 <li>binary executable of your app</li>
@@ -910,68 +1862,157 @@
 <h3 id="Resident-memory"><a href="#Resident-memory" class="headerlink" title="Resident memory"></a>Resident memory</h3><p><code>resident memory = dirty memory + clean memory that loaded in physical memory</code><br>resident memory is the memory really loaded in your physical memory, it mean all the dirty memory and parts of your clean memory.</p>
 <h3 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h3><p>At any time, this is always true:<br><code>virtual memory == (clean memory + dirty memory) &gt; resident memory &gt; dirty memory</code><br>If you are worrying about the physical memory your App is taking(which is the key reason your App is terminated due to low memory), you should mainly focus on resident memory.</p>
 
-        
-        
-        <p class="article-more-link">
           
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/iOS/">iOS</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/iOS/">iOS</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2017/07/07/ios-memory-types/#disqus_thread" class="comments-count-link">Comments</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2017/07/07/find-primes/" title="查找素数" itemprop="url">查找素数</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Charles" target="_blank" itemprop="author">Charles</a>
-		
-  <p class="article-time">
-    <time datetime="2017-07-07T04:13:17.000Z" itemprop="datePublished"> Published 2017-07-07</time>
-    
-  </p>
-</header>
-    <div class="article-content">
         
-        <h2 id="一个Eratosthenes-算法的实现"><a href="#一个Eratosthenes-算法的实现" class="headerlink" title="一个Eratosthenes 算法的实现"></a>一个Eratosthenes 算法的实现</h2><p><strong>质数的定义</strong></p>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://gobodigo.com/2017/07/07/find-primes/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Charles">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SIGABRT">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/07/07/find-primes/" itemprop="url">查找素数</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-07-07T12:13:17+08:00">
+                2017-07-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/算法/" itemprop="url" rel="index">
+                    <span itemprop="name">算法</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/07/07/find-primes/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2017/07/07/find-primes/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="一个Eratosthenes-算法的实现"><a href="#一个Eratosthenes-算法的实现" class="headerlink" title="一个Eratosthenes 算法的实现"></a>一个Eratosthenes 算法的实现</h2><p><strong>质数的定义</strong></p>
 <blockquote>
 <p>质数（prime number）又称素数，有无限个。质数定义为在大于1的自然数中，除了1和它本身以外不再有其他因数，这样的数称为质数。</p>
 </blockquote>
@@ -979,230 +2020,212 @@
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">findPrimes</span><span class="params">(<span class="keyword">bool</span> *isPrimeFlags, <span class="keyword">const</span> <span class="keyword">unsigned</span> <span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">    isPrimeFlags[<span class="number">1</span>] = <span class="literal">false</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">unsigned</span> <span class="keyword">int</span> i = <span class="number">2</span>; i &lt; n; i++) &#123;</span><br><span class="line">        isPrimeFlags[i] = <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//初始化，设置第一个素数为2</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> p = <span class="number">2</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//设置j为p的平方的原因是</span></span><br><span class="line">    <span class="comment">//1. 例如素数7，能够整除它的数为14,21,28,35,42,49,56,63,etc. 以此类推，设能够整除</span></span><br><span class="line">    <span class="comment">//它的数为K, 则K = x * 7, 这里x &lt; 7时，比如2，在算法循环初始的时候，已经被设置为false了，则没必要再</span></span><br><span class="line">    <span class="comment">//在素数为7的时候再比较一次了。</span></span><br><span class="line">    <span class="comment">//2. p * p 如果大于n，则能够提前退出而不用遍历所有从2到N的素数。例如找100内的所有素数的时候，找到11的时候，</span></span><br><span class="line">    <span class="comment">//11 * 11 &gt; 100 就能够提前退出了。 </span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> j = p * p;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">while</span> (j &lt; n) &#123;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//将所有能够整除p的数都设置为false</span></span><br><span class="line">        <span class="keyword">while</span>(j &lt; n) &#123;</span><br><span class="line">            isPrimeFlags[j] = <span class="literal">false</span>;</span><br><span class="line">            j += p;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//找到下一个素数</span></span><br><span class="line">        <span class="keyword">while</span>(!isPrimeFlags[++p] &amp;&amp; p &lt; n) &#123;&#125;</span><br><span class="line">        j = p * p;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>Reference:<br><a href="https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes</a></p>
 
-        
-        
-        <p class="article-more-link">
           
-       </p>
+        
+      
     </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
+    
+    
+    
 
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/算法/">算法</a>
-</div>
+    
 
+    
 
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/算法/">算法</a>
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
   </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2017/07/07/find-primes/#disqus_thread" class="comments-count-link">Comments</a>
-	
-</div>
-
-</footer>
+  
+  
+  
+  </article>
 
 
-    </article>
+    
+  </section>
 
-
-
-
-
-
-
-  <nav id="page-nav" class="clearfix">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
+  
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
-</div>
-      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
 
-<div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
-<aside class="clearfix">
 
+          </div>
+          
+
+
+          
+
+        </div>
+        
+          
   
-<div class="categorieslist">
-	<p class="asidetitle">Categories</p>
-		<ul>
-		
-		  
-			<li><a href="/categories/http/" title="http">http<sup>1</sup></a></li>
-		  
-		
-		  
-			<li><a href="/categories/iOS/" title="iOS">iOS<sup>5</sup></a></li>
-		  
-		
-		  
-			<li><a href="/categories/javascript/" title="javascript">javascript<sup>2</sup></a></li>
-		  
-		
-		  
-			<li><a href="/categories/javascript/react/" title="react">react<sup>1</sup></a></li>
-		  
-		
-		  
-			<li><a href="/categories/正则表达式/" title="正则表达式">正则表达式<sup>1</sup></a></li>
-		  
-		
-		  
-			<li><a href="/categories/算法/" title="算法">算法<sup>2</sup></a></li>
-		  
-		
-		</ul>
-</div>
-
-
-  
-<div class="tagslist">
-	<p class="asidetitle">Tags</p>
-		<ul class="clearfix">
-		
-			
-				<li><a href="/tags/iOS/" title="iOS">iOS<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/算法/" title="算法">算法<sup>2</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/javascript/" title="javascript">javascript<sup>2</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/正则表达式/" title="正则表达式">正则表达式<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/http/" title="http">http<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/react/" title="react">react<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/objective-c/" title="objective-c">objective-c<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/OOD/" title="OOD">OOD<sup>1</sup></a></li>
-			
-		
-		</ul>
-</div>
-
-
-</aside>
-</div>
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
     </div>
-    <footer><div id="footer" >
-	
-	
-	<section class="info">
-		<p> Seeking Thinking <br/>
-			Realize Value</p>
-	</section>
-	 
-	<div class="social-font" class="clearfix">
-		
-		
-		<a href="https://github.com/windseason" target="_blank" class="icon-github" title="github"></a>
-		
-		
-		
-		<a href="https://twitter.com/CharlesLiu8" target="_blank" class="icon-twitter" title="twitter"></a>
-		
-		
-		<a href="https://www.facebook.com/charles.liu.853" target="_blank" class="icon-facebook" title="facebook"></a>
-		
-		
-		<a href="https://www.linkedin.com/in/charles-liu-b98382b" target="_blank" class="icon-linkedin" title="linkedin"></a>
-		
-		
-		
-		<a href="http://www.zhihu.com/people/windseason" target="_blank" class="icon-zhihu" title="知乎"></a>
-		
-		
-		
-		<a href="mailto:liuchao853@msn.com" target="_blank" class="icon-email" title="Email Me"></a>
-		
-	</div>
-			
-		
+  </div>
 
-		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2018 
-		
-		<a href="/about" target="_blank" title="Charles">Charles</a>
-		
-		
-		</p>
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Charles</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">categories</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Charles</span>
+
+  
 </div>
-</footer>
-    <script src="/js/jquery-2.0.3.min.js"></script>
-<script src="/js/jquery.imagesloaded.min.js"></script>
-<script src="/js/gallery.js"></script>
-<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
 
 <script type="text/javascript">
-$(document).ready(function(){ 
-  $('.navbar').click(function(){
-    $('header nav').toggleClass('shownav');
-  });
-  var myWidth = 0;
-  function getSize(){
-    if( typeof( window.innerWidth ) == 'number' ) {
-      myWidth = window.innerWidth;
-    } else if( document.documentElement && document.documentElement.clientWidth) {
-      myWidth = document.documentElement.clientWidth;
-    };
-  };
-  var m = $('#main'),
-      a = $('#asidepart'),
-      c = $('.closeaside'),
-      o = $('.openaside');
-  c.click(function(){
-    a.addClass('fadeOut').css('display', 'none');
-    o.css('display', 'block').addClass('fadeIn');
-    m.addClass('moveMain');
-  });
-  o.click(function(){
-    o.css('display', 'none').removeClass('beforeFadeIn');
-    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
-    m.removeClass('moveMain');
-  });
-  $(window).scroll(function(){
-    o.css("top",Math.max(80,260-$(this).scrollTop()));
-  });
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
   
-  $(window).resize(function(){
-    getSize(); 
-    if (myWidth >= 1024) {
-      $('header nav').removeClass('shownav');
-    }else{
-      m.removeClass('moveMain');
-      a.css('display', 'block').removeClass('fadeOut');
-      o.css('display', 'none');
-        
-    }
-  });
-});
-</script>
 
 
 
@@ -1215,71 +2238,133 @@ $(document).ready(function(){
 
 
 
-<!-- Analytics Begin -->
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
 
 
 
-<script>
-var _hmt = _hmt || [];
-(function() {
-  var hm = document.createElement("script");
-  hm.src = "//hm.baidu.com/hm.js?4f0f6a13270382ca7ac23fd9d6ca150c";
-  var s = document.getElementsByTagName("script")[0]; 
-  s.parentNode.insertBefore(hm, s);
-})();
-</script>
+  
+  
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
 
 
 
-<!-- Analytics End -->
+  
 
-<!-- Totop Begin -->
 
-	<div id="totop">
-	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
-	</div>
-	<script src="/js/totop.js"></script>
+  
 
-<!-- Totop End -->
 
-<!-- MathJax Begin -->
-<!-- mathjax config similar to math.stackexchange -->
 
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({
-    tex2jax: {
-      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-      processEscapes: true
-    }
-  });
-</script>
 
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-      tex2jax: {
-        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-      }
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
     });
-</script>
-
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax(), i;
-        for(i=0; i < all.length; i += 1) {
-            all[i].SourceElement().parentNode.className += ' has-jax';
-        }
+    new Valine({
+        el: '#comments' ,
+        verify: true,
+        notify: false,
+        appId: 'zgEelpnfa3Opcz1YXjhB7Ajs-gzGzoHsz',
+        appKey: 'rwpME5PEjRwUrkjOwzBFmCys',
+        placeholder: '共同交流，共同进步# comment box placeholder',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
     });
-</script>
-
-<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script>
+  </script>
 
 
-<!-- MathJax End -->
 
-<!-- Tiny_search Begin -->
+  
 
-<!-- Tiny_search End -->
 
-  </body>
- </html>
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
