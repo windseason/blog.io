@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/logo114.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/logo32.svg?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/logo32.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="OOD," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="敏捷设计之SOLID原则把握所学东西的本质在讨论SOLID原则之前，我们需要明确一点，就是这个规则是为了解决什么问题而被发明出来的。只有弄清楚这一点，才能够在实际工作中正确应用。举个栗子吧，比如为什么要采用MVC？教科书般的回答就是MVC就是Model-View-Controller，然后将Model,View和Controller各自按照教科书说一遍。你觉得你真的理解为什么要用MVC了吗？举个简">
+<meta name="keywords" content="OOD">
+<meta property="og:type" content="article">
+<meta property="og:title" content="敏捷设计之SOLID原则">
+<meta property="og:url" content="http://gobodigo.com/2017/08/24/agile-desgin/index.html">
+<meta property="og:site_name" content="SIGABRT">
+<meta property="og:description" content="敏捷设计之SOLID原则把握所学东西的本质在讨论SOLID原则之前，我们需要明确一点，就是这个规则是为了解决什么问题而被发明出来的。只有弄清楚这一点，才能够在实际工作中正确应用。举个栗子吧，比如为什么要采用MVC？教科书般的回答就是MVC就是Model-View-Controller，然后将Model,View和Controller各自按照教科书说一遍。你觉得你真的理解为什么要用MVC了吗？举个简">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://ot51d7lis.bkt.clouddn.com/Rectangle%201.png">
+<meta property="og:image" content="http://ot51d7lis.bkt.clouddn.com/Rectangle_good%20%281%29.png">
+<meta property="og:image" content="http://ot51d7lis.bkt.clouddn.com/Better%20OCP%20design.png">
+<meta property="og:image" content="http://ot51d7lis.bkt.clouddn.com/DIP%20%281%29.png">
+<meta property="og:updated_time" content="2018-06-23T14:22:10.517Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="敏捷设计之SOLID原则">
+<meta name="twitter:description" content="敏捷设计之SOLID原则把握所学东西的本质在讨论SOLID原则之前，我们需要明确一点，就是这个规则是为了解决什么问题而被发明出来的。只有弄清楚这一点，才能够在实际工作中正确应用。举个栗子吧，比如为什么要采用MVC？教科书般的回答就是MVC就是Model-View-Controller，然后将Model,View和Controller各自按照教科书说一遍。你觉得你真的理解为什么要用MVC了吗？举个简">
+<meta name="twitter:image" content="http://ot51d7lis.bkt.clouddn.com/Rectangle%201.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://gobodigo.com/2017/08/24/agile-desgin/"/>
+
+
+
+
+
+  <title>敏捷设计之SOLID原则 | SIGABRT</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?4f0f6a13270382ca7ac23fd9d6ca150c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">SIGABRT</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Seeking Thinking Realizing Value</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://gobodigo.com/2017/08/24/agile-desgin/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Charles">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/logo.svg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SIGABRT">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">敏捷设计之SOLID原则</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-24T15:38:11+08:00">
+                2017-08-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/08/24/agile-desgin/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2017/08/24/agile-desgin/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="敏捷设计之SOLID原则"><a href="#敏捷设计之SOLID原则" class="headerlink" title="敏捷设计之SOLID原则"></a>敏捷设计之SOLID原则</h2><h3 id="把握所学东西的本质"><a href="#把握所学东西的本质" class="headerlink" title="把握所学东西的本质"></a>把握所学东西的本质</h3><p>在讨论SOLID原则之前，我们需要明确一点，就是这个规则是为了解决什么问题而被发明出来的。只有弄清楚这一点，才能够在实际工作中正确应用。举个栗子吧，比如为什么要采用MVC？教科书般的回答就是MVC就是Model-View-Controller，然后将Model,View和Controller各自按照教科书说一遍。你觉得你真的理解为什么要用MVC了吗？举个简单的例子说明非MVC是什么样的吧？</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line"></span><br><span class="line">&lt;%</span><br><span class="line">set conn=Server.CreateObject(<span class="string">"ADODB.Connection"</span>)</span><br><span class="line">conn.Provider=<span class="string">"Microsoft.Jet.OLEDB.4.0"</span></span><br><span class="line">conn.Open(Server.Mappath(<span class="string">"/db/northwind.mdb"</span>))</span><br><span class="line">set rs = Server.CreateObject(<span class="string">"ADODB.recordset"</span>)</span><br><span class="line">rs.Open <span class="string">"Select * from Customers"</span>, conn</span><br><span class="line"></span><br><span class="line"><span class="keyword">do</span> until rs.EOF</span><br><span class="line">    <span class="keyword">for</span> each x <span class="keyword">in</span> rs.Fields</span><br><span class="line">       Response.Write(x.name)</span><br><span class="line">       Response.Write(<span class="string">" = "</span>)</span><br><span class="line">       Response.Write(x.value &amp; <span class="string">"&lt;br&gt;"</span>) </span><br><span class="line">    next</span><br><span class="line">    Response.Write(<span class="string">"&lt;br&gt;"</span>)</span><br><span class="line">    rs.MoveNext</span><br><span class="line">loop</span><br><span class="line"></span><br><span class="line">rs.close</span><br><span class="line">conn.close</span><br><span class="line">%&gt;</span><br><span class="line"></span><br><span class="line">&lt;<span class="regexp">/body&gt;</span></span><br><span class="line"><span class="regexp">&lt;/</span>html&gt;</span><br></pre></td></tr></table></figure>
+<p>这是一段ASP classic的代码。这段代码的问题：</p>
+<ul>
+<li>无法在类似逻辑的页面重用使用数据库的代码。为了满足快速迭代的需求，将会促使程序员自然而然的使用copy-paste大法。</li>
+<li>页面的显示与数据库代码混在一起，如果需求变化，要调整页面显示将会变得很麻烦。一个页面还好，如果是几十个这种代码的页面呢？</li>
+</ul>
+<p>所以，从如何能够让这段代码重用为出发点，MVC在不断的试验与测试中诞生了。MVC的优点总结请自行Google。</p>
+<h3 id="设计臭味"><a href="#设计臭味" class="headerlink" title="设计臭味"></a>设计臭味</h3><p>设计一个软件的结构或者架构的时候，如果没有足够的经验，经常会产生如下问题:</p>
+<h4 id="僵化性"><a href="#僵化性" class="headerlink" title="僵化性"></a>僵化性</h4><p>僵化性是指对软件进行改动，即使是简单的改动。如果单一的改动会导致有依赖关系的模块中的连锁改动，那么设计就是僵化的。</p>
+<h4 id="脆弱性"><a href="#脆弱性" class="headerlink" title="脆弱性"></a>脆弱性</h4><p>脆弱性是指，在进行一个改动时，可能会导致程序的许多地方出现问题。</p>
+<h4 id="顽固性"><a href="#顽固性" class="headerlink" title="顽固性"></a>顽固性</h4><p>顽固性是指，设计中包含了对其他有用的部分，但是要把这些部分从系统中分离出来所需要的努力和风险却是巨大的，这是一种令人遗憾，但非常常见的情况。</p>
+<h4 id="粘滞性"><a href="#粘滞性" class="headerlink" title="粘滞性"></a>粘滞性</h4><p>粘滞性是指，当面临一个改动时，开发人员尝尝发现有多种改动的方法。其中，有一些会保持敏捷设计，而另外一些则会破坏设计。比如，如果编译所花费的时间很长，那么开发人员就会被诱导去做不会导致大规模编译的举动。</p>
+<h4 id="不必要的复杂性"><a href="#不必要的复杂性" class="headerlink" title="不必要的复杂性"></a>不必要的复杂性</h4><p>如果设计中包含了当前没用的组成部分，它就含有不必要的复杂性。当开发人员预测需求的变化，并在软件中放置了处理潜在变化的代码时，尝尝出现这种情况。起初，这样做看起来貌似是一件好事，但是结果尝尝正好相反。为过多的可能性做准备，致使设计由于含有绝不会用到的结构而变得混乱。</p>
+<h4 id="不必要的重复性"><a href="#不必要的重复性" class="headerlink" title="不必要的重复性"></a>不必要的重复性</h4><p>copy-paste</p>
+<h4 id="晦涩性"><a href="#晦涩性" class="headerlink" title="晦涩性"></a>晦涩性</h4><p>晦涩性是指模块难以理解。</p>
+<p>怎么能尽量避免产生以上问题呢？那就需要借鉴敏捷设计。</p>
+<h3 id="敏捷设计原则之SOLID"><a href="#敏捷设计原则之SOLID" class="headerlink" title="敏捷设计原则之SOLID"></a>敏捷设计原则之SOLID</h3><p>大家都听说过敏捷开发宣言， 其中最后一条是”随时应对变化<strong>重于</strong>遵循计划”。要达这目的并且避免写出有臭味的代码，就需要引入敏捷设计，就是要让自己的代码够“敏捷”。我认为只有代码具有敏捷设计思想，敏捷开发宣言所倡导的才能够顺利实现。打个比喻，中国古代打战有许多排兵布阵的阵法，想想看如果使用的是一个玄妙无比的阵法，比如八卦阵，但是执行阵法的士兵大部分都是老弱残兵以及老幼妇孺，恐怕连阵势都摆不出来就战败了吧。我们这里说的敏捷设计原则就像士兵一样，是基石。</p>
+<p>那到底什么是敏捷设计呢？敏捷设计是一个过程，不是一个事件。它是一个持续的应用原则、模式以及实践来改进软件的<strong>结构</strong>和<strong>可读性</strong>的过程。它致力于保持系统在任何事件都尽可能的<strong>简单干净</strong>以及富有表达力。</p>
+<p>接下来，我们学习敏捷设计原则，但请记住，敏捷开发人员不会把这些原则应用到一个庞大的预先设计中。相反，这些原则被应用在一次次的迭代中，力图使代码以及代码所表达的设计保持干净。</p>
+<h4 id="单一职责原则-SRP"><a href="#单一职责原则-SRP" class="headerlink" title="单一职责原则(SRP)"></a>单一职责原则(SRP)</h4><blockquote>
+<p>一个类应该只有一个发生变化的原因</p>
+</blockquote>
+<p>如果一个类承担的职责过多，就等于把这些职责耦合在了一起。一个职责的变化可能会削弱或者抑制这个类完成其他职责的能力。</p>
+<p>考虑下图的设计：<br><img src="http://ot51d7lis.bkt.clouddn.com/Rectangle%201.png" alt=""></p>
+<p>这个设计违反了SRP，显然Rectangle有两个职责。导致的问题：</p>
+<ul>
+<li>打包到GUI程序中的时候，需要将计算机几何应用库与图形绘制应用库一起打包</li>
+<li>如果依赖的任何一个库发生了改变，则需要重新对程序打包。如果忘记做，而仅仅只是更新其中一个库的话，将会导致不可预料的错误。</li>
+</ul>
+<p>改进：<br><img src="http://ot51d7lis.bkt.clouddn.com/Rectangle_good%20%281%29.png" alt=""></p>
+<h4 id="开放关闭原则-OCP"><a href="#开放关闭原则-OCP" class="headerlink" title="开放关闭原则(OCP)"></a>开放关闭原则(OCP)</h4><blockquote>
+<p>一个类对修改关闭，对扩展开放。具体来说就是，一个类在不修改它本身的代码的前提下允许扩展它的行为(如果不修改做不到到话，尽量把修改做到最小化)</p>
+</blockquote>
+<p>OCP 听起来并不复杂，但是却不是那么容易实践的。因为通常情况下，为一个功能而设计可以对未来需求开放的类并不简单。这里重要的点是<strong>未来需求</strong>。当我们并不知道未来软件的需求的时候，我们将怎样设计类，模块，功能等来迎合需求呢？这就是OCP不容易实践的原因，通常需要彻底的思考设计。</p>
+<p>我们该如何去解决这个问题呢？当设计类结构的时候，需要用心确类的扩展简单。设计阶段，将所有类的用例记下来，并对所有用例给出合适的接口。抽象类是一种能够确保类能够被扩展的手段，但是要小心不要违反<strong>SRP</strong>，当想让一个类做更多事情的时候就很容易发生。</p>
+<h5 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h5><p>该例子是一个计算个人所得税的例子。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Individual</span>: <span class="title">NSObject</span> </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> salary : <span class="type">Double</span>;</span><br><span class="line">    <span class="keyword">let</span> age : <span class="type">NSInteger</span>;</span><br><span class="line">    <span class="keyword">let</span> name : <span class="type">String</span>;</span><br><span class="line">    <span class="keyword">let</span> countryCode : <span class="type">String</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">init</span>(salary : <span class="type">Double</span>,</span><br><span class="line">         age : <span class="type">NSInteger</span>,</span><br><span class="line">         name : <span class="type">String</span>,</span><br><span class="line">         countryCode : <span class="type">String</span>) &#123;</span><br><span class="line">        <span class="keyword">self</span>.countryCode = countryCode;</span><br><span class="line">        <span class="keyword">self</span>.salary = salary;</span><br><span class="line">        <span class="keyword">self</span>.age = age;</span><br><span class="line">        <span class="keyword">self</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TaxCalculator</span> : <span class="title">NSObject</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">calculate</span><span class="params">(<span class="number">_</span> individual : Individual)</span></span> -&gt; <span class="type">Double</span> &#123;</span><br><span class="line">        <span class="keyword">var</span> tax : <span class="type">Double</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//Just use flat calculation algorithm for simplicity as </span></span><br><span class="line">        <span class="comment">//here we just use it to demostrate OCP.</span></span><br><span class="line">        <span class="keyword">switch</span> individual.countryCode &#123;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">"cn"</span>:</span><br><span class="line">            tax = individual.salary * <span class="number">0.18</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">"us"</span>:</span><br><span class="line">            tax = individual.salary * <span class="number">0.20</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">"jp"</span>:</span><br><span class="line">            tax = individual.salary * <span class="number">0.50</span>;</span><br><span class="line">        <span class="keyword">default</span>:</span><br><span class="line">            tax = <span class="number">0.1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> tax;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="现有设计的缺点"><a href="#现有设计的缺点" class="headerlink" title="现有设计的缺点"></a>现有设计的缺点</h5><p>现有设计的缺点很明显，如果我们想要增加一个新的国家的个税计算，则一定需要更改现有的TaxCalculator的代码。显然，当前设计不对扩展开放。</p>
+<h5 id="一个更好的符合OCP的设计"><a href="#一个更好的符合OCP的设计" class="headerlink" title="一个更好的符合OCP的设计"></a>一个更好的符合OCP的设计</h5><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">protocol</span> <span class="title">CalculateTax</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">calculate</span><span class="params">(<span class="number">_</span> individual : Individual)</span></span> -&gt; <span class="type">Double</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ChinaTaxCalculator</span>: <span class="title">NSObject</span>, <span class="title">CalculateTax</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">calculate</span><span class="params">(<span class="number">_</span> individual: Individual)</span></span> -&gt; <span class="type">Double</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> individual.salary * <span class="number">0.18</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">USATaxCalculator</span>: <span class="title">NSObject</span>, <span class="title">CalculateTax</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">calculate</span><span class="params">(<span class="number">_</span> individual: Individual)</span></span> -&gt; <span class="type">Double</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> individual.salary * <span class="number">0.20</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">JapanTaxCalculator</span>: <span class="title">NSObject</span>, <span class="title">CalculateTax</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">calculate</span><span class="params">(<span class="number">_</span> individual: Individual)</span></span> -&gt; <span class="type">Double</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> individual.salary * <span class="number">0.50</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TaxCalculator</span>: <span class="title">NSObject</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">calculate</span><span class="params">(taxHandler : CalculateTax, individual : Individual)</span></span> -&gt; <span class="type">Double</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> taxHandler.calculate(individual);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>现在，如果增加一个国家的税收计算，只需要添加一个相应国家的税收计算类<strong>XXTaxCalculator</strong>即可，并不需要更改任何已有代码。如果项目按照以下划分程序依赖库的结构，则只需要重新编译具体实现了各个国家税收的库就行了。</p>
+<p><img src="http://ot51d7lis.bkt.clouddn.com/Better%20OCP%20design.png" alt=""></p>
+<h4 id="Liskov替换原则-LSP"><a href="#Liskov替换原则-LSP" class="headerlink" title="Liskov替换原则(LSP)"></a>Liskov替换原则(LSP)</h4><blockquote>
+<p>Liskov 替换原则说的是如果D是B的派生类，则任何B的应用都必须能够被D的实例替换而不会影响到程序运行的逻辑或者功能。换句话说，就是派生类必须能够完全替换基类。</p>
+</blockquote>
+<p>我们先看一个大概只要你学Liskov原则都会看到的一个违反Liskov原则的例子。</p>
+<h5 id="违反Liskov替换原则的例子"><a href="#违反Liskov替换原则的例子" class="headerlink" title="违反Liskov替换原则的例子"></a>违反Liskov替换原则的例子</h5><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Rectangle</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">var</span> width : <span class="type">Double</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">var</span> height : <span class="type">Double</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">init</span>(width : <span class="type">Double</span>, height : <span class="type">Double</span>) &#123;</span><br><span class="line">        <span class="keyword">self</span>.width = width;</span><br><span class="line">        <span class="keyword">self</span>.height = height;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">area</span><span class="params">()</span></span> -&gt; <span class="type">Double</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">self</span>.width * height;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Square</span> : <span class="title">Rectangle</span> </span>&#123;</span><br><span class="line">    <span class="keyword">fileprivate</span> <span class="keyword">var</span> _width : <span class="type">Double</span> = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">fileprivate</span> <span class="keyword">var</span> _height : <span class="type">Double</span> = <span class="number">0</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">override</span> <span class="keyword">public</span> <span class="keyword">var</span> width: <span class="type">Double</span> &#123;</span><br><span class="line">        <span class="keyword">get</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> _width;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">set</span>(newWidth) &#123;</span><br><span class="line">            _width = newWidth;</span><br><span class="line">            _height = newWidth;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">override</span> <span class="keyword">public</span> <span class="keyword">var</span> height: <span class="type">Double</span> &#123;</span><br><span class="line">        <span class="keyword">get</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> _height;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">set</span> (newHeight) &#123;</span><br><span class="line">            _width = newHeight;</span><br><span class="line">            _height = newHeight;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">createRectangle</span><span class="params">(width : Double, height : Double)</span></span> -&gt; <span class="type">Rectangle</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="type">Square</span>(width: width, height: height);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/////////////////////////////////////////////////////////////////////</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//Someday we use createRectangle method somewhere in our application.</span></span><br><span class="line"><span class="keyword">var</span> rect:<span class="type">Rectangle</span> = createRectangle(width : <span class="number">3</span>, height : <span class="number">3</span>);</span><br><span class="line">rect.area();<span class="comment">//result is 9 as expected</span></span><br><span class="line"></span><br><span class="line">rect.height = <span class="number">10</span>;</span><br><span class="line">rect.width = <span class="number">5</span>;</span><br><span class="line"></span><br><span class="line">rect.area();<span class="comment">//opps!result is 25 not 50!</span></span><br></pre></td></tr></table></figure>
+<h5 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h5><p>这个原则是对OCP的一个扩展，他告诉我们从基类派生出新的派生类的时候，我们必须保证不要破坏原有的行为。</p>
+<h4 id="接口隔离原则-ISP"><a href="#接口隔离原则-ISP" class="headerlink" title="接口隔离原则(ISP)"></a>接口隔离原则(ISP)</h4><blockquote>
+<p>接口隔离原则讲的是接口实现者不能被强迫实现或者依赖一些不会用到的方法</p>
+</blockquote>
+<p>举个例子，当我们将一个模块从应用程序中抽象出多个子模块的时候需要小心注意了。假设这个模块是基于类实现的，那我们能够从类抽象出接口（注：这些接口都会在现有系统被逐一实现）。但当我们把模块加入到一个与原系统相比仅含有某些接口的实现，有可能会发生这种结果：为了保证模块能够正常运行，不得不在新系统中被迫实现所有的接口并且有相当一部分接口不会被用到，这部分不会被用到的接口通常为空实现或者返回虚假值，就为了实现接口而实现。通常发生这种情况的接口叫做胖接口或者被污染的接口。</p>
+<h5 id="一个违反了ISP的实际例子"><a href="#一个违反了ISP的实际例子" class="headerlink" title="一个违反了ISP的实际例子"></a>一个违反了ISP的实际例子</h5><p>在早期的ASP.NET 2.0版本中，如果网站想实现自己的membership provider，则需要将需要或者不需要的所有接口都实现一遍。如下：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">CustomMembershipProvider</span> : <span class="title">MembershipProvider</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">string</span> ApplicationName</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">get</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">"The method or operation is not implemented."</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">set</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">"The method or operation is not implemented."</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">bool</span> <span class="title">ChangePassword</span>(<span class="params"><span class="keyword">string</span> username, <span class="keyword">string</span> oldPassword, <span class="keyword">string</span> newPassword</span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">"The method or operation is not implemented."</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">bool</span> <span class="title">ChangePasswordQuestionAndAnswer</span>(<span class="params"><span class="keyword">string</span> username, <span class="keyword">string</span> password, </span></span></span><br><span class="line"><span class="function"><span class="params">        <span class="keyword">string</span> newPasswordQuestion, <span class="keyword">string</span> newPasswordAnswer</span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">"The method or operation is not implemented."</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">override</span> MembershipUser <span class="title">CreateUser</span>(<span class="params"><span class="keyword">string</span> username, <span class="keyword">string</span> password, <span class="keyword">string</span> email, </span></span></span><br><span class="line"><span class="function"><span class="params">        <span class="keyword">string</span> passwordQuestion, <span class="keyword">string</span> passwordAnswer, <span class="keyword">bool</span> isApproved, <span class="keyword">object</span> providerUserKey, </span></span></span><br><span class="line"><span class="function"><span class="params">        <span class="keyword">out</span> MembershipCreateStatus status</span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">"The method or operation is not implemented."</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">bool</span> <span class="title">DeleteUser</span>(<span class="params"><span class="keyword">string</span> username, <span class="keyword">bool</span> deleteAllRelatedData</span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">"The method or operation is not implemented."</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">bool</span> EnablePasswordReset</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">get</span> &#123; <span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">"The method or operation is not implemented."</span>); &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">bool</span> EnablePasswordRetrieval</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">get</span> &#123; <span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">"The method or operation is not implemented."</span>); &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">override</span> MembershipUserCollection <span class="title">FindUsersByEmail</span>(<span class="params"><span class="keyword">string</span> emailToMatch, <span class="keyword">int</span> pageIndex, </span></span></span><br><span class="line"><span class="function"><span class="params">        <span class="keyword">int</span> pageSize, <span class="keyword">out</span> <span class="keyword">int</span> totalRecords</span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">"The method or operation is not implemented."</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">override</span> MembershipUserCollection <span class="title">FindUsersByName</span>(<span class="params"><span class="keyword">string</span> usernameToMatch, <span class="keyword">int</span> pageIndex, </span></span></span><br><span class="line"><span class="function"><span class="params">        <span class="keyword">int</span> pageSize, <span class="keyword">out</span> <span class="keyword">int</span> totalRecords</span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">"The method or operation is not implemented."</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">override</span> MembershipUserCollection <span class="title">GetAllUsers</span>(<span class="params"><span class="keyword">int</span> pageIndex, <span class="keyword">int</span> pageSize, <span class="keyword">out</span> <span class="keyword">int</span> totalRecords</span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">"The method or operation is not implemented."</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">int</span> <span class="title">GetNumberOfUsersOnline</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">"The method or operation is not implemented."</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">string</span> <span class="title">GetPassword</span>(<span class="params"><span class="keyword">string</span> username, <span class="keyword">string</span> answer</span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">"The method or operation is not implemented."</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">override</span> MembershipUser <span class="title">GetUser</span>(<span class="params"><span class="keyword">string</span> username, <span class="keyword">bool</span> userIsOnline</span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">"The method or operation is not implemented."</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">override</span> MembershipUser <span class="title">GetUser</span>(<span class="params"><span class="keyword">object</span> providerUserKey, <span class="keyword">bool</span> userIsOnline</span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">"The method or operation is not implemented."</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">string</span> <span class="title">GetUserNameByEmail</span>(<span class="params"><span class="keyword">string</span> email</span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">"The method or operation is not implemented."</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">int</span> MaxInvalidPasswordAttempts</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">get</span> &#123; <span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">"The method or operation is not implemented."</span>); &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">int</span> MinRequiredNonAlphanumericCharacters</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">get</span> &#123; <span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">"The method or operation is not implemented."</span>); &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">int</span> MinRequiredPasswordLength</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">get</span> &#123; <span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">"The method or operation is not implemented."</span>); &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">int</span> PasswordAttemptWindow</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">get</span> &#123; <span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">"The method or operation is not implemented."</span>); &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">override</span> MembershipPasswordFormat PasswordFormat</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">get</span> &#123; <span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">"The method or operation is not implemented."</span>); &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">string</span> PasswordStrengthRegularExpression</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">get</span> &#123; <span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">"The method or operation is not implemented."</span>); &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">bool</span> RequiresQuestionAndAnswer</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">get</span> &#123; <span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">"The method or operation is not implemented."</span>); &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">bool</span> RequiresUniqueEmail</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">get</span> &#123; <span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">"The method or operation is not implemented."</span>); &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">string</span> <span class="title">ResetPassword</span>(<span class="params"><span class="keyword">string</span> username, <span class="keyword">string</span> answer</span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">"The method or operation is not implemented."</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">bool</span> <span class="title">UnlockUser</span>(<span class="params"><span class="keyword">string</span> userName</span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">"The method or operation is not implemented."</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">void</span> <span class="title">UpdateUser</span>(<span class="params">MembershipUser user</span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">"The method or operation is not implemented."</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">bool</span> <span class="title">ValidateUser</span>(<span class="params"><span class="keyword">string</span> username, <span class="keyword">string</span> password</span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">"The method or operation is not implemented."</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Holy crap! 这是一大堆东西！可能有的时候，你仅仅是想将现有的membership provider的一部分改变成自己的而已，但是你要面对的是全部实现，这就麻烦了。如果你不懂ASP.NET没关系，这里这个例子只是想展示一种违反了ISP后的结果。</p>
+<h5 id="一个更简单通俗的例子来说明ISP"><a href="#一个更简单通俗的例子来说明ISP" class="headerlink" title="一个更简单通俗的例子来说明ISP"></a>一个更简单通俗的例子来说明ISP</h5><p>首先看代码：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">protocol</span> <span class="title">Animal</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">feed</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dog</span> : <span class="title">Animal</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">feed</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"feed with bone"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Snake</span> : <span class="title">Animal</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">feed</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"feed with mice"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>随后，你注意到有些动物是宠物，有宠物的一些特性或者与人互动的方法。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">protocol</span> <span class="title">Animal</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">feed</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="comment">//梳理毛发</span></span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">groom</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dog</span> : <span class="title">Animal</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">feed</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"feed with bone"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">groom</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"grooming and dog feel comfortable"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Snake</span> : <span class="title">Animal</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">feed</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"feed with mice"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">groom</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="comment">//ignore this method as I am not going to groom a feaking snake.</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>写到这里，你就发现问题了。Animal接口被污染了。在Snake类上它要求我们实现一个并不需要的方法。好的做法是把宠物相关的方法抽象出来。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">protocol</span> <span class="title">Animal</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">feed</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">protocol</span> <span class="title">Pet</span> </span>&#123;</span><br><span class="line">    <span class="comment">//梳理毛发</span></span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">groom</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dog</span> : <span class="title">Animal</span>, <span class="title">Pet</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">feed</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"feed with bone"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">groom</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"grooming and dog feel comfortable"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Snake</span> : <span class="title">Animal</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">feed</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"feed with mice"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="依赖反转-DIP"><a href="#依赖反转-DIP" class="headerlink" title="依赖反转(DIP)"></a>依赖反转(DIP)</h4><blockquote>
+<p>A. High-level 模块不应该依赖 low-level 模块。两者都应该依赖于抽象<br>B. 抽象不能依赖于具体实现。具体实现应该依赖于抽象</p>
+</blockquote>
+<h5 id="例子-1"><a href="#例子-1" class="headerlink" title="例子"></a>例子</h5><p>一个简单的例子，我们经常使用DAO(Database access object)来封装数据库操作的逻辑。下面这个例子，将数据库具体的类OracleConnection直接在DAO类里面了。那如果我们想把数据库换成Mysql，怎么办呢？（想想一下，有很多DAO类，里面的逻辑都很复杂很多）</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">OracleConnection</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">open</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="comment">//open database connection logic</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">close</span><span class="params">()</span></span> &#123;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DAO</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">var</span> databaseConnection : <span class="type">OracleConnection</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">init</span>() &#123;</span><br><span class="line">        databaseConnection = <span class="type">OracleConnection</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">commitChanges</span><span class="params">()</span></span> &#123;</span><br><span class="line">        </span><br><span class="line">        databaseConnection.<span class="keyword">open</span>();</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//deal with data base changes</span></span><br><span class="line">        </span><br><span class="line">        databaseConnection.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>符合DIP的写法:</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">protocol</span> <span class="title">DatabaseConnection</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">open</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">close</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">OracleConnection</span> : <span class="title">DatabaseConnection</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">open</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="comment">//open database connection logic</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">close</span><span class="params">()</span></span> &#123;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MysqlConnection</span> : <span class="title">DatabaseConnection</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">open</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="comment">//open database connection logic</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">close</span><span class="params">()</span></span> &#123;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DAO</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">let</span> databaseConnection : <span class="type">DatabaseConnection</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">init</span>(databaseConnection : <span class="type">DatabaseConnection</span>) &#123;</span><br><span class="line">        <span class="keyword">self</span>.databaseConnection = databaseConnection;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">commitChanges</span><span class="params">()</span></span> &#123;</span><br><span class="line">        </span><br><span class="line">        databaseConnection.<span class="keyword">open</span>();</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//deal with data base changes</span></span><br><span class="line">        </span><br><span class="line">        databaseConnection.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>咋一看，细节上可能跟Liskov要求的很像，但是请注意，DIP主要强调的是模块之间的依赖。下面用一个例子来感受一下</p>
+<p><img src="http://ot51d7lis.bkt.clouddn.com/DIP%20%281%29.png" alt=""></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/OOD/" rel="tag"># OOD</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/28/algorithm-dijstra/" rel="next" title="最短路径之迪杰斯特拉算法">
+                <i class="fa fa-chevron-left"></i> 最短路径之迪杰斯特拉算法
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/06/23/fastlane-jenkins/" rel="prev" title="使用Fastlane和Jenkins构建自动打包系统 (Part 1)">
+                使用Fastlane和Jenkins构建自动打包系统 (Part 1) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+  <div class="bdsharebuttonbox">
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+    <a href="#" class="bds_douban" data-cmd="douban" title="分享到豆瓣网"></a>
+    <a href="#" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+    <a href="#" class="bds_tieba" data-cmd="tieba" title="分享到百度贴吧"></a>
+    <a href="#" class="bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+    <a href="#" class="bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+    <a href="#" class="bds_more" data-cmd="more"></a>
+    <a class="bds_count" data-cmd="count"></a>
+  </div>
+  <script>
+    window._bd_share_config = {
+      "common": {
+        "bdText": "",
+        "bdMini": "2",
+        "bdMiniList": false,
+        "bdPic": ""
+      },
+      "share": {
+        "bdSize": "16",
+        "bdStyle": "0"
+      },
+      "image": {
+        "viewList": ["tsina", "douban", "sqq", "qzone", "weixin", "twi", "fbook"],
+        "viewText": "分享到：",
+        "viewSize": "16"
+      }
+    }
+  </script>
+
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/logo.svg"
+                alt="Charles" />
+            
+              <p class="site-author-name" itemprop="name">Charles</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/windseason" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:liuchao853@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/CNonnull" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.facebook.com/charles.liu.853" target="_blank" title="FB Page">
+                      
+                        <i class="fa fa-fw fa-facebook"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#敏捷设计之SOLID原则"><span class="nav-number">1.</span> <span class="nav-text">敏捷设计之SOLID原则</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#把握所学东西的本质"><span class="nav-number">1.1.</span> <span class="nav-text">把握所学东西的本质</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设计臭味"><span class="nav-number">1.2.</span> <span class="nav-text">设计臭味</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#僵化性"><span class="nav-number">1.2.1.</span> <span class="nav-text">僵化性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#脆弱性"><span class="nav-number">1.2.2.</span> <span class="nav-text">脆弱性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#顽固性"><span class="nav-number">1.2.3.</span> <span class="nav-text">顽固性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#粘滞性"><span class="nav-number">1.2.4.</span> <span class="nav-text">粘滞性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#不必要的复杂性"><span class="nav-number">1.2.5.</span> <span class="nav-text">不必要的复杂性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#不必要的重复性"><span class="nav-number">1.2.6.</span> <span class="nav-text">不必要的重复性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#晦涩性"><span class="nav-number">1.2.7.</span> <span class="nav-text">晦涩性</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#敏捷设计原则之SOLID"><span class="nav-number">1.3.</span> <span class="nav-text">敏捷设计原则之SOLID</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#单一职责原则-SRP"><span class="nav-number">1.3.1.</span> <span class="nav-text">单一职责原则(SRP)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#开放关闭原则-OCP"><span class="nav-number">1.3.2.</span> <span class="nav-text">开放关闭原则(OCP)</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#例子"><span class="nav-number">1.3.2.1.</span> <span class="nav-text">例子</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#现有设计的缺点"><span class="nav-number">1.3.2.2.</span> <span class="nav-text">现有设计的缺点</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#一个更好的符合OCP的设计"><span class="nav-number">1.3.2.3.</span> <span class="nav-text">一个更好的符合OCP的设计</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Liskov替换原则-LSP"><span class="nav-number">1.3.3.</span> <span class="nav-text">Liskov替换原则(LSP)</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#违反Liskov替换原则的例子"><span class="nav-number">1.3.3.1.</span> <span class="nav-text">违反Liskov替换原则的例子</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#结论"><span class="nav-number">1.3.3.2.</span> <span class="nav-text">结论</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#接口隔离原则-ISP"><span class="nav-number">1.3.4.</span> <span class="nav-text">接口隔离原则(ISP)</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#一个违反了ISP的实际例子"><span class="nav-number">1.3.4.1.</span> <span class="nav-text">一个违反了ISP的实际例子</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#一个更简单通俗的例子来说明ISP"><span class="nav-number">1.3.4.2.</span> <span class="nav-text">一个更简单通俗的例子来说明ISP</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#依赖反转-DIP"><span class="nav-number">1.3.5.</span> <span class="nav-text">依赖反转(DIP)</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#例子-1"><span class="nav-number">1.3.5.1.</span> <span class="nav-text">例子</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Charles</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: true,
+        notify: true,
+        appId: 'zgEelpnfa3Opcz1YXjhB7Ajs-gzGzoHsz',
+        appKey: 'rwpME5PEjRwUrkjOwzBFmCys',
+        placeholder: '说点什么呗',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
