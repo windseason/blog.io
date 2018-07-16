@@ -345,6 +345,179 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://gobodigo.com/2018/07/16/javascript-get-style/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Charles Liu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/logo.svg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SIGABRT">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/07/16/javascript-get-style/" itemprop="url">获得运行时指定DOM元素的Style</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-16T13:08:42+08:00">
+                2018-07-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/javascript/" itemprop="url" rel="index">
+                    <span itemprop="name">javascript</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/07/16/javascript-get-style/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2018/07/16/javascript-get-style/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2018/07/16/javascript-get-style/" class="leancloud_visitors" data-flag-title="获得运行时指定DOM元素的Style">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="获得运行时指定DOM元素的Style"><a href="#获得运行时指定DOM元素的Style" class="headerlink" title="获得运行时指定DOM元素的Style"></a>获得运行时指定DOM元素的Style</h2><p>在工作中有时候需要获得指定DOM元素是否具有某种style，内联样式和层叠样式都需要检查，怎么做呢？直接上代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 将字符串中的'-'开始的子字符串去掉'-'并替换为大写字母</span></span><br><span class="line"><span class="comment"> * 例如background-color,会被替换为backgroundColor</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">camelize</span>(<span class="params">str</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> str.replace(<span class="regexp">/-(\w)/g</span>, <span class="function"><span class="keyword">function</span> (<span class="params">strMatch, p1</span>)</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> p1.toUpperCase();</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 获得指定元素的指定style</span></span><br><span class="line"><span class="comment"> * @param elem DOM 元素</span></span><br><span class="line"><span class="comment"> * @param property style的名字</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getStyle</span>(<span class="params">elem, property</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!elem || !property) &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'elem or property should not be undefined or null.'</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> value = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">if</span>(elem.style)&#123;</span><br><span class="line">        value = elem.style[camelize(property)];<span class="comment">//先获取是否有内联样式</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">// 无内联样式，则获取层叠样式表计算后的样式</span></span><br><span class="line">        <span class="keyword">if</span> (!value || value === <span class="string">""</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="built_in">document</span>.defaultView &amp;&amp; <span class="built_in">document</span>.defaultView.getComputedStyle) &#123;</span><br><span class="line">                <span class="keyword">var</span> css = <span class="built_in">document</span>.defaultView.getComputedStyle(elem,<span class="literal">null</span>);</span><br><span class="line">                value = css ? css.getPropertyValue(property) : <span class="literal">null</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(error);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> value;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>camelize</code>方法将传入的style名称中的<code>-</code>替换掉，因为内联样式的名称中不包括它。如<code>getStyle</code>方法所体现的，优先在内联样式中查找，如果找到就返回，否则调用<code>defaultView</code>的<code>getComputedStyle</code>方法来获得层叠样式表中的style。</p>
+<h3 id="defaultView"><a href="#defaultView" class="headerlink" title="defaultView"></a>defaultView</h3><p>什么是<code>defaultView</code>? 根据<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Document/defaultView" target="_blank" rel="noopener">https://developer.mozilla.org/zh-CN/docs/Web/API/Document/defaultView</a>所说：</p>
+<blockquote>
+<p>在浏览器中，该属性返回当前 document 对象所关联的 window 对象，如果没有，会返回 null。</p>
+</blockquote>
+<h3 id="getComputedStyle"><a href="#getComputedStyle" class="headerlink" title="getComputedStyle"></a>getComputedStyle</h3><blockquote>
+<p>Window.getComputedStyle()方法返回一个对象，该对象在应用活动样式表并解析这些值可能包含的任何基本计算后报告元素的所有CSS属性的值。 私有的CSS属性值可以通过对象提供的API或通过简单地使用CSS属性名称进行索引来访问。</p>
+</blockquote>
+<p>参考：<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Window/getComputedStyle" target="_blank" rel="noopener">https://developer.mozilla.org/zh-CN/docs/Web/API/Window/getComputedStyle</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://gobodigo.com/2018/07/13/password-table/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2137,181 +2310,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://gobodigo.com/2017/07/07/ios-memory-types/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Charles Liu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/logo.svg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="SIGABRT">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/07/07/ios-memory-types/" itemprop="url">iOS memory types</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-07T13:12:52+08:00">
-                2017-07-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/iOS/" itemprop="url" rel="index">
-                    <span itemprop="name">iOS</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/07/07/ios-memory-types/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2017/07/07/ios-memory-types/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-             <span id="/2017/07/07/ios-memory-types/" class="leancloud_visitors" data-flag-title="iOS memory types">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数&#58;</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="iOS-memory"><a href="#iOS-memory" class="headerlink" title="iOS memory"></a>iOS memory</h2><h3 id="Clean-memory"><a href="#Clean-memory" class="headerlink" title="Clean memory"></a>Clean memory</h3><p>clean memory are memories that can be recreated, on iOS it is memory of:</p>
-<ul>
-<li>system framework</li>
-<li>binary executable of your app</li>
-<li>memory mapped files   </li>
-</ul>
-<p>Also notice this situation: when your app link to a framework, the clean memory will increase by the size of the framework binary. But most of time, only part of binary is really loaded in physical memory.</p>
-<h3 id="Dirty-memory"><a href="#Dirty-memory" class="headerlink" title="Dirty memory"></a>Dirty memory</h3><p>All memory that is not clean memory is dirty memory, dirty memory can’t be recreated by system.</p>
-<p>When there is a memory pressure, system will unload some clean memory, when the memory is needed again, system will recreate them.</p>
-<p>But for dirty memory, system can’t unload them, and iOS has no swap mechanism, so dirty memory will always be kept in physical memory, till it reach a certain limit, then your App will be terminated and all memory for it is recycled by system.</p>
-<h3 id="Virtual-memory"><a href="#Virtual-memory" class="headerlink" title="Virtual memory"></a>Virtual memory</h3><p><code>virtual memory = clean memory + dirty memory.</code><br>That means virtual memory is all the memory your App want.</p>
-<h3 id="Resident-memory"><a href="#Resident-memory" class="headerlink" title="Resident memory"></a>Resident memory</h3><p><code>resident memory = dirty memory + clean memory that loaded in physical memory</code><br>resident memory is the memory really loaded in your physical memory, it mean all the dirty memory and parts of your clean memory.</p>
-<h3 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h3><p>At any time, this is always true:<br><code>virtual memory == (clean memory + dirty memory) &gt; resident memory &gt; dirty memory</code><br>If you are worrying about the physical memory your App is taking(which is the key reason your App is terminated due to low memory), you should mainly focus on resident memory.</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2366,7 +2364,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">14</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2377,7 +2375,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>

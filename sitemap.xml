@@ -2,9 +2,23 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     
     <url>
+        <loc>http://gobodigo.com/2018/07/16/javascript-get-style/</loc>
+        
+        <lastmod>2018-07-16T05:09:25.159Z</lastmod>
+        
+    </url>
+    
+    <url>
+        <loc>http://gobodigo.com/2017/07/08/javascript-Hoisting/</loc>
+        
+        <lastmod>2018-07-16T05:09:16.899Z</lastmod>
+        
+    </url>
+    
+    <url>
         <loc>http://gobodigo.com/2017/08/24/agile-desgin/</loc>
         
-        <lastmod>2018-07-15T15:00:35.796Z</lastmod>
+        <lastmod>2018-07-16T04:36:53.792Z</lastmod>
         
     </url>
     
@@ -73,13 +87,6 @@
     
     <url>
         <loc>http://gobodigo.com/2017/07/18/react-life-cycle/</loc>
-        
-        <lastmod>2018-06-23T14:22:10.519Z</lastmod>
-        
-    </url>
-    
-    <url>
-        <loc>http://gobodigo.com/2017/07/08/javascript-Hoisting/</loc>
         
         <lastmod>2018-06-23T14:22:10.519Z</lastmod>
         
