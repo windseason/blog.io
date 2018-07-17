@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     
     <url>
+        <loc>http://gobodigo.com/2018/07/13/password-table/</loc>
+        
+        <lastmod>2018-07-17T05:12:14.058Z</lastmod>
+        
+    </url>
+    
+    <url>
         <loc>http://gobodigo.com/about/index.html</loc>
         
         <lastmod>2018-07-16T10:21:04.212Z</lastmod>
@@ -40,13 +47,6 @@
         <loc>http://gobodigo.com/404.html</loc>
         
         <lastmod>2018-07-14T01:21:33.874Z</lastmod>
-        
-    </url>
-    
-    <url>
-        <loc>http://gobodigo.com/2018/07/13/password-table/</loc>
-        
-        <lastmod>2018-07-14T01:13:16.100Z</lastmod>
         
     </url>
     
