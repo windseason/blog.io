@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     
     <url>
+        <loc>http://gobodigo.com/2018/07/28/ios-runloop/</loc>
+        
+        <lastmod>2018-08-02T06:50:55.851Z</lastmod>
+        
+    </url>
+    
+    <url>
         <loc>http://gobodigo.com/2018/07/13/password-table/</loc>
         
         <lastmod>2018-07-17T05:12:14.058Z</lastmod>
@@ -79,14 +86,14 @@
     </url>
     
     <url>
-        <loc>http://gobodigo.com/2015/09/22/objc-dynamic-binding/</loc>
+        <loc>http://gobodigo.com/2017/07/18/react-life-cycle/</loc>
         
         <lastmod>2018-06-23T14:22:10.519Z</lastmod>
         
     </url>
     
     <url>
-        <loc>http://gobodigo.com/2017/07/18/react-life-cycle/</loc>
+        <loc>http://gobodigo.com/2015/09/22/objc-dynamic-binding/</loc>
         
         <lastmod>2018-06-23T14:22:10.519Z</lastmod>
         

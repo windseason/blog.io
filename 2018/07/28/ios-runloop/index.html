@@ -1,0 +1,1593 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="Kn55h2vCsmSGHs9XInHq814M5vYSysviS3wsF5u88o0" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Microsoft YaHei:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/logo114.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/logo32.svg?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/logo32.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="iOS," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="SIGABRT" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="iOS Runloop 深入浅出Runloop是什么？苹果官方文档解释：  A run loop is a piece of infrastructure used to manage events arriving asynchronously on a thread. A run loop works by monitoring one or more event sources for th">
+<meta name="keywords" content="iOS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS Runloop 深入浅出">
+<meta property="og:url" content="http://gobodigo.com/2018/07/28/ios-runloop/index.html">
+<meta property="og:site_name" content="SIGABRT">
+<meta property="og:description" content="iOS Runloop 深入浅出Runloop是什么？苹果官方文档解释：  A run loop is a piece of infrastructure used to manage events arriving asynchronously on a thread. A run loop works by monitoring one or more event sources for th">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://ot51d7lis.bkt.clouddn.com/Runloop2.png">
+<meta property="og:image" content="http://ot51d7lis.bkt.clouddn.com/RunloopModes.png">
+<meta property="og:updated_time" content="2018-08-02T06:50:55.851Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS Runloop 深入浅出">
+<meta name="twitter:description" content="iOS Runloop 深入浅出Runloop是什么？苹果官方文档解释：  A run loop is a piece of infrastructure used to manage events arriving asynchronously on a thread. A run loop works by monitoring one or more event sources for th">
+<meta name="twitter:image" content="http://ot51d7lis.bkt.clouddn.com/Runloop2.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://gobodigo.com/2018/07/28/ios-runloop/"/>
+
+
+
+
+
+  <title>iOS Runloop 深入浅出 | SIGABRT</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?4f0f6a13270382ca7ac23fd9d6ca150c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">SIGABRT</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">Seeking Thinking Realizing Value</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://gobodigo.com/2018/07/28/ios-runloop/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Charles Liu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/logo.svg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SIGABRT">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">iOS Runloop 深入浅出</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-28T14:38:09+08:00">
+                2018-07-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/iOS/" itemprop="url" rel="index">
+                    <span itemprop="name">iOS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/07/28/ios-runloop/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2018/07/28/ios-runloop/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2018/07/28/ios-runloop/" class="leancloud_visitors" data-flag-title="iOS Runloop 深入浅出">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="iOS-Runloop-深入浅出"><a href="#iOS-Runloop-深入浅出" class="headerlink" title="iOS Runloop 深入浅出"></a>iOS Runloop 深入浅出</h1><h2 id="Runloop是什么？"><a href="#Runloop是什么？" class="headerlink" title="Runloop是什么？"></a>Runloop是什么？</h2><p>苹果官方文档解释：</p>
+<blockquote>
+<p>A run loop is a piece of infrastructure used to manage events arriving asynchronously on a thread. A run loop works by monitoring one or more event sources for the thread. As events arrive, the system wakes up the thread and dispatches the events to the run loop, which then dispatches them to the handlers you specify. If no events are present and ready to be handled, the run loop puts the thread to sleep.</p>
+</blockquote>
+<p>根据以上这个段落，我们能够得知一个重要的信息，<strong>Runloop</strong>是用来处理异步达到<strong>线程</strong>上事件的一种基础结构。所以，要想理解好<strong>Runloop</strong>，我们首先得把<strong>线程</strong>理解清楚了，许多同学跳过线程直接去理解<strong>Runloop</strong>(更不可取的是有部分同学只是为了应付面试而死背硬记Runloop相关知识，往往过后就忘记了)，往往搞得一头雾水，不理解为什么要有这种东西，即使网络上看了几篇直接讲述<strong>Runloop</strong>并贴有很多源代码分析的文章，也始终没有搞懂来龙去脉。要记住，<strong>Runloop</strong>仅仅只是管理事件异步达到线程的一种结构而已，其目的是解决多线程管理中的问题（线程管理中，还有其他手段可以实现类似Runloop这种机制，例如使用信号量, 只不过依赖Runloop更为简单）。</p>
+<h2 id="线程"><a href="#线程" class="headerlink" title="线程"></a>线程</h2><p>偷个懒，还是借用苹果官方文档的解释来解释什么是线程:]</p>
+<blockquote>
+<p>Each process (application) in OS X or iOS is made up of one or more threads, each of which represents a single path of execution through the application’s code. Every application starts with a single thread, which runs the application’s main function. Applications can spawn additional threads, each of which executes the code of a specific function.</p>
+<p>When an application spawns a new thread, that thread becomes an independent entity inside of the application’s process space. Each thread has its own execution stack and is scheduled for runtime separately by the kernel. A thread can communicate with other threads and other processes, perform I/O operations, and do anything else you might need it to do. Because they are inside the same process space, however, all threads in a single application share the same virtual memory space and have the same access rights as the process itself.</p>
+</blockquote>
+<p>大意就是每个OS X或者iOS每个应用程序都会以一个线程开始，这个线程执行应用程序的main方法。应用程序可以产生多个线程，每个线程在应用程序内都会有独立的处理空间、堆栈并且被kernel分别在运行时安排执行时间。一个线程可以与同进程内的其他线程通信甚至其他进程、执行I/O操作或者是任何你想让它做的事情。</p>
+<h3 id="为什么需要有线程？"><a href="#为什么需要有线程？" class="headerlink" title="为什么需要有线程？"></a>为什么需要有线程？</h3><p>在传统的操作系统中，进程拥有独立的内存地址空间和一个用于控制的线程。但是，现在的情况更多的情况下要求在同一地址空间下拥有多个线程并发执行。因此线程被引入操作系统。</p>
+<p> 如果非要说是为什么需要线程，还不如说为什么需要进程中还有其它进程。这些进程中包含的其它迷你进程就是线程线程之所以说是迷你进程，是因为线程和进程有很多相似之处，比如线程和进程的状态都有运行，就绪，阻塞状态。这几种状态理解起来非常简单，当进程所需的资源没有到位时会是阻塞状态，当进程所需的资源到位时但CPU没有到位时是就绪状态，当进程既有所需的资源，又有CPU时，就为运行状态。</p>
+<p>假设没有线程，相当于进程只有一个线程，很多情况下的用户体验是无法接受的。来看一个具体的例子，使用iPhone拍摄视频或者照片后，相机app需要将照片或者视频写入磁盘，而访问磁盘的时间内线程是阻塞的，这个时候在相机app无论执行什么操作都不会相应，因为仅有的线程在忙着处理数据写入呢。而如果引入了多线程，每个线程仅仅需要处理自己那一部分应该完成的任务，而不用去关心和其他线程的冲突，因此简化了编程模型。</p>
+<h3 id="创建一个线程"><a href="#创建一个线程" class="headerlink" title="创建一个线程"></a>创建一个线程</h3><p>使用<strong>NSThread</strong>创建线程</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="keyword">void</span>)viewDidLoad &#123;</span><br><span class="line">    [<span class="keyword">super</span> viewDidLoad];</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">self</span>.thread = [[<span class="built_in">NSThread</span> alloc] initWithTarget:<span class="keyword">self</span> selector:<span class="keyword">@selector</span>(onThreadStart:) object:<span class="literal">nil</span>];</span><br><span class="line">    <span class="keyword">self</span>.thread.name = <span class="string">@"myThread"</span>;</span><br><span class="line">    [<span class="keyword">self</span>.thread start];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>)onThreadStart:(<span class="keyword">id</span>)args &#123;</span><br><span class="line">    <span class="built_in">NSLog</span>(<span class="string">@"Execution in thread [%@]"</span>, [<span class="built_in">NSThread</span> currentThread].name);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>)persistVideoClips &#123;</span><br><span class="line">    <span class="comment">//这里有存储视频信息的代码</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到控制台打印<code>Execution in thread [myThread]</code></p>
+<h3 id="使用线程"><a href="#使用线程" class="headerlink" title="使用线程"></a>使用线程</h3><p>继续前面讲的存储视频的例子，我们在界面加上一个按钮，每次点击就使用线程模拟保存视频(也许你会说，可以使用GCD或者NSOperationQueue来完成啊！对，但是这两个也都是苹果提供的多线程管理库，我们要研究为什么苹果引入Runloop就需要从线程上去考虑)。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="keyword">void</span>)viewDidLoad &#123;</span><br><span class="line">    [<span class="keyword">super</span> viewDidLoad];</span><br><span class="line">    <span class="keyword">self</span>.videoClips = [<span class="built_in">NSMutableArray</span> array];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (<span class="keyword">IBAction</span>)onButtonTapped:(<span class="keyword">id</span>)sender &#123;</span><br><span class="line">   <span class="keyword">self</span>.thread = [[<span class="built_in">NSThread</span> alloc] initWithTarget:<span class="keyword">self</span> selector:<span class="keyword">@selector</span>(onThreadStart:) object:[<span class="keyword">self</span>.videoClips <span class="keyword">copy</span>]];</span><br><span class="line">    <span class="keyword">self</span>.thread.name = <span class="string">@"myThread"</span>;</span><br><span class="line">    [<span class="keyword">self</span>.thread start];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>)onThreadStart:(<span class="keyword">id</span>)args &#123;</span><br><span class="line">    <span class="comment">//这里有存储视频信息的代码</span></span><br><span class="line">    <span class="keyword">@autoreleasepool</span> &#123;</span><br><span class="line">		<span class="built_in">NSLog</span>(<span class="string">@"Execution in thread [%@]"</span>, [<span class="built_in">NSThread</span> currentThread].name);</span><br><span class="line">		<span class="built_in">NSLog</span>(<span class="string">@"saving video clips"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这种方式是强烈不推荐的，想必也没有人会这么干，因为线程的创建是昂贵的。</p>
+<blockquote>
+<p>Threading has a real cost to your program (and the system) in terms of memory use and performance. Each thread requires the allocation of memory in both the kernel memory space and your program’s memory space. The core structures needed to manage your thread and coordinate its scheduling are stored in the kernel using wired memory. Your thread’s stack space and per-thread data is stored in your program’s memory space. Most of these structures are created and initialized when you first create the thread—a process that can be relatively expensive because of the required interactions with the kernel.</p>
+</blockquote>
+<p>为了解决消耗这个问题，聪明的人对线程进行了封装，使用继承实现了自己的<code>LCThread</code></p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * LCThread.h</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">void</span> (^LCActionBlock)(<span class="keyword">void</span>);</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">LCThread</span> : <span class="title">NSThread</span></span></span><br><span class="line">- (<span class="keyword">void</span>)queueAction:(LCActionBlock)action;</span><br><span class="line"><span class="keyword">@end</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * LCThread.m</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#import <span class="meta-string">"LCThread.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">LCThread</span> ()</span></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">strong</span>, <span class="keyword">nonatomic</span>) <span class="built_in">NSMutableArray</span>&lt;LCActionBlock&gt; *actions;</span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">strong</span>, <span class="keyword">nonatomic</span>) <span class="built_in">NSObject</span> *mutex;</span><br><span class="line"><span class="keyword">@end</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">LCThread</span></span></span><br><span class="line"></span><br><span class="line">- (<span class="keyword">instancetype</span>)init</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">self</span> = [<span class="keyword">super</span> init];</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">self</span>) &#123;</span><br><span class="line">        _actions = [<span class="built_in">NSMutableArray</span> array];</span><br><span class="line">        _mutex   = [<span class="built_in">NSObject</span> new];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">self</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>)queueAction:(LCActionBlock)action &#123;</span><br><span class="line">    <span class="keyword">@synchronized</span>(<span class="keyword">self</span>.mutex) &#123;</span><br><span class="line">        [<span class="keyword">self</span>.actions addObject:[action <span class="keyword">copy</span>]];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>)main &#123;</span><br><span class="line">    <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">    	  <span class="keyword">@autoreleasepool</span> &#123;</span><br><span class="line">		    <span class="keyword">@synchronized</span>(<span class="keyword">self</span>.mutex) &#123;</span><br><span class="line">		        <span class="built_in">NSArray</span>&lt;LCActionBlock&gt; *actions = [<span class="keyword">self</span>.actions <span class="keyword">copy</span>];</span><br><span class="line">		        [<span class="keyword">self</span>.actions removeAllObjects];</span><br><span class="line">		        </span><br><span class="line">		        [actions enumerateObjectsUsingBlock:^(LCActionBlock  _Nonnull action, <span class="built_in">NSUInteger</span> idx, <span class="built_in">BOOL</span> * _Nonnull stop) &#123;</span><br><span class="line">		            <span class="keyword">@try</span> &#123;</span><br><span class="line">		                action();</span><br><span class="line">		            &#125; <span class="keyword">@catch</span>(<span class="built_in">NSException</span> *error) &#123;</span><br><span class="line">		                <span class="built_in">NSLog</span>(<span class="string">@"error occurred: %@"</span>, error);</span><br><span class="line">		            &#125;</span><br><span class="line">		        &#125;];</span><br><span class="line">		    &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        [<span class="built_in">NSThread</span> sleepForTimeInterval:<span class="number">0.3</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@end</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * 主界面代码</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>)viewDidLoad &#123;</span><br><span class="line">    [<span class="keyword">super</span> viewDidLoad];</span><br><span class="line">    <span class="keyword">self</span>.thread = [LCThread new];</span><br><span class="line">    <span class="keyword">self</span>.thread.name = <span class="string">@"myThread"</span>;</span><br><span class="line">    [<span class="keyword">self</span>.thread start];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (<span class="keyword">IBAction</span>)onButtonTapped:(<span class="keyword">id</span>)sender &#123;</span><br><span class="line">    [<span class="keyword">self</span>.thread queueAction:^&#123;</span><br><span class="line">        <span class="built_in">NSLog</span>(<span class="string">@"Execution in thread [%@]"</span>, [<span class="built_in">NSThread</span> currentThread].name);</span><br><span class="line">        <span class="built_in">NSLog</span>(<span class="string">@"saving video clips"</span>);</span><br><span class="line">    &#125;];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>现在点击按钮，可以看到<code>video clips</code>正确地在我们创建的线程中调用，基本达到我们让保存视频的代码在后台线程执行的目的。但是这种方法有缺点：</p>
+<ul>
+<li>为了让线程一直运行但又不占满CPU时间，我们引入了<code>[NSThread sleepForTimeInterval:0.3]</code>，人为地让线程“活着”</li>
+<li>即使<code>actions</code>为空，线程也需要从休眠中醒来检查还有没有需要处理的<code>action</code>，带来了无意义的消耗</li>
+<li>无法随心所欲地唤醒线程，只能被动等待线程休眠足够长的时间</li>
+<li>无法对<code>LCThread</code>使用<code>performSelector:onThread:withObject:waitUntilDone</code>等方法</li>
+</ul>
+<p>为了解决包括这个例子遇到的问题，苹果引入了<code>Runloop</code>的实现。</p>
+<h2 id="Runloop"><a href="#Runloop" class="headerlink" title="Runloop"></a>Runloop</h2><p>现在再来拜读一下苹果对<code>Runloop</code>的解释</p>
+<blockquote>
+<p>Run loops are part of the fundamental infrastructure associated with threads. A run loop is an event processing loop that you use to schedule work and coordinate the receipt of incoming events. The purpose of a run loop is to keep your thread busy when there is work to do and put your thread to sleep when there is none.</p>
+</blockquote>
+<p>这不正是我们想要的么？当有工作需要线程做的时候，就让它干活，不需要它的时候，就让它休息去。“召之即来挥之即去”，在休眠时几乎不占用系统资源。</p>
+<h3 id="尝试使用Runloop"><a href="#尝试使用Runloop" class="headerlink" title="尝试使用Runloop"></a>尝试使用Runloop</h3><p>苹果不允许直接创建<code>Runloop</code>，它只提供了两个自动获取的函数：<code>CFRunloopGetMain()</code>和<code>CFRunloopGetCurrent()</code>。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/// 全局的Dictionary，key 是 pthread_t， value 是 CFRunLoopRef</span></span><br><span class="line"><span class="keyword">static</span> CFMutableDictionaryRef loopsDic;</span><br><span class="line"><span class="comment">/// 访问 loopsDic 时的锁</span></span><br><span class="line"><span class="keyword">static</span> CFSpinLock_t loopsLock;</span><br><span class="line"> </span><br><span class="line"><span class="comment">/// 获取一个 pthread 对应的 RunLoop。</span></span><br><span class="line">CFRunLoopRef _CFRunLoopGet(<span class="keyword">pthread_t</span> thread) &#123;</span><br><span class="line">    OSSpinLockLock(&amp;loopsLock);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (!loopsDic) &#123;</span><br><span class="line">        <span class="comment">// 第一次进入时，初始化全局Dic，并先为主线程创建一个 RunLoop。</span></span><br><span class="line">        loopsDic = CFDictionaryCreateMutable();</span><br><span class="line">        CFRunLoopRef mainLoop = _CFRunLoopCreate();</span><br><span class="line">        CFDictionarySetValue(loopsDic, pthread_main_thread_np(), mainLoop);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/// 直接从 Dictionary 里获取。</span></span><br><span class="line">    CFRunLoopRef loop = CFDictionaryGetValue(loopsDic, thread));</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (!loop) &#123;</span><br><span class="line">        <span class="comment">/// 取不到时，创建一个</span></span><br><span class="line">        loop = _CFRunLoopCreate();</span><br><span class="line">        CFDictionarySetValue(loopsDic, thread, loop);</span><br><span class="line">        <span class="comment">/// 注册一个回调，当线程销毁时，顺便也销毁其对应的 RunLoop。</span></span><br><span class="line">        _CFSetTSD(..., thread, loop, __CFFinalizeRunLoop);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    OSSpinLockUnLock(&amp;loopsLock);</span><br><span class="line">    <span class="keyword">return</span> loop;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="function">CFRunLoopRef <span class="title">CFRunLoopGetMain</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> _CFRunLoopGet(pthread_main_thread_np());</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="function">CFRunLoopRef <span class="title">CFRunLoopGetCurrent</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> _CFRunLoopGet(pthread_self());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>现在就让我们在创建的线程中使用它吧</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="keyword">void</span>)viewDidLoad &#123;</span><br><span class="line">    [<span class="keyword">super</span> viewDidLoad];</span><br><span class="line">    <span class="keyword">self</span>.videoClips = [<span class="built_in">NSMutableArray</span> array];</span><br><span class="line">    <span class="keyword">self</span>.thread = [[<span class="built_in">NSThread</span> alloc] initWithBlock:^&#123;</span><br><span class="line">        <span class="built_in">NSLog</span>(<span class="string">@"Execution in thread [%@]"</span>, [<span class="built_in">NSThread</span> currentThread].name);</span><br><span class="line">        [[<span class="built_in">NSRunLoop</span> currentRunLoop] run];</span><br><span class="line">    &#125;];</span><br><span class="line">    <span class="keyword">self</span>.thread.name = <span class="string">@"myThread"</span>;</span><br><span class="line">    [<span class="keyword">self</span>.thread start];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (<span class="keyword">IBAction</span>)onButtonTapped:(<span class="keyword">id</span>)sender &#123;</span><br><span class="line">    [<span class="keyword">self</span> performSelector:<span class="keyword">@selector</span>(persistVideoClips:) onThread:<span class="keyword">self</span>.thread withObject:[<span class="keyword">self</span>.videoClips <span class="keyword">copy</span>] waitUntilDone:<span class="literal">NO</span>];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>)persistVideoClips:(<span class="built_in">NSArray</span> *)clips &#123;</span><br><span class="line">    <span class="built_in">NSLog</span>(<span class="string">@"saving video clips"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>啊啊啊~！按照我们预想的结果，运行以后每次点击屏幕都应该有输出，但是实际上我们点击屏幕并没有任何效果，没有打印<code>saving video clips</code>。</p>
+<p>根据<a href="https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/Multithreading/RunLoopManagement/RunLoopManagement.html#//apple_ref/doc/uid/10000057i-CH16-SW25" target="_blank" rel="noopener">苹果官方文档 - Starting the Run loop</a>的解释</p>
+<blockquote>
+<p>A run loop must have at least one input source or timer to monitor. If one is not attached, the run loop exits immediately.</p>
+</blockquote>
+<p>因为没有<code>input source</code>或者<code>timer source</code>，所以<code>Runloop</code>在启动后就立即退出了。</p>
+<h3 id="深入Runloop"><a href="#深入Runloop" class="headerlink" title="深入Runloop"></a>深入Runloop</h3><p>不对Runloop一番了解，很难驾驭，所以我们就先来熟悉熟悉Runloop。Runloop在源代码中体现为一个对象，指的是<strong>NSRunloop</strong>或者<strong>CFRunloopRef</strong>，CFRunloopRef是在 CoreFoundation 框架内的，它提供了纯C的函数API，所有这些 API 都是线程安全的，而NSRunloop仅仅是CFRunloopRef的objective-c的封装，提供了面向对象的 API，但是这些 API 不是线程安全的。CFRunLoopRef 的代码是开源的，你可以在这里<a href="http://opensource.apple.com/tarballs/CF/" target="_blank" rel="noopener">http://opensource.apple.com/tarballs/CF/</a>下载到整个 CoreFoundation 的源码来查看。我们接下来通过代码来了解它的内部逻辑(为了阅读方便，提取了重要的部分展示，如果不想阅读可以直接跳过看后面的流程图)：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//使用kCFRunLoopDefaultMode启动Runloop</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">CFRunLoopRun</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;	<span class="comment">/* DOES CALLOUT */</span></span><br><span class="line">    <span class="keyword">int32_t</span> result;</span><br><span class="line">    <span class="keyword">do</span> &#123;</span><br><span class="line">        result = CFRunLoopRunSpecific(CFRunLoopGetCurrent(), kCFRunLoopDefaultMode, <span class="number">1.0e10</span>, <span class="literal">false</span>);</span><br><span class="line">        CHECK_FOR_FORK();</span><br><span class="line">    &#125; <span class="keyword">while</span> (kCFRunLoopRunStopped != result &amp;&amp; kCFRunLoopRunFinished != result);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//使用指定的mode启动Runloop</span></span><br><span class="line"><span class="function">SInt32 <span class="title">CFRunLoopRunInMode</span><span class="params">(CFStringRef modeName, CFTimeInterval seconds, Boolean returnAfterSourceHandled)</span> </span>&#123;     <span class="comment">/* DOES CALLOUT */</span></span><br><span class="line">    CHECK_FOR_FORK();</span><br><span class="line">    <span class="keyword">return</span> CFRunLoopRunSpecific(CFRunLoopGetCurrent(), modeName, seconds, returnAfterSourceHandled);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function">SInt32 <span class="title">CFRunLoopRunSpecific</span><span class="params">(runloop, modeName, seconds, returnAfterSourceHandled)</span> </span>&#123;     <span class="comment">/* DOES CALLOUT */</span></span><br><span class="line">    <span class="keyword">if</span> (__CFRunLoopIsDeallocating(runloop)) </span><br><span class="line">        <span class="keyword">return</span> kCFRunLoopRunFinished;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//首先根据modeName找到对应的mode</span></span><br><span class="line">    CFRunLoopModeRef currentMode = __CFRunLoopFindMode(runloop, modeName, <span class="literal">false</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//如果mode为空，或者mode里面没有[sources,timers,observers]直接返回</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="literal">NULL</span> == currentMode || __CFRunLoopModeIsEmpty(runloop, currentMode, runloop-&gt;_currentMode)) &#123;</span><br><span class="line">    	<span class="keyword">return</span> kCFRunLoopRunFinished;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int32_t</span> result = kCFRunLoopRunFinished;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//通知observers，即将进入loop</span></span><br><span class="line">	<span class="keyword">if</span> (currentMode-&gt;_observerMask &amp; kCFRunLoopEntry ) </span><br><span class="line">        __CFRunLoopDoObservers(runloop, currentMode, kCFRunLoopEntry);</span><br><span class="line"></span><br><span class="line">	<span class="comment">//调用内部函数进入loop</span></span><br><span class="line">	result = __CFRunLoopRun(runloop, currentMode, seconds, returnAfterSourceHandled, previousMode);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//通知observers，Runloop即将退出</span></span><br><span class="line">	<span class="keyword">if</span> (currentMode-&gt;_observerMask &amp; kCFRunLoopExit )</span><br><span class="line">        __CFRunLoopDoObservers(runloop, currentMode, kCFRunLoopExit);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//进入loop的内部函数</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">int32_t</span> __CFRunLoopRun(runloop, currentMode, seconds, stopAfterHandle) &#123;</span><br><span class="line">    <span class="keyword">int32_t</span> retVal = <span class="number">0</span>;</span><br><span class="line">    Boolean isTimerSource = <span class="literal">false</span>;</span><br><span class="line">    <span class="comment">//获得timer的port</span></span><br><span class="line">    <span class="keyword">mach_port_name_t</span> timerPort = MACH_PORT_NULL;</span><br><span class="line">    <span class="keyword">if</span> (runloop-&gt;_queue) &#123;</span><br><span class="line">        timerPort = _dispatch_runloop_root_queue_get_port_4CF(runloop-&gt;_queue);</span><br><span class="line">        <span class="keyword">if</span> (!timerPort) &#123;</span><br><span class="line">            CRASH(<span class="string">"Unable to get port for run loop mode queue (%d)"</span>, <span class="number">-1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">do</span> &#123;</span><br><span class="line">        <span class="comment">// 2. 通知 Observers: RunLoop 即将触发 Timer 回调。</span></span><br><span class="line">        __CFRunLoopDoObservers(runloop, currentMode, kCFRunLoopBeforeTimers);</span><br><span class="line">        <span class="comment">// 3. 通知 Observers: RunLoop 即将触发 Source0 (非port) 回调。</span></span><br><span class="line">        __CFRunLoopDoObservers(runloop, currentMode, kCFRunLoopBeforeSources);</span><br><span class="line">        <span class="comment">// 执行被加入的block</span></span><br><span class="line">        __CFRunLoopDoBlocks(runloop, currentMode);</span><br><span class="line">        <span class="comment">// 4. RunLoop 触发 Source0 (非port) 回调。</span></span><br><span class="line">        Boolean sourceHandledThisLoop = __CFRunLoopDoSources0(runloop, currentMode, stopAfterHandle);</span><br><span class="line">        <span class="keyword">if</span> (sourceHandledThisLoop) &#123;</span><br><span class="line">            __CFRunLoopDoBlocks(runloop, currentMode);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//5. 如果有 Source1 (基于port) 处于 ready 状态，直接处理这个 Source1 然后跳转去9</span></span><br><span class="line">        <span class="keyword">if</span> (MACH_PORT_NULL != dispatchPort &amp;&amp; !didDispatchPortLastTime) &#123;</span><br><span class="line">            msg = (<span class="keyword">mach_msg_header_t</span> *)msg_buffer;</span><br><span class="line">            <span class="keyword">if</span> (__CFRunLoopServiceMachPort(dispatchPort, &amp;msg, <span class="keyword">sizeof</span>(msg_buffer), &amp;livePort, <span class="number">0</span>, &amp;voucherState, <span class="literal">NULL</span>)) &#123;</span><br><span class="line">                <span class="keyword">goto</span> handle_msg;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 通知 Observers: RunLoop的线程即将进入休眠</span></span><br><span class="line">        <span class="keyword">if</span> (!sourceHandledThisLoop) &#123;</span><br><span class="line">            __CFRunLoopDoObservers(runloop, currentMode, kCFRunLoopBeforeWaiting);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 7. 调用 mach_msg 等待接受 mach_port 的消息。线程将进入休眠, 直到被下面某一个事件唤醒。</span></span><br><span class="line">        <span class="comment">// • 一个基于 port 的Source 的事件。</span></span><br><span class="line">        <span class="comment">// • 一个 Timer 到时间了</span></span><br><span class="line">        <span class="comment">// • RunLoop 自身的超时时间到了</span></span><br><span class="line">        <span class="comment">// • 被其他什么调用者手动唤醒</span></span><br><span class="line">        __CFRunLoopServiceMachPort(waitSet, &amp;msg, <span class="keyword">sizeof</span>(msg_buffer), &amp;livePort, poll ? <span class="number">0</span> : TIMEOUT_INFINITY, &amp;voucherState, &amp;voucherCopy);</span><br><span class="line"></span><br><span class="line">        isTimerSource = timerPort != MACH_PORT_NULL &amp;&amp; livePort == timerPort;</span><br><span class="line">        <span class="comment">// 8. 通知 Observers: Runloop的线程刚刚被唤醒了</span></span><br><span class="line">        __CFRunLoopDoObservers(runloop, currentMode, kCFRunLoopAfterWaiting);</span><br><span class="line"></span><br><span class="line">    handle_msg:</span><br><span class="line">        <span class="comment">// 9.1 如果是timer唤醒，触发这个Timer的回调。</span></span><br><span class="line">        <span class="keyword">if</span>(isTimerSource) &#123;</span><br><span class="line">            __CFRunLoopDoTimers(runloop, currentMode, mach_absolute_time()</span><br><span class="line">        <span class="comment">//9.2 如果是main dispatch的唤醒，执行block</span></span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span>(msg_is_dispatch) &#123;</span><br><span class="line">            __CFRUNLOOP_IS_SERVICING_THE_MAIN_DISPATCH_QUEUE__(msg);</span><br><span class="line">        <span class="comment">//9.3 如果一个 Source1 (基于port) 唤醒，处理source1</span></span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            CFRunLoopSourceRef source1 = __CFRunLoopModeFindSourceForMachPort(runloop, currentMode, livePort);</span><br><span class="line">            sourceHandledThisLoop = __CFRunLoopDoSource1(runloop, currentMode, source1, msg);</span><br><span class="line">            <span class="keyword">if</span> (sourceHandledThisLoop) &#123;</span><br><span class="line">                mach_msg(reply, MACH_SEND_MSG, reply);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//  再次确保是否有同步的方法需要调用</span></span><br><span class="line">        __CFRunLoopDoBlocks(runloop, currentMode);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (sourceHandledThisLoop &amp;&amp; stopAfterHandle) &#123;</span><br><span class="line">        	<span class="comment">// 进入loop时参数说处理完事件就返回。</span></span><br><span class="line">	       retVal = kCFRunLoopRunHandledSource;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (timeout) &#123;</span><br><span class="line">           <span class="comment">// 超出传入参数标记的超时时间了</span></span><br><span class="line">           retVal = kCFRunLoopRunTimedOut;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (__CFRunLoopIsStopped(runloop)) &#123;</span><br><span class="line">           <span class="comment">// 被外部调用者强制停止了</span></span><br><span class="line">           retVal = kCFRunLoopRunStopped;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (currentMode-&gt;_stopped) &#123;</span><br><span class="line">        	<span class="comment">// currentMode 被强制停止，调用内部_CFRunLoopStopMode</span></span><br><span class="line">        	currentMode-&gt;_stopped = <span class="literal">false</span>;</span><br><span class="line">        	retVal = kCFRunLoopRunStopped;</span><br><span class="line">		 &#125; <span class="keyword">else</span> <span class="keyword">if</span> (__CFRunLoopModeIsEmpty(runloop, currentMode)) &#123;</span><br><span class="line">		 	<span class="comment">// source/timer/observer一个都没有了</span></span><br><span class="line">		 	retVal = kCFRunLoopRunFinished;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">while</span>(<span class="number">0</span> == retVal);</span><br><span class="line">    <span class="keyword">return</span> retVal;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过上面的伪代码可以看到，实际上Runloop就是内部是一个do-while调用的函数。这个函数管理线程需要处理的事件和消息，并在没有处理消息时休眠以避免占用系统资源，在有消息到来时立刻被唤醒。线程执行了<code>Runloop</code>后，其内部就会一直处于<code>接收消息-&gt;休眠-&gt;处理消息</code>的循环中，直到循环结束条件满足才会退出，结束线程。</p>
+<p>下图展示了Runloop运行时的关键流程：</p>
+<p><img src="http://ot51d7lis.bkt.clouddn.com/Runloop2.png" alt=""></p>
+<p>通过代码和流程图我们有了初步的了解，但是还是有种神秘的感觉，别急，接下来就为您一一介绍什么是mode，source, observers和callouts。</p>
+<h4 id="Runloop-modes"><a href="#Runloop-modes" class="headerlink" title="Runloop modes"></a>Runloop modes</h4><p>从源码很容易看出，Runloop总是运行在某种特定的CFRunLoopModeRef下，每次运行<strong>CFRunLoopRun</strong>函数时必须指定一种Mode，这个mode称为<strong>current mode</strong>。通过<strong>CFRunloopRef</strong>的结构体可以看出，一个Runloop可以包含N个modes，每个mode又可以包含若干个<strong>Sources/Timers/Observers</strong>。当切换Mode时必须退出<strong>current mode</strong>，然后再重新进入。</p>
+<p><img src="http://ot51d7lis.bkt.clouddn.com/RunloopModes.png" alt=""> </p>
+<p>CFRunloopMode和CFRunloop的结构如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> __<span class="title">CFRunLoopMode</span> &#123;</span></span><br><span class="line">	 CFRuntimeBase _base;</span><br><span class="line">    <span class="keyword">pthread_mutex_t</span> _lock;	<span class="comment">/* must have the run loop locked before locking this */</span></span><br><span class="line">    CFStringRef _name;</span><br><span class="line">    Boolean _stopped;</span><br><span class="line">    <span class="keyword">char</span> _padding[<span class="number">3</span>];</span><br><span class="line">    CFMutableSetRef _sources0; <span class="comment">// source0</span></span><br><span class="line">    CFMutableSetRef _sources1; <span class="comment">// source1</span></span><br><span class="line">    CFMutableArrayRef _observers;</span><br><span class="line">    CFMutableArrayRef _timers;</span><br><span class="line">    CFMutableDictionaryRef _portToV1SourceMap;</span><br><span class="line">    __CFPortSet _portSet;</span><br><span class="line">    CFIndex _observerMask;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> USE_DISPATCH_SOURCE_FOR_TIMERS</span></span><br><span class="line">    <span class="keyword">dispatch_source_t</span> _timerSource;</span><br><span class="line">    <span class="keyword">dispatch_queue_t</span> _queue;</span><br><span class="line">    Boolean _timerFired; <span class="comment">// set to true by the source when a timer has fired</span></span><br><span class="line">    Boolean _dispatchTimerArmed;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> USE_MK_TIMER_TOO</span></span><br><span class="line">    <span class="keyword">mach_port_t</span> _timerPort;</span><br><span class="line">    Boolean _mkTimerArmed;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> DEPLOYMENT_TARGET_WINDOWS</span></span><br><span class="line">    DWORD _msgQMask;</span><br><span class="line">    <span class="keyword">void</span> (*_msgPump)(<span class="keyword">void</span>);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">    <span class="keyword">uint64_t</span> _timerSoftDeadline; <span class="comment">/* TSR */</span></span><br><span class="line">    <span class="keyword">uint64_t</span> _timerHardDeadline; <span class="comment">/* TSR */</span></span><br><span class="line">&#125;;</span><br><span class="line"> </span><br><span class="line"><span class="class"><span class="keyword">struct</span> __<span class="title">CFRunLoop</span> &#123;</span></span><br><span class="line">    CFRuntimeBase _base;</span><br><span class="line">    <span class="keyword">pthread_mutex_t</span> _lock;			<span class="comment">/* locked for accessing mode list */</span></span><br><span class="line">    __CFPort _wakeUpPort;			<span class="comment">// used for CFRunLoopWakeUp </span></span><br><span class="line">    Boolean _unused;</span><br><span class="line">    <span class="keyword">volatile</span> _per_run_data *_perRunData;              <span class="comment">// reset for runs of the run loop</span></span><br><span class="line">    <span class="keyword">pthread_t</span> _pthread;</span><br><span class="line">    <span class="keyword">uint32_t</span> _winthread;</span><br><span class="line">    CFMutableSetRef _commonModes;</span><br><span class="line">    CFMutableSetRef _commonModeItems;</span><br><span class="line">    CFRunLoopModeRef _currentMode;</span><br><span class="line">    CFMutableSetRef _modes;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> _<span class="title">block_item</span> *_<span class="title">blocks_head</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> _<span class="title">block_item</span> *_<span class="title">blocks_tail</span>;</span></span><br><span class="line">    CFAbsoluteTime _runTime;</span><br><span class="line">    CFAbsoluteTime _sleepTime;</span><br><span class="line">    CFTypeRef _counterpart;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h5 id="Common-Modes"><a href="#Common-Modes" class="headerlink" title="Common Modes"></a>Common Modes</h5><p>一个 Mode 可以将自己标记为<code>&quot;Common&quot;</code>属性（通过将其 ModeName 添加到RunLoop的 <code>_commonModes</code> 中）。每当 RunLoop的内容发生变化时，RunLoop都会自动将_commonModeItems里的 Source/Observer/Timer 同步到具有 <code>“Common”</code> 标记的所有Mode里。</p>
+<h6 id="应用场景举例："><a href="#应用场景举例：" class="headerlink" title="应用场景举例："></a>应用场景举例：</h6><p>主线程的RunLoop里有两个预置的 Mode：<code>kCFRunLoopDefault    Mode</code> 和 <code>UITrackingRunLoopMode</code>。这两个 Mode 都已经被标记为”Common”属性。<code>DefaultMode</code> 是 App 平时所处的状态，<code>TrackingRunLoopMode</code> 是追踪 ScrollView 滑动时的状态。当你创建一个 Timer 并加到 DefaultMode时，Timer会得到重复回调，但此时滑动一个TableView时，RunLoop会将 mode 切换为 <code>TrackingRunLoopMode</code>，这时 Timer 就不会被回调，并且也不会影响到滑动操作。如果你想让这个Timer，在两个 Mode 中都能得到回调，有三种办法：</p>
+<ul>
+<li>将这个<code>Timer</code>分别加入这两个 Mode</li>
+<li>将<code>Timer</code>加入到顶层的 RunLoop 的 “commonModeItems” 中。”commonModeItems” 被 RunLoop 自动更新到所有具有”Common”属性的 Mode 里去</li>
+<li>将<code>Timer</code>加入到kCFRunLoopCommonModes（后面小节会提到）里面</li>
+</ul>
+<h5 id="常见modes介绍"><a href="#常见modes介绍" class="headerlink" title="常见modes介绍"></a>常见modes介绍</h5><ul>
+<li><code>NSDefaultRunLoopMode</code>：App的默认 Mode。这个mode应该用在线程默认、空闲和等待事件时。</li>
+<li><code>UITrackingRunLoopMode</code>：界面跟踪 Mode，用于 ScrollView 追踪触摸滑动，保证界面滑动时不受其他 Mode 影响</li>
+<li><code>UIInitializationRunLoopMode</code>： 在刚启动 App 时第进入的第一个 Mode，启动完成后就不再使用</li>
+<li><code>GSEventReceiveRunLoopMode</code>： 接受系统事件的内部 Mode，通常用不到</li>
+<li><code>NSRunLoopCommonModes</code>：通过将对象（timer/source/observer）通过<code>CFRunLoopAddCommonMode</code>加入到<code>Runloop</code>后，能够被同步到所有标记为<code>&quot;common&quot;</code>的modes里</li>
+</ul>
+<h5 id="常用接口"><a href="#常用接口" class="headerlink" title="常用接口"></a>常用接口</h5><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">///将一个mode加入到common modes的set里面</span></span><br><span class="line">CFRunLoopAddCommonMode(CFRunLoopRef runloop, CFStringRef modeName);</span><br><span class="line"><span class="comment">///以指定mode在当前线程启动runloop</span></span><br><span class="line"><span class="function">CFRunLoopRunResult <span class="title">CFRunLoopRunInMode</span><span class="params">(CFRunLoopMode mode, CFTimeInterval seconds, Boolean returnAfterSourceHandled)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">///添加一个source到指定的mode</span></span><br><span class="line">CFRunLoopAddSource(CFRunLoopRef rl, CFRunLoopSourceRef source, CFStringRef modeName);</span><br><span class="line"><span class="comment">///判断指定的mode是否包含传入的source</span></span><br><span class="line">CFRunLoopContainsSource(CFRunLoopRef rl, CFRunLoopSourceRef source, CFRunLoopMode mode);</span><br><span class="line"><span class="comment">///将一个source从指定mode中移除</span></span><br><span class="line">CFRunLoopRemoveSource(CFRunLoopRef rl, CFRunLoopSourceRef source, CFStringRef modeName);</span><br><span class="line"></span><br><span class="line"><span class="comment">///添加一个observer到指定的mode</span></span><br><span class="line">CFRunLoopAddObserver(CFRunLoopRef rl, CFRunLoopObserverRef observer, CFStringRef modeName);</span><br><span class="line"><span class="comment">///判断指定的mode是否包含传入的observer</span></span><br><span class="line">CFRunLoopContainsObserver(CFRunLoopRef rl, CFRunLoopObserverRef observer, CFRunLoopMode mode);</span><br><span class="line"><span class="comment">///将一个observer从指定mode中移除</span></span><br><span class="line">CFRunLoopRemoveObserver(CFRunLoopRef rl, CFRunLoopObserverRef observer, CFStringRef modeName);</span><br><span class="line"></span><br><span class="line"><span class="comment">///添加一个timer到指定的mode</span></span><br><span class="line">CFRunLoopAddTimer(CFRunLoopRef rl, CFRunLoopTimerRef timer, CFStringRef mode);</span><br><span class="line"><span class="comment">///将timer从指定的mode中移除</span></span><br><span class="line">CFRunLoopRemoveTimer(CFRunLoopRef rl, CFRunLoopTimerRef timer, CFStringRef mode);</span><br></pre></td></tr></table></figure>
+<h4 id="Sources"><a href="#Sources" class="headerlink" title="Sources"></a>Sources</h4><p>Sources是用来唤醒Runloop的线程的</p>
+<h5 id="CFRunLoopSourceRef"><a href="#CFRunLoopSourceRef" class="headerlink" title="CFRunLoopSourceRef"></a>CFRunLoopSourceRef</h5><p>CFRunLoopSourceRef对应两种源: source0和source1。其中Source1和Timer source都属于端口事件源，不同的是所有的Timer都共用一个端口，而每个source1都有自己的端口。</p>
+<ul>
+<li>source0：负责app内部事件，只包含一个回调函数指针，不能主动触发事件。使用时，需要先调用<strong>CFRunLoopSourceSignal(source)</strong>,将这个Source标记为待处理，然后手动调用 <strong>CFRunLoopWakeUp(runloop)</strong> 来唤醒 RunLoop，让其处理这个事件</li>
+<li>Source1：除了包含回调指针外还包含一个<strong>mach port</strong>，和source0不同，source1可以监听系统端口或者和其他线程互发消息，它能够主动唤醒Runloop。</li>
+</ul>
+<h5 id="CFRunLoopTimerRef"><a href="#CFRunLoopTimerRef" class="headerlink" title="CFRunLoopTimerRef"></a>CFRunLoopTimerRef</h5><p>Timer会在一个预设的时间内向线程传递<strong>同步</strong>消息。Timer是与Runloop的mode来联系在一起的，如果Timer所在的mode没有被Runloop所使用，那么它将不会被调用直到Runloop切换到Timer所属的mode。同样地，如果Timer在Runloop处理事务过程中触发了，那就需要等到Runloop下一次loop才能执行Timer的回调了。如果Runloop压根就没有跑起来，那么Timer无论如何也不会触发的。</p>
+<h4 id="Observers"><a href="#Observers" class="headerlink" title="Observers"></a>Observers</h4><p>与sources相反，Runloop observers是用来观察Runloop的状态变化的。当Runloop状态改变，可以通过observers的回调接收到相应的变化。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> __<span class="title">CFRunLoopObserver</span> &#123;</span></span><br><span class="line">    CFRuntimeBase _base;</span><br><span class="line">    <span class="keyword">pthread_mutex_t</span> _lock;</span><br><span class="line">    CFRunLoopRef _runLoop;</span><br><span class="line">    CFIndex _rlCount;</span><br><span class="line">    CFOptionFlags _activities;      <span class="comment">/* immutable */</span></span><br><span class="line">    CFIndex _order;         <span class="comment">/* immutable */</span></span><br><span class="line">    CFRunLoopObserverCallBack _callout; <span class="comment">/* immutable */</span></span><br><span class="line">    CFRunLoopObserverContext _context;  <span class="comment">/* immutable, except invalidation */</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>可以观察到的状态有：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Run Loop Observer Activities */</span></span><br><span class="line"><span class="function"><span class="keyword">typedef</span> <span class="title">CF_OPTIONS</span><span class="params">(CFOptionFlags, CFRunLoopActivity)</span> </span>&#123;</span><br><span class="line">    kCFRunLoopEntry = (<span class="number">1U</span>L &lt;&lt; <span class="number">0</span>), <span class="comment">// 进入RunLoop </span></span><br><span class="line">    kCFRunLoopBeforeTimers = (<span class="number">1U</span>L &lt;&lt; <span class="number">1</span>), <span class="comment">// 即将开始Timer处理</span></span><br><span class="line">    kCFRunLoopBeforeSources = (<span class="number">1U</span>L &lt;&lt; <span class="number">2</span>), <span class="comment">// 即将开始Source处理</span></span><br><span class="line">    kCFRunLoopBeforeWaiting = (<span class="number">1U</span>L &lt;&lt; <span class="number">5</span>), <span class="comment">// 即将进入休眠</span></span><br><span class="line">    kCFRunLoopAfterWaiting = (<span class="number">1U</span>L &lt;&lt; <span class="number">6</span>), <span class="comment">//从休眠状态唤醒</span></span><br><span class="line">    kCFRunLoopExit = (<span class="number">1U</span>L &lt;&lt; <span class="number">7</span>), <span class="comment">//退出RunLoop</span></span><br><span class="line">    kCFRunLoopAllActivities = <span class="number">0x0FFFFFFF</span>U</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h4 id="Call-out"><a href="#Call-out" class="headerlink" title="Call out"></a>Call out</h4><p>在开发过程中几乎所有的操作都是通过Call out进行回调的(无论是Observer的状态通知还是Timer、Source的处理)，而系统在回调时通常使用如下几个函数进行回调(换句话说你的代码其实最终都是通过下面几个函数来负责调用的，即使你自己监听Observer也会先调用下面的函数然后间接通知你，所以在调用堆栈中经常看到这些函数)：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">void</span> __CFRUNLOOP_IS_CALLING_OUT_TO_AN_OBSERVER_CALLBACK_FUNCTION__() __attribute__((noinline));</span><br><span class="line"><span class="keyword">static</span> <span class="keyword">void</span> __CFRUNLOOP_IS_CALLING_OUT_TO_A_TIMER_CALLBACK_FUNCTION__() __attribute__((noinline));</span><br><span class="line"><span class="keyword">static</span> <span class="keyword">void</span> __CFRUNLOOP_IS_CALLING_OUT_TO_A_BLOCK__() __attribute__((noinline));</span><br><span class="line"><span class="keyword">static</span> <span class="keyword">void</span> __CFRUNLOOP_IS_SERVICING_THE_MAIN_DISPATCH_QUEUE__() __attribute__((noinline));</span><br><span class="line"><span class="keyword">static</span> <span class="keyword">void</span> __CFRUNLOOP_IS_CALLING_OUT_TO_A_SOURCE0_PERFORM_FUNCTION__() __attribute__((noinline));</span><br><span class="line"><span class="keyword">static</span> <span class="keyword">void</span> __CFRUNLOOP_IS_CALLING_OUT_TO_A_SOURCE1_PERFORM_FUNCTION__() __attribute__((noinline));</span><br></pre></td></tr></table></figure>
+<h4 id="Runloop的休眠"><a href="#Runloop的休眠" class="headerlink" title="Runloop的休眠"></a>Runloop的休眠</h4><p>RunLoop最核心的事情就是保证线程在没有消息时休眠以避免占用系统资源，有消息时能够及时唤醒。RunLoop的这个机制完全依靠系统内核来完成，具体来说是苹果操作系统核心组件Darwin中的Mach来完成的（<a href="https://opensource.apple.com/" target="_blank" rel="noopener">Darwin</a>是开源的）</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> *  Routine:    mach_msg</span></span><br><span class="line"><span class="comment"> *  Purpose:</span></span><br><span class="line"><span class="comment"> *      Send and/or receive a message.  If the message operation</span></span><br><span class="line"><span class="comment"> *      is interrupted, and the user did not request an indication</span></span><br><span class="line"><span class="comment"> *      of that fact, then restart the appropriate parts of the</span></span><br><span class="line"><span class="comment"> *      operation silently (trap version does not restart).</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">__WATCHOS_PROHIBITED __TVOS_PROHIBITED</span><br><span class="line"><span class="function"><span class="keyword">extern</span> mach_msg_return_t    <span class="title">mach_msg</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">                    <span class="keyword">mach_msg_header_t</span> *msg,</span></span></span><br><span class="line"><span class="function"><span class="params">                    <span class="keyword">mach_msg_option_t</span> option,</span></span></span><br><span class="line"><span class="function"><span class="params">                    <span class="keyword">mach_msg_size_t</span> send_size,</span></span></span><br><span class="line"><span class="function"><span class="params">                    <span class="keyword">mach_msg_size_t</span> rcv_size,</span></span></span><br><span class="line"><span class="function"><span class="params">                    <span class="keyword">mach_port_name_t</span> rcv_name,</span></span></span><br><span class="line"><span class="function"><span class="params">                    <span class="keyword">mach_msg_timeout_t</span> timeout,</span></span></span><br><span class="line"><span class="function"><span class="params">                    <span class="keyword">mach_port_name_t</span> notify)</span></span>;</span><br></pre></td></tr></table></figure>
+<h3 id="使用Runloop"><a href="#使用Runloop" class="headerlink" title="使用Runloop"></a>使用Runloop</h3><h4 id="使用NSMachPort作为source-source1"><a href="#使用NSMachPort作为source-source1" class="headerlink" title="使用NSMachPort作为source (source1)"></a>使用NSMachPort作为source (source1)</h4><p>经过上一节的分析，已经对Runloop有了深入的了解。现在就能修改之前的例子，让它能正常工作起来了。为了让Runloop不退出，最简单的方式就是创建一个NSMachPort添加到Runloop里面。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="keyword">void</span>)viewDidLoad &#123;</span><br><span class="line">    [<span class="keyword">super</span> viewDidLoad];</span><br><span class="line">    <span class="keyword">self</span>.videoClips = [<span class="built_in">NSMutableArray</span> array];</span><br><span class="line">    <span class="keyword">self</span>.thread = [[<span class="built_in">NSThread</span> alloc] initWithBlock:^&#123;</span><br><span class="line">        <span class="built_in">NSRunLoop</span> *runloop = [<span class="built_in">NSRunLoop</span> currentRunLoop];</span><br><span class="line">        [runloop addPort:[<span class="built_in">NSMachPort</span> port] forMode:<span class="built_in">NSDefaultRunLoopMode</span>];</span><br><span class="line">        [runloop run];</span><br><span class="line">    &#125;];</span><br><span class="line">    <span class="keyword">self</span>.thread.name = <span class="string">@"myThread"</span>;</span><br><span class="line">    [<span class="keyword">self</span>.thread start];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (<span class="keyword">IBAction</span>)onButtonTapped:(<span class="keyword">id</span>)sender &#123;</span><br><span class="line">    [<span class="keyword">self</span> performSelector:<span class="keyword">@selector</span>(persistVideoClips:) onThread:<span class="keyword">self</span>.thread withObject:[<span class="keyword">self</span>.videoClips <span class="keyword">copy</span>] waitUntilDone:<span class="literal">NO</span>];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>)persistVideoClips:(<span class="built_in">NSArray</span> *)clips &#123;</span><br><span class="line">    <span class="built_in">NSLog</span>(<span class="string">@"Execution in thread [%@], saving video clips"</span>, [<span class="built_in">NSThread</span> currentThread].name);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行后，点击按钮，可以看到控制台输出<code>Execution in thread [myThread], saving video clips</code>。</p>
+<h4 id="自定义source-Source0"><a href="#自定义source-Source0" class="headerlink" title="自定义source (Source0)"></a>自定义source (Source0)</h4><p>我们把例子用source0的方式修改一下</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> runloopSourceScheduleRoutine(<span class="keyword">void</span> *info, <span class="built_in">CFRunLoopRef</span> runloop, <span class="built_in">CFRunLoopMode</span> mode) &#123;</span><br><span class="line">    <span class="built_in">NSLog</span>(<span class="string">@"Schedule routine: source is added to runloop"</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> runloopSourceCancelRoutine(<span class="keyword">void</span> *info, <span class="built_in">CFRunLoopRef</span> runloop, <span class="built_in">CFRunLoopMode</span> mode) &#123;</span><br><span class="line">    <span class="built_in">NSLog</span>(<span class="string">@"Cancel Routine: source removed from runloop"</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> runloopSourcePerformRoutine(<span class="keyword">void</span> *info) &#123;</span><br><span class="line">    <span class="built_in">NSLog</span>(<span class="string">@"In thread [%@], Perform Routine: source has fired"</span>, [<span class="built_in">NSThread</span> currentThread].name);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">MyThread</span> ()</span></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">assign</span>, <span class="keyword">nonatomic</span>) <span class="built_in">CFRunLoopSourceRef</span> source;</span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">assign</span>, <span class="keyword">nonatomic</span>) <span class="built_in">CFRunLoopRef</span> runloop;</span><br><span class="line"><span class="keyword">@end</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">MyThread</span></span></span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>)dealloc &#123;</span><br><span class="line">    <span class="keyword">self</span>.source = <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">self</span>.runloop = <span class="literal">NULL</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>)main &#123;</span><br><span class="line">    <span class="keyword">@autoreleasepool</span> &#123;</span><br><span class="line">        <span class="built_in">NSRunLoop</span> *runloop = [<span class="built_in">NSRunLoop</span> currentRunLoop];</span><br><span class="line">        <span class="keyword">self</span>.runloop = [runloop getCFRunLoop];</span><br><span class="line">        <span class="built_in">CFRunLoopSourceContext</span> context = &#123;<span class="number">0</span>, (__bridge <span class="keyword">void</span> *)(<span class="keyword">self</span>), <span class="literal">NULL</span>, <span class="literal">NULL</span>, <span class="literal">NULL</span>, <span class="literal">NULL</span>, <span class="literal">NULL</span>, runloopSourceScheduleRoutine, runloopSourceCancelRoutine, runloopSourcePerformRoutine &#125;;</span><br><span class="line">        <span class="keyword">self</span>.source = <span class="built_in">CFRunLoopSourceCreate</span>(<span class="literal">NULL</span>, <span class="number">0</span>, &amp;context);</span><br><span class="line">        <span class="built_in">CFRunLoopAddSource</span>(<span class="keyword">self</span>.runloop, <span class="keyword">self</span>.source, kCFRunLoopDefaultMode);</span><br><span class="line">        [runloop run];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>)triggerSource0 &#123;</span><br><span class="line">    <span class="built_in">CFRunLoopSourceSignal</span>(<span class="keyword">self</span>.source);</span><br><span class="line">    <span class="built_in">CFRunLoopWakeUp</span>(<span class="keyword">self</span>.runloop);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * ViewController </span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>)viewDidLoad &#123;</span><br><span class="line">    [<span class="keyword">super</span> viewDidLoad];</span><br><span class="line">    <span class="keyword">self</span>.videoClips = [<span class="built_in">NSMutableArray</span> array];</span><br><span class="line">    <span class="keyword">self</span>.thread = [MyThread new];</span><br><span class="line">    <span class="keyword">self</span>.thread.name = <span class="string">@"myThread"</span>;</span><br><span class="line">    [<span class="keyword">self</span>.thread start];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (<span class="keyword">IBAction</span>)buttonTapped:(<span class="keyword">id</span>)sender &#123;</span><br><span class="line">    [<span class="keyword">self</span>.thread triggerSource0];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="使用Observer"><a href="#使用Observer" class="headerlink" title="使用Observer"></a>使用Observer</h4><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> addObserver(<span class="built_in">CFRunLoopRef</span> runloop) &#123;</span><br><span class="line">    <span class="built_in">CFRunLoopObserverRef</span> observer = <span class="built_in">CFRunLoopObserverCreateWithHandler</span>(</span><br><span class="line">                                                                       kCFAllocatorDefault,</span><br><span class="line">                                                                       kCFRunLoopAllActivities,</span><br><span class="line">                                                                       <span class="literal">YES</span>,</span><br><span class="line">                                                                       <span class="number">0</span>,</span><br><span class="line">       ^(<span class="built_in">CFRunLoopObserverRef</span> observer, <span class="built_in">CFRunLoopActivity</span> activity) &#123;</span><br><span class="line">           <span class="comment">/*</span></span><br><span class="line"><span class="comment">            kCFRunLoopEntry = (1UL &lt;&lt; 0),          进入工作</span></span><br><span class="line"><span class="comment">            kCFRunLoopBeforeTimers = (1UL &lt;&lt; 1),   即将处理Timers事件</span></span><br><span class="line"><span class="comment">            kCFRunLoopBeforeSources = (1UL &lt;&lt; 2),  即将处理Source事件</span></span><br><span class="line"><span class="comment">            kCFRunLoopBeforeWaiting = (1UL &lt;&lt; 5),  即将休眠</span></span><br><span class="line"><span class="comment">            kCFRunLoopAfterWaiting = (1UL &lt;&lt; 6),   被唤醒</span></span><br><span class="line"><span class="comment">            kCFRunLoopExit = (1UL &lt;&lt; 7),           退出RunLoop</span></span><br><span class="line"><span class="comment">            kCFRunLoopAllActivities = 0x0FFFFFFFU  监听所有事件</span></span><br><span class="line"><span class="comment">            */</span></span><br><span class="line">           <span class="keyword">switch</span> (activity) &#123;</span><br><span class="line">               <span class="keyword">case</span> kCFRunLoopEntry:</span><br><span class="line">                   <span class="built_in">NSLog</span>(<span class="string">@"进入"</span>);</span><br><span class="line">                   <span class="keyword">break</span>;</span><br><span class="line">               <span class="keyword">case</span> kCFRunLoopBeforeTimers:</span><br><span class="line">                   <span class="built_in">NSLog</span>(<span class="string">@"即将处理Timer事件"</span>);</span><br><span class="line">                   <span class="keyword">break</span>;</span><br><span class="line">               <span class="keyword">case</span> kCFRunLoopBeforeSources:</span><br><span class="line">                   <span class="built_in">NSLog</span>(<span class="string">@"即将处理Source事件"</span>);</span><br><span class="line">                   <span class="keyword">break</span>;</span><br><span class="line">               <span class="keyword">case</span> kCFRunLoopBeforeWaiting:</span><br><span class="line">                   <span class="built_in">NSLog</span>(<span class="string">@"即将休眠"</span>);</span><br><span class="line">                   <span class="keyword">break</span>;</span><br><span class="line">               <span class="keyword">case</span> kCFRunLoopAfterWaiting:</span><br><span class="line">                   <span class="built_in">NSLog</span>(<span class="string">@"被唤醒"</span>);</span><br><span class="line">                   <span class="keyword">break</span>;</span><br><span class="line">               <span class="keyword">case</span> kCFRunLoopExit:</span><br><span class="line">                   <span class="built_in">NSLog</span>(<span class="string">@"退出RunLoop"</span>);</span><br><span class="line">                   <span class="keyword">break</span>;</span><br><span class="line">               <span class="keyword">default</span>:</span><br><span class="line">                   <span class="keyword">break</span>;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">  );</span><br><span class="line">    <span class="built_in">CFRunLoopAddObserver</span>(runloop, observer, kCFRunLoopDefaultMode);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">ViewController</span> ()</span></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">weak</span> ,<span class="keyword">nonatomic</span>) <span class="built_in">NSTimer</span> *timer;</span><br><span class="line"><span class="keyword">@end</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">ViewController</span></span></span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>)viewDidLoad &#123;</span><br><span class="line">    [<span class="keyword">super</span> viewDidLoad];</span><br><span class="line">    <span class="keyword">self</span>.timer = [<span class="built_in">NSTimer</span> scheduledTimerWithTimeInterval:<span class="number">2.0</span> repeats:<span class="literal">YES</span> block:^(<span class="built_in">NSTimer</span> * _Nonnull timer) &#123;</span><br><span class="line">        <span class="built_in">NSLog</span>(<span class="string">@"timer tick"</span>);</span><br><span class="line">    &#125;];</span><br><span class="line">    addObserver(<span class="built_in">CFRunLoopGetCurrent</span>());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
+<p>控制台打印的部分信息：</p>
+<blockquote>
+<p>2018-08-02 14:46:40.994863+0800 ObserverDemo[4707:559984] 被唤醒<br>2018-08-02 14:46:40.995346+0800 ObserverDemo[4707:559984] 即将处理Timer事件<br>2018-08-02 14:46:40.995468+0800 ObserverDemo[4707:559984] 即将处理Source事件<br>2018-08-02 14:46:40.995584+0800 ObserverDemo[4707:559984] 即将休眠<br>2018-08-02 14:46:41.584618+0800 ObserverDemo[4707:559984] 被唤醒<br>2018-08-02 14:46:41.584982+0800 ObserverDemo[4707:559984] timer tick<br>2018-08-02 14:46:41.585309+0800 ObserverDemo[4707:559984] 即将处理Timer事件<br>2018-08-02 14:46:41.585592+0800 ObserverDemo[4707:559984] 即将处理Source事件<br>2018-08-02 14:46:41.585810+0800 ObserverDemo[4707:559984] 即将休眠<br>2018-08-02 14:46:43.584045+0800 ObserverDemo[4707:559984] 被唤醒<br>2018-08-02 14:46:43.584247+0800 ObserverDemo[4707:559984] timer tick<br>2018-08-02 14:46:43.584424+0800 ObserverDemo[4707:559984] 即将处理Timer事件<br>2018-08-02 14:46:43.584539+0800 ObserverDemo[4707:559984] 即将处理Source事件<br>2018-08-02 14:46:43.584685+0800 ObserverDemo[4707:559984] 即将休眠<br>2018-08-02 14:46:45.584768+0800 ObserverDemo[4707:559984] 被唤醒<br>2018-08-02 14:46:45.585063+0800 ObserverDemo[4707:559984] timer tick<br>2018-08-02 14:46:45.585379+0800 ObserverDemo[4707:559984] 即将处理Timer事件<br>2018-08-02 14:46:45.585638+0800 ObserverDemo[4707:559984] 即将处理Source事件<br>2018-08-02 14:46:45.585864+0800 ObserverDemo[4707:559984] 即将休眠</p>
+</blockquote>
+<p>可以看到流程跟我们在深入Runloop分析的一样。</p>
+<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><p>苹果的<a href="https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/Multithreading/Introduction/Introduction.html#//apple_ref/doc/uid/10000057i-CH1-SW1" target="_blank" rel="noopener">Threading Programming Guide</a></p>
+<p>Kenshin的<a href="https://www.cnblogs.com/kenshincui/p/6823841.html" target="_blank" rel="noopener">iOS刨根问底-深入理解Runloop</a></p>
+<p>ibireme的<a href="https://blog.ibireme.com/2015/05/18/runloop/" target="_blank" rel="noopener">深入理解Runloop</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.JPG" alt="Charles Liu 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.JPG" alt="Charles Liu 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    Charles Liu
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://gobodigo.com/2018/07/28/ios-runloop/" title="iOS Runloop 深入浅出">http://gobodigo.com/2018/07/28/ios-runloop/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/iOS/" rel="tag"># iOS</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+          <div class="wp_rating">
+            <div id="wpac-rating"></div>
+          </div>
+        
+
+        
+
+        
+          
+          <div id="needsharebutton-postbottom">
+            <span class="btn">
+              <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </span>
+          </div>
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/16/javascript-get-style/" rel="next" title="获得运行时指定DOM元素的Style">
+                <i class="fa fa-chevron-left"></i> 获得运行时指定DOM元素的Style
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/logo.svg"
+                alt="Charles Liu" />
+            
+              <p class="site-author-name" itemprop="name">Charles Liu</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/windseason" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:liuchao853@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/CNonnull" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.facebook.com/charles.liu.853" target="_blank" title="FB Page">
+                      
+                        <i class="fa fa-fw fa-facebook"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#iOS-Runloop-深入浅出"><span class="nav-number">1.</span> <span class="nav-text">iOS Runloop 深入浅出</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Runloop是什么？"><span class="nav-number">1.1.</span> <span class="nav-text">Runloop是什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#线程"><span class="nav-number">1.2.</span> <span class="nav-text">线程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么需要有线程？"><span class="nav-number">1.2.1.</span> <span class="nav-text">为什么需要有线程？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建一个线程"><span class="nav-number">1.2.2.</span> <span class="nav-text">创建一个线程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用线程"><span class="nav-number">1.2.3.</span> <span class="nav-text">使用线程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Runloop"><span class="nav-number">1.3.</span> <span class="nav-text">Runloop</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#尝试使用Runloop"><span class="nav-number">1.3.1.</span> <span class="nav-text">尝试使用Runloop</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#深入Runloop"><span class="nav-number">1.3.2.</span> <span class="nav-text">深入Runloop</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Runloop-modes"><span class="nav-number">1.3.2.1.</span> <span class="nav-text">Runloop modes</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Common-Modes"><span class="nav-number">1.3.2.1.1.</span> <span class="nav-text">Common Modes</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#应用场景举例："><span class="nav-number">1.3.2.1.1.1.</span> <span class="nav-text">应用场景举例：</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#常见modes介绍"><span class="nav-number">1.3.2.1.2.</span> <span class="nav-text">常见modes介绍</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#常用接口"><span class="nav-number">1.3.2.1.3.</span> <span class="nav-text">常用接口</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Sources"><span class="nav-number">1.3.2.2.</span> <span class="nav-text">Sources</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#CFRunLoopSourceRef"><span class="nav-number">1.3.2.2.1.</span> <span class="nav-text">CFRunLoopSourceRef</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#CFRunLoopTimerRef"><span class="nav-number">1.3.2.2.2.</span> <span class="nav-text">CFRunLoopTimerRef</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Observers"><span class="nav-number">1.3.2.3.</span> <span class="nav-text">Observers</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Call-out"><span class="nav-number">1.3.2.4.</span> <span class="nav-text">Call out</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Runloop的休眠"><span class="nav-number">1.3.2.5.</span> <span class="nav-text">Runloop的休眠</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用Runloop"><span class="nav-number">1.3.3.</span> <span class="nav-text">使用Runloop</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#使用NSMachPort作为source-source1"><span class="nav-number">1.3.3.1.</span> <span class="nav-text">使用NSMachPort作为source (source1)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#自定义source-Source0"><span class="nav-number">1.3.3.2.</span> <span class="nav-text">自定义source (Source0)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用Observer"><span class="nav-number">1.3.3.3.</span> <span class="nav-text">使用Observer</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考资料"><span class="nav-number">1.3.4.</span> <span class="nav-text">参考资料</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Charles Liu</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: true,
+        notify: true,
+        appId: 'zgEelpnfa3Opcz1YXjhB7Ajs-gzGzoHsz',
+        appKey: 'rwpME5PEjRwUrkjOwzBFmCys',
+        placeholder: '说点什么呗',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("zgEelpnfa3Opcz1YXjhB7Ajs-gzGzoHsz", "rwpME5PEjRwUrkjOwzBFmCys");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
+
+  
+  
+  <script src="/lib/needsharebutton/needsharebutton.js"></script>
+
+  <script>
+    
+      pbOptions = {};
+      
+          pbOptions.iconStyle = "box";
+      
+          pbOptions.boxForm = "horizontal";
+      
+          pbOptions.position = "bottomCenter";
+      
+          pbOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook,Evernote,Linkedin,Reddit";
+      
+      new needShareButton('#needsharebutton-postbottom', pbOptions);
+    
+    
+  </script>
+
+  
+  <script type="text/javascript">
+  wpac_init = window.wpac_init || [];
+  wpac_init.push({widget: 'Rating', id: 12641,
+    el: 'wpac-rating',
+    color: 'fc6423'
+  });
+  (function() {
+    if ('WIDGETPACK_LOADED' in window) return;
+    WIDGETPACK_LOADED = true;
+    var mc = document.createElement('script');
+    mc.type = 'text/javascript';
+    mc.async = true;
+    mc.src = '//embed.widgetpack.com/widget.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+  })();
+  </script>
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

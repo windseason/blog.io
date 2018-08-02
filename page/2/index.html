@@ -345,6 +345,179 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://gobodigo.com/2017/07/08/javascript-Hoisting/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Charles Liu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/logo.svg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SIGABRT">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/07/08/javascript-Hoisting/" itemprop="url">什么是Javascript Hoisting？</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-08T00:06:58+08:00">
+                2017-07-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/javascript/" itemprop="url" rel="index">
+                    <span itemprop="name">javascript</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/07/08/javascript-Hoisting/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2017/07/08/javascript-Hoisting/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2017/07/08/javascript-Hoisting/" class="leancloud_visitors" data-flag-title="什么是Javascript Hoisting？">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="什么是Javascript-hoisting"><a href="#什么是Javascript-hoisting" class="headerlink" title="什么是Javascript hoisting?"></a>什么是Javascript hoisting?</h2><p>Javascript hoisting 国内一般翻译为<strong>变量提升</strong>。</p>
+<p>Hoisting这个词是用来描述Javascript在执行上下文，尤其是创建和执行变量时时如何工作的。但是，hoisting使得Javascript的执行容易被误解。例如，hoisting通常被认为是把变量或者方法在运行时环境被物理地移动到代码的顶部，但是实际上却不是这样。实际上发生的是，变量或者方法的声明在编译时就被提前放入内存，而代码仍然放到原来的位置上。</p>
+<p>接下来，通过几个例子来帮助理解</p>
+<h2 id="方法提升例子"><a href="#方法提升例子" class="headerlink" title="方法提升例子"></a>方法提升例子</h2><p>将方法的声明在任何代码执行之前放入内存的好处是能够在方法声明之前就能够使用它，因为它已经被提前放入内存里了。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">catName</span>(<span class="params">name</span>) </span>&#123;</span><br><span class="line">   <span class="built_in">console</span>.log(<span class="string">"My cat's name is "</span> + name);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">catName(<span class="string">"Tigger"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">运行结果是: "My cat's name is Tigger"</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+<p>上面的代码是一个非常正常的代码。接下来，我们看一下如果把调用放到申明之前会发生什么。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">catName(<span class="string">"Chloe"</span>);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">catName</span>(<span class="params">name</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">"My cat's name is "</span> + name);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">运行结果是: "My cat's name is Chloe"</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+<p>结果是，跟我们之前写的代码运行的结果一模一样。这是因为Javascript就是这么运行的。</p>
+<h2 id="变量提升例子"><a href="#变量提升例子" class="headerlink" title="变量提升例子"></a>变量提升例子</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">num = <span class="number">6</span>;</span><br><span class="line">num + <span class="number">7</span>;</span><br><span class="line"><span class="keyword">var</span> num; </span><br><span class="line"><span class="comment">/* 只要num声明过，无论它在什么位置上，这个代码都运行正常*/</span></span><br></pre></td></tr></table></figure>
+<p><strong>注意</strong>: Javascript 只提升变量的声明，而不提升变量的定义。如果你在声明和定义之前试图获得变量的值，你会得到undefined。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> x = <span class="number">1</span>; <span class="comment">// 初始化 x</span></span><br><span class="line"><span class="built_in">console</span>.log(x + <span class="string">" "</span> + y); <span class="comment">// '1 undefined'，因为定义不会被提升</span></span><br><span class="line"><span class="keyword">var</span> y = <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 下面这段代码的结果也是一样的</span></span><br><span class="line"><span class="keyword">var</span> x = <span class="number">1</span>; <span class="comment">// Initialize x</span></span><br><span class="line"><span class="keyword">var</span> y; <span class="comment">// Declare y</span></span><br><span class="line"><span class="built_in">console</span>.log(x + <span class="string">" "</span> + y); <span class="comment">// '1 undefined'</span></span><br><span class="line">y = <span class="number">2</span>; <span class="comment">// Initialize y</span></span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://gobodigo.com/2017/07/07/ios-memory-types/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1216,7 +1389,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-count">15</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
